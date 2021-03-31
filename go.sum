@@ -1,0 +1,9 @@
+github.com/google/uuid v1.2.0 h1:qJYtXnJRWmpe7m/3XlyhrsLrEURqHRM2kxzoxXqyUDs=
+github.com/google/uuid v1.2.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/junglemc/mc v0.0.0-20210331133548-4352dd381d7c/go.mod h1:+DoNKOMcg3ORkKbDFMb6waahjB4YjGH9Ypo4t93OG98=
+github.com/junglemc/mc v0.0.0-20210331135753-2c933d019f59 h1:0X3m7RBsfRGkcfgZP9zpqnPiUL7WPCc78ikDTGxNQrI=
+github.com/junglemc/mc v0.0.0-20210331135753-2c933d019f59/go.mod h1:+DoNKOMcg3ORkKbDFMb6waahjB4YjGH9Ypo4t93OG98=
+github.com/junglemc/nbt v1.0.0 h1:D8O+n9xcZOcpnjvXDGt598Y6lU0RqnAN+H9/irp5Z0s=
+github.com/junglemc/nbt v1.0.0/go.mod h1:ovpV/BbmI1rptmVHTMeUivqaMI3YaJ56fuLn1SsCrhY=
+github.com/junglemc/net v0.0.0-20210331145919-6bd9227a4c95 h1:i4+3dk/OMGvipKvnFx+7tFOokqQWZhV69PAyEckng1k=
+github.com/junglemc/net v0.0.0-20210331145919-6bd9227a4c95/go.mod h1:ueXu34QI4nl2AsDWTXoShIKXA1H9I7mlNgLLXxN1Jc0=

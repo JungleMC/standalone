@@ -1,0 +1,13 @@
+!.gitignore
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/vendor/
+/Godeps/
+.vs-code/
+.idea/
+.DS_Store
