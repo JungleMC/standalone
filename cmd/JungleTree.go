@@ -39,5 +39,5 @@ func onClientDisconnect(c *net.Client, err error) {
 
 func onClientPacket(c *net.Client, pkt net.Packet) {
 	log.Println("Packet recv")
-	c.Protocol = net.ProtocolLogin
+	log.Println(pkt)
 }
