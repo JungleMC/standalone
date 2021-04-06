@@ -1,8 +1,10 @@
 package main
 
 import (
+	"github.com/junglemc/JungleTree/internal/handlers"
 	"github.com/junglemc/net"
 	"log"
+	"reflect"
 )
 
 func main() {
@@ -26,18 +28,36 @@ func run(srv *net.Server) {
 }
 
 func onClientConnect(c *net.Client) {
-	log.Println("New client! Handshaking...")
+	log.Printf("Client connected: %s\n", c.Connection.RemoteAddr().String())
 	c.Protocol = net.ProtocolHandshake
 }
 
 func onClientDisconnect(c *net.Client, err error) {
-	log.Println("Client disconnected.")
+	log.Printf("Client disconnect: %s\n", c.Connection.RemoteAddr().String())
 	if err != nil {
+		if err.Error() == "EOF" {
+			return
+		}
 		log.Printf("Client error: %s\n", err)
 	}
 }
 
 func onClientPacket(c *net.Client, pkt net.Packet) {
-	log.Println("Packet recv")
-	log.Println(pkt)
+	var find map[reflect.Type]func(c *net.Client, pkt net.Packet)
+
+	switch c.Protocol {
+	case net.ProtocolHandshake:
+		find = handlers.HandshakeHandlers
+	}
+
+	if find == nil {
+		panic("not implemented")
+	}
+
+	funcCall := find[reflect.TypeOf(pkt)]
+	if pkt == nil {
+		panic("not found") // TODO: Cleanup
+	}
+	funcCall(c, pkt)
+	log.Println(c.GameProtocolVersion)
 }
