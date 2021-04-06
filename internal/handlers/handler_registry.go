@@ -11,5 +11,6 @@ var Handshake = map[reflect.Type]func(c *net.Client, pkt net.Packet){
 }
 
 var Status = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-    reflect.TypeOf(packet.ServerboundStatusPingStart{}): statusPingStart,
+    reflect.TypeOf(packet.ServerboundStatusPingStart{}): statusRequest,
+    reflect.TypeOf(packet.ServerboundStatusPing{}): statusPing,
 }

@@ -3,7 +3,6 @@ package handlers
 import (
     "github.com/junglemc/mc/packet"
     "github.com/junglemc/net"
-    "log"
 )
 
 func handshakeSetProtocol(c *net.Client, p net.Packet) {
@@ -11,5 +10,4 @@ func handshakeSetProtocol(c *net.Client, p net.Packet) {
 
     c.Protocol = net.Protocol(pkt.NextState)
     c.GameProtocolVersion = pkt.ProtocolVersion
-    log.Println("Handshake!")
 }
