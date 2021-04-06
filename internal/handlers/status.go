@@ -5,7 +5,6 @@ import (
 	"log"
 )
 
-func statusHello(c *net.Client, p net.Packet) {
-	// pkt := p.(packet.ServerboundStatusHelloPacket)
+func statusPingStart(c *net.Client, p net.Packet) {
 	log.Println("Hello!")
 }

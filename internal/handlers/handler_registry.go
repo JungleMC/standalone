@@ -1,15 +1,15 @@
 package handlers
 
 import (
+	"github.com/junglemc/mc/packet"
 	"github.com/junglemc/net"
-	"github.com/junglemc/net/packet"
 	"reflect"
 )
 
 var Handshake = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-	reflect.TypeOf(packet.ServerboundHandshakeHelloPacket{}): handshakeHandle,
+	reflect.TypeOf(packet.ServerboundHandshakeSetProtocol{}): handshakeSetProtocol,
 }
 
 var Status = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-	reflect.TypeOf(packet.ServerboundStatusHelloPacket{}): statusHello,
+	reflect.TypeOf(packet.ServerboundStatusPingStart{}): statusPingStart,
 }

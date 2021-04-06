@@ -1,15 +1,15 @@
 package handlers
 
 import (
+	"github.com/junglemc/mc/packet"
 	"github.com/junglemc/net"
-	"github.com/junglemc/net/packet"
 	"log"
 )
 
-func handshakeHandle(c *net.Client, p net.Packet) {
-	pkt := p.(packet.ServerboundHandshakeHelloPacket)
+func handshakeSetProtocol(c *net.Client, p net.Packet) {
+	pkt := p.(packet.ServerboundHandshakeSetProtocol)
 
 	c.Protocol = net.Protocol(pkt.NextState)
 	c.GameProtocolVersion = pkt.ProtocolVersion
-	log.Println("Handshake")
+	log.Println("Handshake!")
 }
