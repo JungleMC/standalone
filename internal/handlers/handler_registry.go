@@ -6,6 +6,6 @@ import (
 	"reflect"
 )
 
-var HandshakeHandlers = map[reflect.Type]func(c *net.Client, pkt net.Packet){
+var Handshake = map[reflect.Type]func(c *net.Client, pkt net.Packet){
 	reflect.TypeOf(packet.ServerboundHandshakeHelloPacket{}): handshakeHandle,
 }
