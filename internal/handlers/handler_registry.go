@@ -9,3 +9,7 @@ import (
 var Handshake = map[reflect.Type]func(c *net.Client, pkt net.Packet){
 	reflect.TypeOf(packet.ServerboundHandshakeHelloPacket{}): handshakeHandle,
 }
+
+var Status = map[reflect.Type]func(c *net.Client, pkt net.Packet){
+	reflect.TypeOf(packet.ServerboundStatusHelloPacket{}): statusHello,
+}
