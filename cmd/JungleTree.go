@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-    s := net.NewServer("0.0.0.0", 25565, handlers.Handshake, handlers.Status, nil, nil)
+    s := net.NewServer("0.0.0.0", 25565, handlers.Handshake, handlers.Status, handlers.Login, nil)
 
     err := s.Listen()
     if err != nil {

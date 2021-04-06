@@ -21,7 +21,6 @@ func statusRequest(c *net.Client, p net.Packet) {
             Sample: []ServerListPlayer{},
         },
         Description: util.Chat{Text: "A JungleTree Server"},
-        Favicon:     "",
     }
 
     data, err := json.Marshal(response)
