@@ -17,9 +17,7 @@ func loginStart(c *net.Client, p net.Packet) {
         Uuid:     id,
         Username: c.Username,
     }
-    bin, err := id.MarshalBinary()
-    log.Println(bin)
-    err = c.Send(response)
+    err := c.Send(response)
     if err != nil {
         log.Println(err)
     }
