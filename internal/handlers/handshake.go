@@ -6,7 +6,7 @@ import (
 )
 
 func handshakeSetProtocol(c *net.Client, p net.Packet) {
-    pkt := p.(packet.ServerboundHandshakeSetProtocol)
+    pkt := p.(packet.ServerboundHandshakePacket)
 
     c.Protocol = net.Protocol(pkt.NextState)
     c.GameProtocolVersion = pkt.ProtocolVersion

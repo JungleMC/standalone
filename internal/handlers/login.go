@@ -8,7 +8,7 @@ import (
 )
 
 func loginStart(c *net.Client, p net.Packet) {
-    pkt := p.(packet.ServerboundLoginStart)
+    pkt := p.(packet.ServerboundLoginStartPacket)
     c.Username = pkt.Username
 
     id, _ := uuid.NewRandom()

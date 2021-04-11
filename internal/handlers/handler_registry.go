@@ -7,14 +7,14 @@ import (
 )
 
 var Handshake = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-    reflect.TypeOf(packet.ServerboundHandshakeSetProtocol{}): handshakeSetProtocol,
+    reflect.TypeOf(packet.ServerboundHandshakePacket{}): handshakeSetProtocol,
 }
 
 var Status = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-    reflect.TypeOf(packet.ServerboundStatusPingStart{}): statusRequest,
-    reflect.TypeOf(packet.ServerboundStatusPing{}):      statusPing,
+    reflect.TypeOf(packet.ServerboundStatusRequestPacket{}): statusRequest,
+    reflect.TypeOf(packet.ServerboundStatusPingPacket{}):    statusPing,
 }
 
 var Login = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-    reflect.TypeOf(packet.ServerboundLoginStart{}): loginStart,
+    reflect.TypeOf(packet.ServerboundLoginStartPacket{}): loginStart,
 }

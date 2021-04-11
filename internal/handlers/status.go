@@ -28,7 +28,7 @@ func statusRequest(c *net.Client, p net.Packet) {
         return
     }
 
-    responsePkt := &packet.ClientboundStatusServerInfo{Response: string(data)}
+    responsePkt := &packet.ClientboundStatusResponsePacket{Response: string(data)}
     err = c.Send(responsePkt)
     if err != nil {
         log.Println(err)
@@ -36,7 +36,7 @@ func statusRequest(c *net.Client, p net.Packet) {
 }
 
 func statusPing(c *net.Client, p net.Packet) {
-    err := c.Send(&packet.ClientboundStatusPing{Time: p.(packet.ServerboundStatusPing).Time})
+    err := c.Send(&packet.ClientboundStatusPongPacket{Time: p.(packet.ServerboundStatusPingPacket).Time})
     if err != nil {
         log.Println(err)
     }
