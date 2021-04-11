@@ -2,8 +2,8 @@ package handlers
 
 import (
     "github.com/google/uuid"
-    "github.com/junglemc/mc/packet"
     "github.com/junglemc/net"
+    "github.com/junglemc/net/packet"
     "log"
 )
 

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-    "github.com/junglemc/mc/packet"
     "github.com/junglemc/net"
+    "github.com/junglemc/net/packet"
     "reflect"
 )
 
