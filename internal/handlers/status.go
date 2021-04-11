@@ -3,8 +3,8 @@ package handlers
 import (
     "encoding/json"
     "github.com/google/uuid"
+    "github.com/junglemc/mc"
     "github.com/junglemc/mc/packet"
-    "github.com/junglemc/mc/util"
     "github.com/junglemc/net"
     "log"
 )
@@ -20,7 +20,7 @@ func statusRequest(c *net.Client, p net.Packet) {
             Online: 0,
             Sample: []ServerListPlayer{},
         },
-        Description: util.Chat{Text: "A JungleTree Server"},
+        Description: mc.Chat{Text: "A JungleTree Server"},
     }
 
     data, err := json.Marshal(response)
@@ -47,7 +47,7 @@ func statusPing(c *net.Client, p net.Packet) {
 type ServerListResponse struct {
     Version     GameVersion       `json:"version"`
     Players     ServerListPlayers `json:"players"`
-    Description util.Chat         `json:"description,omitempty"`
+    Description mc.Chat           `json:"description,omitempty"`
     Favicon     string            `json:"favicon,omitempty"`
 }
 
