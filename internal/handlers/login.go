@@ -40,7 +40,7 @@ func loginStart(c *net.Client, p net.Packet) {
             Uuid:     id,
             Username: c.Username,
         }
-        err := c.Send(response)
+        err = c.Send(response)
         if err != nil {
             log.Println(err)
         }
