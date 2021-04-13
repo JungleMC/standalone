@@ -4,11 +4,12 @@ import (
     "encoding/json"
     "github.com/junglemc/mc"
     "github.com/junglemc/net"
+    "github.com/junglemc/net/codec"
     "github.com/junglemc/net/packet"
     "log"
 )
 
-func statusRequest(c *net.Client, p net.Packet) {
+func statusRequest(c *net.Client, p codec.Packet) {
     response := mc.ServerListResponse{
         Version: mc.GameVersion{
             Name:     "1.16.5",
@@ -35,7 +36,7 @@ func statusRequest(c *net.Client, p net.Packet) {
     }
 }
 
-func statusPing(c *net.Client, p net.Packet) {
+func statusPing(c *net.Client, p codec.Packet) {
     err := c.Send(&packet.ClientboundStatusPongPacket{Time: p.(packet.ServerboundStatusPingPacket).Time})
     if err != nil {
         log.Println(err)

@@ -8,7 +8,9 @@ import (
     "github.com/google/uuid"
     "github.com/junglemc/mc"
     "github.com/junglemc/net"
+    "github.com/junglemc/net/codec"
     "github.com/junglemc/net/packet"
+    "github.com/junglemc/net/session"
     "io/ioutil"
     "log"
     "net/http"
@@ -20,7 +22,7 @@ import (
 const sessionServerUri = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=%s&serverId=%s"
 
 // TODO: Refactor function bodies
-func loginStart(c *net.Client, p net.Packet) {
+func loginStart(c *net.Client, p codec.Packet) {
     pkt := p.(packet.ServerboundLoginStartPacket)
     c.Username = pkt.Username
 
@@ -44,7 +46,7 @@ func loginStart(c *net.Client, p net.Packet) {
         if err != nil {
             log.Println(err)
         }
-        c.Protocol = net.ProtocolPlay
+        c.Protocol = codec.ProtocolPlay
     } else {
         loginEncryptionRequest(c)
     }
@@ -65,7 +67,7 @@ func loginEncryptionRequest(c *net.Client) {
     }
 }
 
-func loginEncryptionResponse(c *net.Client, p net.Packet) {
+func loginEncryptionResponse(c *net.Client, p codec.Packet) {
     pkt := p.(packet.ServerboundLoginEncryptionResponsePacket)
 
     verifyToken, err := rsa.DecryptPKCS1v15(rand.Reader, c.Server.PrivateKey, pkt.VerifyToken)
@@ -100,7 +102,7 @@ func loginVerify(c *net.Client, sharedSecret []byte) {
         return
     }
 
-    authDigest := net.AuthDigest(sharedSecret, pubBytes)
+    authDigest := session.AuthDigest(sharedSecret, pubBytes)
 
     getUri := fmt.Sprintf(sessionServerUri, c.Username+"", authDigest)
     log.Println(getUri)
