@@ -1,25 +1,132 @@
 package handlers
 
 import (
+    "crypto/rand"
+    "crypto/rsa"
+    "crypto/x509"
+    "fmt"
     "github.com/google/uuid"
+    "github.com/junglemc/mc"
     "github.com/junglemc/net"
     "github.com/junglemc/net/packet"
+    "io/ioutil"
     "log"
+    "net/http"
+    "os"
+    "reflect"
+    "strconv"
 )
 
+const sessionServerUri = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=%s&serverId=%s"
+
+// TODO: Refactor function bodies
 func loginStart(c *net.Client, p net.Packet) {
     pkt := p.(packet.ServerboundLoginStartPacket)
     c.Username = pkt.Username
 
-    id, _ := uuid.NewRandom()
-
-    response := &packet.ClientboundLoginSuccess{
-        Uuid:     id,
-        Username: c.Username,
+    offlineText, ok := os.LookupEnv("OFFLINE_MODE")
+    if !ok {
+        offlineText = "false"
     }
-    err := c.Send(response)
+
+    offlineMode, err := strconv.ParseBool(offlineText)
+    if err != nil {
+        offlineMode = false
+    }
+
+    if offlineMode {
+        id, _ := uuid.NewRandom()
+        response := &packet.ClientboundLoginSuccess{
+            Uuid:     id,
+            Username: c.Username,
+        }
+        err := c.Send(response)
+        if err != nil {
+            log.Println(err)
+        }
+        c.Protocol = net.ProtocolPlay
+    } else {
+        loginEncryptionRequest(c)
+    }
+}
+
+func loginEncryptionRequest(c *net.Client) {
+    pubBytes, err := x509.MarshalPKIXPublicKey(c.Server.PrivateKey.Public())
+
+    pkt := &packet.ClientboundLoginEncryptionRequest{
+        ServerId:    "",
+        PublicKey:   pubBytes,
+        VerifyToken: c.VerifyToken,
+    }
+
+    err = c.Send(pkt)
     if err != nil {
         log.Println(err)
     }
-    c.Protocol = net.ProtocolPlay
+}
+
+func loginEncryptionResponse(c *net.Client, p net.Packet) {
+    pkt := p.(packet.ServerboundLoginEncryptionResponsePacket)
+
+    verifyToken, err := rsa.DecryptPKCS1v15(rand.Reader, c.Server.PrivateKey, pkt.VerifyToken)
+    if err != nil {
+        log.Println("Verify: " + err.Error())
+        return
+    }
+
+    if !reflect.DeepEqual(c.VerifyToken, verifyToken) {
+        log.Println("VerifyToken mismatch")
+        return
+    }
+
+    sharedSecret, err := rsa.DecryptPKCS1v15(rand.Reader, c.Server.PrivateKey, pkt.SharedSecret)
+    if err != nil {
+        log.Println("Shared: " + err.Error())
+        return
+    }
+
+    c.EnableEncryption(sharedSecret)
+
+    log.Println("Encryption success")
+    c.EnableEncryption(sharedSecret)
+
+    loginVerify(c, sharedSecret)
+}
+
+func loginVerify(c *net.Client, sharedSecret []byte) {
+    pubBytes, err := x509.MarshalPKIXPublicKey(c.Server.PrivateKey.Public())
+    if err != nil {
+        log.Println(err)
+        return
+    }
+
+    authDigest := net.AuthDigest(sharedSecret, pubBytes)
+
+    getUri := fmt.Sprintf(sessionServerUri, c.Username+"", authDigest)
+    log.Println(getUri)
+
+    response, err := http.Get(getUri)
+    if err != nil {
+        log.Println(err)
+        return
+    }
+
+    defer response.Body.Close()
+
+    if response.StatusCode == 204 {
+        log.Println("Verify failed")
+        c.Send(&packet.ClientboundLoginDisconnectPacket{Reason: mc.Chat{Text: "Invalid session"}})
+        c.Disconnect = true
+        return
+    }
+
+    body, err := ioutil.ReadAll(response.Body)
+    if err != nil {
+        log.Println(err)
+        return
+    }
+
+    c.VerifyToken = nil
+
+    log.Println(string(body))
 }

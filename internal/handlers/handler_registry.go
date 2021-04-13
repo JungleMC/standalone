@@ -16,5 +16,6 @@ var Status = map[reflect.Type]func(c *net.Client, pkt net.Packet){
 }
 
 var Login = map[reflect.Type]func(c *net.Client, pkt net.Packet){
-    reflect.TypeOf(packet.ServerboundLoginStartPacket{}): loginStart,
+    reflect.TypeOf(packet.ServerboundLoginStartPacket{}):              loginStart,
+    reflect.TypeOf(packet.ServerboundLoginEncryptionResponsePacket{}): loginEncryptionResponse,
 }
