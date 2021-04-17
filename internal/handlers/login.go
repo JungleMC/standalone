@@ -17,7 +17,7 @@ func loginStart(c *net.Client, p codec.Packet) (err error) {
         pkt := &packet.ClientboundLoginEncryptionRequest{
             ServerId:    "",
             PublicKey:   c.Server.PublicKey(),
-            VerifyToken: c.VerifyToken,
+            VerifyToken: c.ExpectedVerifyToken,
         }
         return c.Send(pkt)
     } else {
@@ -34,7 +34,7 @@ func loginStart(c *net.Client, p codec.Packet) (err error) {
 func loginEncryptionResponse(c *net.Client, p codec.Packet) (err error) {
     pkt := p.(packet.ServerboundLoginEncryptionResponsePacket)
 
-    sharedSecret, err := auth.DecryptLoginResponse(c, pkt.VerifyToken, pkt.SharedSecret)
+    sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
     if err != nil {
         return
     }
