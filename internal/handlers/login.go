@@ -4,6 +4,7 @@ import (
     "crypto/rand"
     "crypto/rsa"
     "crypto/x509"
+    "encoding/json"
     "fmt"
     "github.com/google/uuid"
     "github.com/junglemc/mc"
@@ -22,30 +23,30 @@ const sessionServerUri = "https://sessionserver.mojang.com/session/minecraft/has
 // TODO: Refactor function bodies
 func loginStart(c *net.Client, p codec.Packet) {
     pkt := p.(packet.ServerboundLoginStartPacket)
-    c.Username = pkt.Username
+
+    c.Profile = mc.Profile{
+        ID:         uuid.UUID{},
+        Name:       pkt.Username,
+        Properties: nil,
+    }
 
     if c.Server.OnlineMode {
         loginEncryptionRequest(c)
     } else {
-        err := c.Send(&packet.ClientboundLoginCompressionPacket{Threshold: 256})
-        if err != nil {
-            log.Println(err)
-            return
-        }
-        c.CompressionEnabled = true
-        c.CompressionThreshold = 256 // TODO: magic number
+        loginCompression(c)
 
-        id, _ := uuid.NewRandom()
-        response := &packet.ClientboundLoginSuccess{
-            Uuid:     id,
-            Username: c.Username,
-        }
-        err = c.Send(response)
-        if err != nil {
-            log.Println(err)
-        }
-        c.Protocol = codec.ProtocolPlay
+        c.Profile.ID, _ = uuid.NewRandom()
+        loginSuccess(c)
     }
+}
+
+func loginCompression(c *net.Client) {
+    err := c.Send(&packet.ClientboundLoginCompressionPacket{Threshold: c.Server.CompressionThreshold})
+    if err != nil {
+        log.Println(err)
+        return
+    }
+    c.CompressionEnabled = true
 }
 
 func loginEncryptionRequest(c *net.Client) {
@@ -84,10 +85,6 @@ func loginEncryptionResponse(c *net.Client, p codec.Packet) {
     }
 
     c.EnableEncryption(sharedSecret)
-
-    log.Println("Encryption success")
-    c.EnableEncryption(sharedSecret)
-
     loginVerify(c, sharedSecret)
 }
 
@@ -100,8 +97,7 @@ func loginVerify(c *net.Client, sharedSecret []byte) {
 
     authDigest := session.AuthDigest(sharedSecret, pubBytes)
 
-    getUri := fmt.Sprintf(sessionServerUri, c.Username+"", authDigest)
-    log.Println(getUri)
+    getUri := fmt.Sprintf(sessionServerUri, c.Profile.Name+"", authDigest)
 
     response, err := http.Get(getUri)
     if err != nil {
@@ -126,5 +122,24 @@ func loginVerify(c *net.Client, sharedSecret []byte) {
 
     c.VerifyToken = nil
 
-    log.Println(string(body))
+    c.Profile = mc.Profile{}
+    err = json.Unmarshal(body, &c.Profile)
+    if err != nil {
+        log.Println(err)
+        return
+    }
+    loginCompression(c)
+    loginSuccess(c)
+}
+
+func loginSuccess(c *net.Client) {
+    response := &packet.ClientboundLoginSuccess{
+        Uuid:     c.Profile.ID,
+        Username: c.Profile.Name,
+    }
+    err := c.Send(response)
+    if err != nil {
+        log.Println(err)
+    }
+    c.Protocol = codec.ProtocolPlay
 }
