@@ -14,9 +14,7 @@ import (
     "io/ioutil"
     "log"
     "net/http"
-    "os"
     "reflect"
-    "strconv"
 )
 
 const sessionServerUri = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=%s&serverId=%s"
@@ -26,17 +24,17 @@ func loginStart(c *net.Client, p codec.Packet) {
     pkt := p.(packet.ServerboundLoginStartPacket)
     c.Username = pkt.Username
 
-    offlineText, ok := os.LookupEnv("OFFLINE_MODE")
-    if !ok {
-        offlineText = "false"
-    }
+    if c.Server.OnlineMode {
+        loginEncryptionRequest(c)
+    } else {
+        err := c.Send(&packet.ClientboundLoginCompressionPacket{Threshold: 256})
+        if err != nil {
+            log.Println(err)
+            return
+        }
+        c.CompressionEnabled = true
+        c.CompressionThreshold = 256 // TODO: magic number
 
-    offlineMode, err := strconv.ParseBool(offlineText)
-    if err != nil {
-        offlineMode = false
-    }
-
-    if offlineMode {
         id, _ := uuid.NewRandom()
         response := &packet.ClientboundLoginSuccess{
             Uuid:     id,
@@ -47,8 +45,6 @@ func loginStart(c *net.Client, p codec.Packet) {
             log.Println(err)
         }
         c.Protocol = codec.ProtocolPlay
-    } else {
-        loginEncryptionRequest(c)
     }
 }
 
