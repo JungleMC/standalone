@@ -3,7 +3,7 @@ package main
 import (
     "github.com/junglemc/JungleTree/internal/handlers"
     "github.com/junglemc/net"
-    "github.com/junglemc/world/blocks"
+    "github.com/junglemc/world/block"
     "log"
     "path/filepath"
 )
@@ -26,7 +26,7 @@ func main() {
         log.Println("\t* Loading blocks")
     }
 
-    err := blocks.LoadBlocks(filepath.Join("configs", MinecraftVersion, "blocks.json"))
+    err := block.LoadBlocks(filepath.Join("configs", MinecraftVersion, "blocks.json"))
     if err != nil {
         log.Panicln(err)
     }
