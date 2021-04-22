@@ -8,7 +8,6 @@ import (
     "github.com/junglemc/net/codec"
     "github.com/junglemc/net/codec/primitives"
     "github.com/junglemc/net/packet"
-    "log"
 )
 
 func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
@@ -23,7 +22,6 @@ func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
         }
         playr := player.GetOnlinePlayer(c)
         playr.ClientBrand = brand
-        log.Println(player.GetOnlinePlayer(c).ClientBrand)
     }
     return
 }
