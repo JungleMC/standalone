@@ -24,6 +24,7 @@ func main() {
 
 	loadBlocks(s)
 	loadBiomes(s)
+	loadDimensions(s)
 
 	if s.Debug {
 		log.Println("Done!")
@@ -54,6 +55,17 @@ func loadBiomes(s *net.Server) {
 	}
 
 	err := world.LoadBiomes()
+	if err != nil {
+		log.Panicln(err)
+	}
+}
+
+func loadDimensions(s *net.Server) {
+	if s.Debug {
+		log.Println("\t* Loading dimensions")
+	}
+
+	err := world.LoadDimensions()
 	if err != nil {
 		log.Panicln(err)
 	}
