@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	JungleTreeVersion = "0.0.4" // TODO: Load from git or tags?
+	JungleTreeVersion = "0.0.3" // TODO: Load from git or tags?
 	MinecraftVersion  = "1.16.5"
 	thinLine          = "------------------------------------"
 	thickLine         = "===================================="
