@@ -3,6 +3,7 @@ package main
 import (
     _ "embed"
     "github.com/junglemc/JungleTree/internal/handlers"
+    "github.com/junglemc/entity"
     "github.com/junglemc/net"
     "github.com/junglemc/world/biomes"
     "github.com/junglemc/world/blocks"
@@ -14,18 +15,20 @@ const (
     JungleTreeVersion = "0.0.4" // TODO: Load from git or tags?
     thinLine          = "------------------------------------"
     thickLine         = "===================================="
+    TicksPerSecond    = 20
 )
 
 func main() {
-    s := net.NewServer("0.0.0.0", 25565, true, 0, false, handlers.Handshake, handlers.Status, handlers.Login, nil)
+    s := net.NewServer("0.0.0.0", 25565, true, 0, false, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play)
 
     log.Println(thickLine)
     log.Println("Starting JungleTree Server v" + JungleTreeVersion)
     log.Println(thickLine)
 
-    loadBlocks(s)
-    loadBiomes(s)
-    loadDimensions(s)
+    loadDimensions()
+    loadBiomes()
+    loadBlocks()
+    loadEntities()
 
     log.Println("Done!")
     log.Println(thinLine)
@@ -37,7 +40,7 @@ func main() {
     }
 }
 
-func loadBlocks(s *net.Server) {
+func loadBlocks() {
     log.Println("\t* Loading blocks")
 
     err := blocks.Load()
@@ -46,7 +49,7 @@ func loadBlocks(s *net.Server) {
     }
 }
 
-func loadBiomes(s *net.Server) {
+func loadBiomes() {
     log.Println("\t* Loading biomes")
 
     err := biomes.Load()
@@ -55,10 +58,21 @@ func loadBiomes(s *net.Server) {
     }
 }
 
-func loadDimensions(s *net.Server) {
+func loadDimensions() {
     log.Println("\t* Loading dimensions")
     err := dimensions.Load()
     if err != nil {
         log.Panicln(err)
     }
+}
+
+func loadEntities() {
+    log.Println("\t* Loading entities")
+    err := entity.Load()
+    if err != nil {
+        log.Panicln(err)
+    }
+
+    entityThread := entity.EntityRunner{TPS: TicksPerSecond}
+    entityThread.Run()
 }
