@@ -11,13 +11,13 @@ import (
 )
 
 const (
-    JungleTreeVersion = "0.0.3" // TODO: Load from git or tags?
+    JungleTreeVersion = "0.0.4" // TODO: Load from git or tags?
     thinLine          = "------------------------------------"
     thickLine         = "===================================="
 )
 
 func main() {
-    s := net.NewServer("0.0.0.0", 25565, true, 0, true, handlers.Handshake, handlers.Status, handlers.Login, nil)
+    s := net.NewServer("0.0.0.0", 25565, true, 0, false, handlers.Handshake, handlers.Status, handlers.Login, nil)
 
     log.Println(thickLine)
     log.Println("Starting JungleTree Server v" + JungleTreeVersion)
@@ -27,10 +27,8 @@ func main() {
     loadBiomes(s)
     loadDimensions(s)
 
-    if s.Debug {
-        log.Println("Done!")
-        log.Println(thinLine)
-    }
+    log.Println("Done!")
+    log.Println(thinLine)
 
     log.Printf("Server listening on: %s:%d", s.Address, s.Port)
     err := s.Listen()
@@ -40,9 +38,7 @@ func main() {
 }
 
 func loadBlocks(s *net.Server) {
-    if s.Debug {
-        log.Println("\t* Loading blocks")
-    }
+    log.Println("\t* Loading blocks")
 
     err := blocks.Load()
     if err != nil {
@@ -51,9 +47,7 @@ func loadBlocks(s *net.Server) {
 }
 
 func loadBiomes(s *net.Server) {
-    if s.Debug {
-        log.Println("\t* Loading biomes")
-    }
+    log.Println("\t* Loading biomes")
 
     err := biomes.Load()
     if err != nil {
@@ -62,10 +56,7 @@ func loadBiomes(s *net.Server) {
 }
 
 func loadDimensions(s *net.Server) {
-    if s.Debug {
-        log.Println("\t* Loading dimensions")
-    }
-
+    log.Println("\t* Loading dimensions")
     err := dimensions.Load()
     if err != nil {
         log.Panicln(err)
