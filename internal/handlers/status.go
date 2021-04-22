@@ -3,21 +3,22 @@ package handlers
 import (
     "encoding/json"
     "github.com/junglemc/mc"
+    "github.com/junglemc/mc/status"
     "github.com/junglemc/net"
     "github.com/junglemc/net/codec"
     "github.com/junglemc/net/packet"
 )
 
 func statusRequest(c *net.Client, p codec.Packet) (err error) {
-    response := mc.ServerListResponse{
-        Version: mc.GameVersion{
+    response := status.ServerListResponse{
+        Version: status.GameVersion{
             Name:     "1.16.5",
             Protocol: 754,
         },
-        Players: mc.ServerListPlayers{
+        Players: status.ServerListPlayers{
             Max:    10,
             Online: 0,
-            Sample: []mc.ServerListPlayer{},
+            Sample: []status.ServerListPlayer{},
         },
         Description: mc.Chat{Text: "A JungleTree Server"},
     }
