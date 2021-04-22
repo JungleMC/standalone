@@ -27,4 +27,5 @@ var Login = map[reflect.Type]func(c *net.Client, pkt codec.Packet) error{
 
 var Play = map[reflect.Type]func(c *net.Client, pkt codec.Packet) error{
     t(packet.ServerboundClientSettingsPacket{}): playClientSettings,
+    t(packet.ServerboundPluginMessagePacket{}):  playPluginMessage,
 }

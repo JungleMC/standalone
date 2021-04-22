@@ -1,11 +1,16 @@
 package handlers
 
 import (
+    "bufio"
+    "bytes"
     "github.com/google/uuid"
+    "github.com/junglemc/JungleTree/internal/player"
+    "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/mc"
     "github.com/junglemc/net"
     "github.com/junglemc/net/auth"
     "github.com/junglemc/net/codec"
+    "github.com/junglemc/net/codec/primitives"
     "github.com/junglemc/net/packet"
     "github.com/junglemc/world"
     "github.com/junglemc/world/dimensions"
@@ -68,7 +73,7 @@ func loginEncryptionResponse(c *net.Client, p codec.Packet) (err error) {
 }
 
 func joinGame(c *net.Client) (err error) {
-    joinGame := &packet.ClientboundJoinGamePacket{
+    join := &packet.ClientboundJoinGamePacket{
         EntityId:            0,
         IsHardcore:          false,
         GameMode:            mc.Survival,
@@ -85,6 +90,27 @@ func joinGame(c *net.Client) (err error) {
         IsDebug:             true,
         IsFlat:              false,
     }
-    err = c.Send(joinGame)
+    err = c.Send(join)
+    if err != nil {
+        return
+    }
+
+    b := &bytes.Buffer{}
+    buf := bufio.NewWriter(b)
+    err = primitives.WriteString(buf, pkg.Brand)
+    if err != nil {
+        return
+    }
+
+    player.Connect(c)
+
+    brand := &packet.ClientboundPluginMessagePacket{
+        Channel: mc.Identifier{
+            Prefix: "minecraft",
+            Name:   "brand",
+        },
+        Data: b.Bytes(),
+    }
+    err = c.Send(brand)
     return
 }

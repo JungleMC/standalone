@@ -19,7 +19,7 @@ const (
 )
 
 func main() {
-    s := net.NewServer("0.0.0.0", 25565, true, 0, false, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play)
+    s := net.NewServer("0.0.0.0", 25565, true, 0, true, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play)
 
     log.Println(thickLine)
     log.Println("Starting JungleTree Server v" + JungleTreeVersion)

@@ -1,3 +1,6 @@
 package pkg
 
-const Version = "1.16.5"
+const (
+    Brand = "JungleTree"
+	Version = "1.16.5"
+)
