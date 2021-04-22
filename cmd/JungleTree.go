@@ -4,7 +4,9 @@ import (
 	_ "embed"
 	"github.com/junglemc/JungleTree/internal/handlers"
 	"github.com/junglemc/net"
-	"github.com/junglemc/world"
+	"github.com/junglemc/world/biomes"
+	"github.com/junglemc/world/blocks"
+	"github.com/junglemc/world/dimensions"
 	"log"
 )
 
@@ -43,7 +45,7 @@ func loadBlocks(s *net.Server) {
 		log.Println("\t* Loading blocks")
 	}
 
-	err := world.LoadBlocks()
+	err := blocks.Load()
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -54,7 +56,7 @@ func loadBiomes(s *net.Server) {
 		log.Println("\t* Loading biomes")
 	}
 
-	err := world.LoadBiomes()
+	err := biomes.Load()
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -65,7 +67,7 @@ func loadDimensions(s *net.Server) {
 		log.Println("\t* Loading dimensions")
 	}
 
-	err := world.LoadDimensions()
+	err := dimensions.Load()
 	if err != nil {
 		log.Panicln(err)
 	}
