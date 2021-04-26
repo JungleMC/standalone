@@ -91,7 +91,7 @@ func joinGame(c *net.Client) (err error) {
         return
     }
 
-    return sendClientAbilities(c)
+    return sendPlayerAbilities(c)
 }
 
 func sendJoinGame(c *net.Client) (err error) {
@@ -141,7 +141,7 @@ func sendServerDifficulty(c *net.Client) (err error) {
     return c.Send(pkt)
 }
 
-func sendClientAbilities(c *net.Client) (err error) {
+func sendPlayerAbilities(c *net.Client) (err error) {
     onlinePlayer, ok := player.GetOnlinePlayer(c)
     if !ok {
         return
