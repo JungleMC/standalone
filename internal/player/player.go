@@ -1,6 +1,7 @@
 package player
 
 import (
+    "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/entity"
     "github.com/junglemc/mc"
     "github.com/junglemc/net"
@@ -18,6 +19,8 @@ type OnlinePlayer struct {
     Client      *net.Client
     Entity      *entity.LivingEntity
     ClientBrand string
+    Gamemode    mc.GameMode
+    Difficulty  mc.Difficulty
 }
 
 func (o OnlinePlayer) String() string {
@@ -39,8 +42,10 @@ func Connect(c *net.Client) {
     })
 
     player := OnlinePlayer{
-        Client: c,
-        Entity: playerEntity,
+        Client:     c,
+        Entity:     playerEntity,
+        Gamemode:   pkg.Config().Gamemode,
+        Difficulty: pkg.Config().Difficulty,
     }
     wait.Wait()
     onlinePlayers = append(onlinePlayers, player)

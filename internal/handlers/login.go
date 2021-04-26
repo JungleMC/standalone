@@ -7,6 +7,7 @@ import (
     "github.com/junglemc/JungleTree/internal/player"
     "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/mc"
+    "github.com/junglemc/mc/ability"
     "github.com/junglemc/net"
     "github.com/junglemc/net/auth"
     "github.com/junglemc/net/codec"
@@ -85,7 +86,12 @@ func joinGame(c *net.Client) (err error) {
         return
     }
 
-    return sendServerDifficulty(c)
+    err = sendServerDifficulty(c)
+    if err != nil {
+        return
+    }
+
+    return sendClientAbilities(c)
 }
 
 func sendJoinGame(c *net.Client) (err error) {
@@ -117,20 +123,39 @@ func sendServerBrand(c *net.Client) (err error) {
         return
     }
 
-    brand := &packet.ClientboundPluginMessagePacket{
+    pkt := &packet.ClientboundPluginMessagePacket{
         Channel: mc.Identifier{
             Prefix: "minecraft",
             Name:   "brand",
         },
         Data: b.Bytes(),
     }
-    return c.Send(brand)
+    return c.Send(pkt)
 }
 
 func sendServerDifficulty(c *net.Client) (err error) {
-    difficulty := &packet.ClientboundServerDifficultyPacket{
+    pkt := &packet.ClientboundServerDifficultyPacket{
         Difficulty:       pkg.Config().Difficulty.Byte(),
         DifficultyLocked: false,
     }
-    return c.Send(difficulty)
+    return c.Send(pkt)
+}
+
+func sendClientAbilities(c *net.Client) (err error) {
+    onlinePlayer, ok := player.GetOnlinePlayer(c)
+    if !ok {
+        return
+    }
+
+    abilities := ability.Set(0, ability.Invulnerable)
+    if onlinePlayer.Gamemode == mc.Creative {
+        abilities = ability.Set(abilities, ability.CreativeMode)
+    }
+
+    pkt := &packet.ClientboundPlayerAbilitiesPacket{
+        Flags:        byte(abilities),
+        FlyingSpeed:  0.5,
+        WalkingSpeed: 0.1,
+    }
+    return c.Send(pkt)
 }
