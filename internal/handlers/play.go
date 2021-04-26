@@ -29,6 +29,15 @@ func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
 }
 
 func playClientSettings(c *net.Client, p codec.Packet) (err error) {
-    // pkt := p.(packet.ServerboundClientSettingsPacket)
+    pkt := p.(packet.ServerboundClientSettingsPacket)
+
+    onlinePlayer, ok := player.GetOnlinePlayer(c)
+    if ok {
+        onlinePlayer.Locale = pkt.Locale
+        onlinePlayer.ViewDistance = pkt.ViewDistance
+        onlinePlayer.ChatMode = pkt.ChatMode
+        onlinePlayer.ChatColorsEnabled = pkt.ChatColorsEnabled
+        onlinePlayer.MainHand = pkt.MainHand
+    }
     return
 }

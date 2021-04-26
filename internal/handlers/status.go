@@ -1,14 +1,14 @@
 package handlers
 
 import (
-    "encoding/json"
-    "github.com/junglemc/JungleTree/internal/player"
-    "github.com/junglemc/JungleTree/pkg"
-    "github.com/junglemc/mc"
-    "github.com/junglemc/mc/status"
-    "github.com/junglemc/net"
-    "github.com/junglemc/net/codec"
-    "github.com/junglemc/net/packet"
+	"encoding/json"
+	"github.com/junglemc/JungleTree/internal/player"
+	"github.com/junglemc/JungleTree/pkg"
+	"github.com/junglemc/mc/chat"
+	"github.com/junglemc/mc/status"
+	"github.com/junglemc/net"
+	"github.com/junglemc/net/codec"
+	"github.com/junglemc/net/packet"
 )
 
 func statusRequest(c *net.Client, p codec.Packet) (err error) {
@@ -22,7 +22,7 @@ func statusRequest(c *net.Client, p codec.Packet) (err error) {
             Online: player.GetOnlinePlayers(),
             Sample: []status.ServerListPlayer{},
         },
-        Description: mc.Chat{Text: "A JungleTree Server"},
+        Description: chat.Message{Text: "A JungleTree Server"},
     }
 
     data, err := json.Marshal(response)

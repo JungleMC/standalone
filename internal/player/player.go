@@ -4,6 +4,7 @@ import (
     "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/entity"
     "github.com/junglemc/mc"
+    "github.com/junglemc/mc/chat"
     "github.com/junglemc/net"
     "github.com/junglemc/net/codec"
     "github.com/junglemc/net/packet"
@@ -16,11 +17,17 @@ var onlinePlayers = make([]OnlinePlayer, 0)
 var wait = &sync.WaitGroup{}
 
 type OnlinePlayer struct {
-    Client      *net.Client
-    Entity      *entity.LivingEntity
-    ClientBrand string
-    Gamemode    mc.GameMode
-    Difficulty  mc.Difficulty
+    Client            *net.Client
+    Entity            *entity.LivingEntity
+    ClientBrand       string
+    Gamemode          mc.GameMode
+    Difficulty        mc.Difficulty
+    Locale            string
+    ViewDistance      byte
+    ChatMode          chat.Mode
+    ChatColorsEnabled bool
+    SkinParts         byte
+    MainHand          mc.Hand
 }
 
 func (o OnlinePlayer) String() string {
@@ -34,7 +41,7 @@ func tick(c *net.Client, time time.Time) (err error) {
 func Connect(c *net.Client) {
 
     if _, player, ok := getOnlinePlayer(c); ok {
-        player.Client.Disconnect(&mc.Chat{Text: "You logged in from another location!"})
+        player.Client.Disconnect(&chat.Message{Text: "You logged in from another location!"})
     }
 
     playerEntity := entity.NewLivingEntity(entity.ByName("player"), c.Profile.ID, func(e *entity.LivingEntity, time time.Time) error {
@@ -51,7 +58,7 @@ func Connect(c *net.Client) {
     onlinePlayers = append(onlinePlayers, player)
 }
 
-func Disconnect(c *net.Client, reason *mc.Chat) {
+func Disconnect(c *net.Client, reason *chat.Message) {
     if i, _, ok := getOnlinePlayer(c); ok {
         wait.Wait()
         if i+1 >= len(onlinePlayers) {
