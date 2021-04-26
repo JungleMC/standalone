@@ -30,7 +30,6 @@ func tick(c *net.Client, time time.Time) (err error) {
 
 func Connect(c *net.Client) {
 
-	log.Println(c.Profile.Name)
 	if _, player, ok := getOnlinePlayer(c); ok {
 		player.Client.Disconnect(&mc.Chat{Text: "You logged in from another location!"})
 	}
@@ -48,7 +47,6 @@ func Connect(c *net.Client) {
 }
 
 func Disconnect(c *net.Client, reason *mc.Chat) {
-
 	if i, _, ok := getOnlinePlayer(c); ok {
 		wait.Wait()
 		if i+1 >= len(onlinePlayers) {
