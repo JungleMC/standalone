@@ -73,6 +73,22 @@ func loginEncryptionResponse(c *net.Client, p codec.Packet) (err error) {
 }
 
 func joinGame(c *net.Client) (err error) {
+    err = sendJoinGame(c)
+    if err != nil {
+        return
+    }
+
+    player.Connect(c)
+
+    err = sendServerBrand(c)
+    if err != nil {
+        return
+    }
+
+    return sendServerDifficulty(c)
+}
+
+func sendJoinGame(c *net.Client) (err error) {
     join := &packet.ClientboundJoinGamePacket{
         EntityId:            0,
         IsHardcore:          false,
@@ -90,19 +106,16 @@ func joinGame(c *net.Client) (err error) {
         IsDebug:             true,
         IsFlat:              false,
     }
-    err = c.Send(join)
-    if err != nil {
-        return
-    }
+    return c.Send(join)
+}
 
+func sendServerBrand(c *net.Client) (err error) {
     b := &bytes.Buffer{}
     buf := bufio.NewWriter(b)
     err = primitives.WriteString(buf, pkg.Brand)
     if err != nil {
         return
     }
-
-    player.Connect(c)
 
     brand := &packet.ClientboundPluginMessagePacket{
         Channel: mc.Identifier{
@@ -111,6 +124,13 @@ func joinGame(c *net.Client) (err error) {
         },
         Data: b.Bytes(),
     }
-    err = c.Send(brand)
-    return
+    return c.Send(brand)
+}
+
+func sendServerDifficulty(c *net.Client) (err error) {
+    difficulty := &packet.ClientboundServerDifficultyPacket{
+        Difficulty:       pkg.Config().Difficulty.Byte(),
+        DifficultyLocked: false,
+    }
+    return c.Send(difficulty)
 }
