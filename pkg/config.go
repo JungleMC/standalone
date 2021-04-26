@@ -1,6 +1,7 @@
 package pkg
 
 import (
+    "github.com/junglemc/mc"
     "github.com/pelletier/go-toml"
     "io/fs"
     "io/ioutil"
@@ -16,7 +17,7 @@ type RootConfiguration struct {
     MOTD             string
     MaxOnlinePlayers int
     Network          NetConfig
-    Difficulty       string
+    Difficulty       mc.Difficulty
     JavaEdition      JavaEditionConfig
 }
 
@@ -60,6 +61,7 @@ func createDefaults() {
         MOTD:             "A JungleTree Server",
         MaxOnlinePlayers: 20,
         Network:          serverConfig,
+        Difficulty:       mc.Normal,
         JavaEdition:      jeConfig,
     }
 
