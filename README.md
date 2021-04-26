@@ -1,3 +1,3 @@
 # JungleTree
 
-Inventory tracking for Minecraft
+Minecraft server software
