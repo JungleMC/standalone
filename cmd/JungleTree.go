@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	JungleTreeVersion = "0.0.5" // TODO: Load from git or tags?
+	JungleTreeVersion = "0.0.6" // TODO: Load from git or tags?
 	thinLine          = "------------------------------------"
 	thickLine         = "===================================="
 	TicksPerSecond    = 20
