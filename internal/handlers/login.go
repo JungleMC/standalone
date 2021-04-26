@@ -147,8 +147,11 @@ func sendClientAbilities(c *net.Client) (err error) {
         return
     }
 
-    abilities := ability.Set(0, ability.Invulnerable)
+    abilities := ability.PlayerAbilities(0)
+
     if onlinePlayer.Gamemode == mc.Creative {
+        abilities = ability.Set(abilities, ability.Invulnerable)
+        abilities = ability.Set(abilities, ability.AllowFlying)
         abilities = ability.Set(abilities, ability.CreativeMode)
     }
 
