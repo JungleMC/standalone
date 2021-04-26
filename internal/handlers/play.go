@@ -39,17 +39,22 @@ func playClientSettings(c *net.Client, p codec.Packet) (err error) {
     pkt := p.(packet.ServerboundClientSettingsPacket)
 
     onlinePlayer, ok := player.GetOnlinePlayer(c)
-    if ok {
-        onlinePlayer.Locale = pkt.Locale
-        onlinePlayer.ViewDistance = pkt.ViewDistance
-        onlinePlayer.ChatMode = pkt.ChatMode
-        onlinePlayer.ChatColorsEnabled = pkt.ChatColorsEnabled
-        onlinePlayer.MainHand = pkt.MainHand
-
-        if pkg.Config().DebugMode {
-            data, _ := json.MarshalIndent(onlinePlayer, "", "  ")
-            log.Printf("Client settings for %s:\n%s\n", c.Profile.Name, string(data))
-        }
+    if !ok {
+        return
     }
-    return
+    onlinePlayer.Locale = pkt.Locale
+    onlinePlayer.ViewDistance = pkt.ViewDistance
+    onlinePlayer.ChatMode = pkt.ChatMode
+    onlinePlayer.ChatColorsEnabled = pkt.ChatColorsEnabled
+    onlinePlayer.MainHand = pkt.MainHand
+
+    if pkg.Config().DebugMode {
+        data, _ := json.MarshalIndent(onlinePlayer, "", "  ")
+        log.Printf("Client settings for %s:\n%s\n", c.Profile.Name, string(data))
+    }
+
+    itemChange := &packet.ClientboundHeldItemChangePacket{
+        Slot: byte(onlinePlayer.Hotbar.SelectedIndex),
+    }
+    return c.Send(itemChange)
 }

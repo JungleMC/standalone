@@ -3,6 +3,7 @@ package player
 import (
     "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/entity"
+    "github.com/junglemc/inventory"
     "github.com/junglemc/mc"
     "github.com/junglemc/mc/chat"
     "github.com/junglemc/net"
@@ -28,6 +29,8 @@ type OnlinePlayer struct {
     ChatColorsEnabled bool
     SkinParts         byte
     MainHand          mc.Hand
+    Inventory         inventory.Player
+    Hotbar            inventory.Hotbar
 }
 
 func (o OnlinePlayer) String() string {
@@ -53,6 +56,8 @@ func Connect(c *net.Client) {
         Entity:     playerEntity,
         Gamemode:   pkg.Config().Gamemode,
         Difficulty: pkg.Config().Difficulty,
+        Inventory: inventory.Player{},
+        Hotbar: inventory.Hotbar{},
     }
     wait.Wait()
     onlinePlayers = append(onlinePlayers, player)
