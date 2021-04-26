@@ -17,9 +17,9 @@ var onlinePlayers = make([]OnlinePlayer, 0)
 var wait = &sync.WaitGroup{}
 
 type OnlinePlayer struct {
-    Client            *net.Client
-    Entity            *entity.LivingEntity
-    ClientBrand       string
+    Client            *net.Client          `json:"-"`
+    Entity            *entity.LivingEntity `json:"-"`
+    ClientBrand       string               `json:"-"`
     Gamemode          mc.GameMode
     Difficulty        mc.Difficulty
     Locale            string

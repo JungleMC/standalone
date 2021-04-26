@@ -3,11 +3,14 @@ package handlers
 import (
     "bufio"
     "bytes"
+    "encoding/json"
     "github.com/junglemc/JungleTree/internal/player"
+    "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/net"
     "github.com/junglemc/net/codec"
     "github.com/junglemc/net/codec/primitives"
     "github.com/junglemc/net/packet"
+    "log"
 )
 
 func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
@@ -23,6 +26,10 @@ func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
 
         if onlinePlayer, ok := player.GetOnlinePlayer(c); ok {
             onlinePlayer.ClientBrand = brand
+
+            if pkg.Config().DebugMode {
+                log.Printf("Client brand for %s: %s\n", c.Profile.Name, onlinePlayer.ClientBrand)
+            }
         }
     }
     return
@@ -38,6 +45,11 @@ func playClientSettings(c *net.Client, p codec.Packet) (err error) {
         onlinePlayer.ChatMode = pkt.ChatMode
         onlinePlayer.ChatColorsEnabled = pkt.ChatColorsEnabled
         onlinePlayer.MainHand = pkt.MainHand
+
+        if pkg.Config().DebugMode {
+            data, _ := json.MarshalIndent(onlinePlayer, "", "  ")
+            log.Printf("Client settings for %s:\n%s\n", c.Profile.Name, string(data))
+        }
     }
     return
 }
