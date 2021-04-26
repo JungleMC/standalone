@@ -20,8 +20,10 @@ func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
         if err != nil {
             return
         }
-        playr := player.GetOnlinePlayer(c)
-        playr.ClientBrand = brand
+
+        if onlinePlayer, ok := player.GetOnlinePlayer(c); ok {
+            onlinePlayer.ClientBrand = brand
+        }
     }
     return
 }

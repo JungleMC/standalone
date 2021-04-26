@@ -1,0 +1,11 @@
+DebugMode = false
+MOTD = "A JungleTree Server"
+MaxOnlinePlayers = 20
+
+[JavaEdition]
+  OnlineMode = true
+
+[Network]
+  IP = ""
+  NetworkCompressionThreshold = 256
+  Port = 25565

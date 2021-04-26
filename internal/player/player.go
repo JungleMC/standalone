@@ -1,52 +1,89 @@
 package player
 
 import (
-    "errors"
-    "github.com/junglemc/entity"
-    "github.com/junglemc/net"
-    "sync"
-    "time"
+	"github.com/junglemc/entity"
+	"github.com/junglemc/mc"
+	"github.com/junglemc/net"
+	"github.com/junglemc/net/codec"
+	"github.com/junglemc/net/packet"
+	"log"
+	"sync"
+	"time"
 )
 
 var onlinePlayers = make([]OnlinePlayer, 0)
 var wait = &sync.WaitGroup{}
 
 type OnlinePlayer struct {
-    Client      *net.Client
-    Entity      *entity.LivingEntity
-    ClientBrand string
+	Client      *net.Client
+	Entity      *entity.LivingEntity
+	ClientBrand string
 }
 
 func (o OnlinePlayer) String() string {
-    return o.Client.Profile.Name
+	return o.Client.Profile.Name
 }
 
 func tick(c *net.Client, time time.Time) (err error) {
-    return
+	return
 }
 
 func Connect(c *net.Client) {
-    wait.Add(1)
 
-    playerEntity := entity.NewLivingEntity(entity.ByName("player"), c.Profile.ID, func(e *entity.LivingEntity, time time.Time) error {
-        return tick(c, time)
-    })
+	log.Println(c.Profile.Name)
+	if _, player, ok := getOnlinePlayer(c); ok {
+		player.Client.Disconnect(&mc.Chat{Text: "You logged in from another location!"})
+	}
 
-    player := OnlinePlayer{
-        Client: c,
-        Entity: playerEntity,
-    }
-    onlinePlayers = append(onlinePlayers, player)
-    wait.Done()
+	playerEntity := entity.NewLivingEntity(entity.ByName("player"), c.Profile.ID, func(e *entity.LivingEntity, time time.Time) error {
+		return tick(c, time)
+	})
+
+	player := OnlinePlayer{
+		Client: c,
+		Entity: playerEntity,
+	}
+	wait.Wait()
+	onlinePlayers = append(onlinePlayers, player)
 }
 
-func GetOnlinePlayer(c *net.Client) *OnlinePlayer {
-    wait.Add(1)
-    for i, o := range onlinePlayers {
-        if o.Client.Profile.ID == c.Profile.ID {
-            return &onlinePlayers[i]
-        }
-    }
-    wait.Done()
-    panic(errors.New("online player not found for client: " + c.Profile.Name))
+func Disconnect(c *net.Client, reason *mc.Chat) {
+
+	if i, _, ok := getOnlinePlayer(c); ok {
+		wait.Wait()
+		if i+1 >= len(onlinePlayers) {
+			onlinePlayers = onlinePlayers[:i]
+		} else {
+			onlinePlayers = append(onlinePlayers[:i], onlinePlayers[i+1:]...)
+		}
+
+		if reason != nil {
+			log.Printf("%s disconnected: %s", c.Profile.Name, reason.String())
+			if c.Protocol == codec.ProtocolLogin {
+				_ = c.Send(&packet.ClientboundLoginDisconnectPacket{Reason: *reason})
+			} else if c.Protocol == codec.ProtocolPlay {
+				_ = c.Send(&packet.ClientboundPlayKickDisconnect{Reason: *reason})
+			}
+		}
+	}
+}
+
+func GetOnlinePlayers() int {
+	return len(onlinePlayers)
+}
+
+func GetOnlinePlayer(c *net.Client) (p *OnlinePlayer, ok bool) {
+	_, p, ok = getOnlinePlayer(c)
+	return
+}
+
+func getOnlinePlayer(c *net.Client) (index int, p *OnlinePlayer, ok bool) {
+	wait.Add(1)
+	defer wait.Done()
+	for i, o := range onlinePlayers {
+		if o.Client.Profile.ID == c.Profile.ID {
+			return i, &onlinePlayers[i], true
+		}
+	}
+	return 0, nil, false
 }
