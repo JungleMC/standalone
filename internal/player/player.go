@@ -56,8 +56,8 @@ func Connect(c *net.Client) {
         Entity:     playerEntity,
         Gamemode:   pkg.Config().Gamemode,
         Difficulty: pkg.Config().Difficulty,
-        Inventory: inventory.Player{},
-        Hotbar: inventory.Hotbar{},
+        Inventory:  inventory.Player{},
+        Hotbar:     inventory.Hotbar{},
     }
     wait.Wait()
     onlinePlayers = append(onlinePlayers, player)
