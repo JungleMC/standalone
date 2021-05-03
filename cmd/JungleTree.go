@@ -4,9 +4,9 @@ import (
     "github.com/junglemc/JungleTree/internal/handlers"
     "github.com/junglemc/JungleTree/internal/player"
     "github.com/junglemc/JungleTree/pkg"
+    "github.com/junglemc/crafting"
     "github.com/junglemc/entity"
     "github.com/junglemc/item"
-    "github.com/junglemc/item/recipes"
     "github.com/junglemc/net"
     "github.com/junglemc/world/biomes"
     "github.com/junglemc/world/blocks"
@@ -94,7 +94,7 @@ func loadEntities() {
 
 func loadItems() {
     log.Println("\t* Loading items")
-    err := item.Load()
+    err := item.LoadItemTypes()
     if err != nil {
         log.Panicln(err)
     }
@@ -102,7 +102,7 @@ func loadItems() {
 
 func loadRecipes() {
     log.Println("\t* Loading recipes")
-    err := recipes.Load()
+    err := crafting.LoadRecipes()
     if err != nil {
         log.Panicln(err)
     }

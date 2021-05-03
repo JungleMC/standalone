@@ -6,7 +6,7 @@ import (
     "github.com/google/uuid"
     "github.com/junglemc/JungleTree/internal/player"
     "github.com/junglemc/JungleTree/pkg"
-    "github.com/junglemc/item/recipes"
+    "github.com/junglemc/crafting"
     "github.com/junglemc/mc"
     "github.com/junglemc/mc/ability"
     "github.com/junglemc/net"
@@ -170,5 +170,5 @@ func sendPlayerAbilities(c *net.Client) (err error) {
 }
 
 func sendDeclaredRecipes(c *net.Client) (err error) {
-    return c.Send(&packet.ClientboundDeclareRecipesPacket{Recipes: recipes.Get()})
+    return c.Send(&packet.ClientboundDeclareRecipesPacket{Recipes: crafting.Recipes()})
 }
