@@ -54,8 +54,8 @@ func Connect(c *net.Client) {
 	player := OnlinePlayer{
 		Client:     c,
 		Entity:     playerEntity,
-		Gamemode:   pkg.Config().Gamemode,
-		Difficulty: pkg.Config().Difficulty,
+		Gamemode:   mc.GameModeByName(pkg.Config().Gamemode),
+		Difficulty: mc.DifficultyByName(pkg.Config().Difficulty),
 		Inventory:  inventory.Player{},
 		Hotbar:     inventory.Hotbar{},
 	}

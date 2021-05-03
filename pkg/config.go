@@ -17,8 +17,8 @@ type RootConfiguration struct {
     MOTD             string
     MaxOnlinePlayers int
     Network          NetConfig
-    Gamemode         mc.GameMode
-    Difficulty       mc.Difficulty
+    Gamemode         string
+    Difficulty       string
     JavaEdition      JavaEditionConfig
 }
 
@@ -62,8 +62,8 @@ func createDefaults() {
         MOTD:             "A JungleTree Server",
         MaxOnlinePlayers: 20,
         Network:          serverConfig,
-        Gamemode:         mc.Survival,
-        Difficulty:       mc.Normal,
+        Gamemode:         mc.Survival.String(),
+        Difficulty:       mc.Normal.String(),
         JavaEdition:      jeConfig,
     }
 

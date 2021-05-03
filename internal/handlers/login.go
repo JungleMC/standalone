@@ -101,6 +101,11 @@ func joinGame(c *net.Client) (err error) {
 }
 
 func sendJoinGame(c *net.Client) (err error) {
+    dimension, ok := dimensions.ByName("minecraft:overworld")
+    if !ok {
+        panic("dimension not found")
+    }
+
     join := &packet.ClientboundJoinGamePacket{
         EntityId:            0,
         IsHardcore:          false,
@@ -108,7 +113,7 @@ func sendJoinGame(c *net.Client) (err error) {
         PreviousGameMode:    -1,
         WorldNames:          []string{"world"},
         DimensionCodec:      world.Codec(),
-        Dimension:           *dimensions.ByName("overworld"),
+        Dimension:           *dimension,
         WorldName:           "world",
         HashedSeed:          0,
         MaxPlayers:          10,
@@ -130,10 +135,7 @@ func sendServerBrand(c *net.Client) (err error) {
     }
 
     pkt := &packet.ClientboundPluginMessagePacket{
-        Channel: mc.Identifier{
-            Prefix: "minecraft",
-            Name:   "brand",
-        },
+        Channel: "minecraft:brand",
         Data: b.Bytes(),
     }
     return c.Send(pkt)
@@ -141,7 +143,7 @@ func sendServerBrand(c *net.Client) (err error) {
 
 func sendServerDifficulty(c *net.Client) (err error) {
     pkt := &packet.ClientboundServerDifficultyPacket{
-        Difficulty:       pkg.Config().Difficulty.Byte(),
+        Difficulty:       mc.DifficultyByName(pkg.Config().Difficulty),
         DifficultyLocked: false,
     }
     return c.Send(pkt)

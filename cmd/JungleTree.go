@@ -94,7 +94,7 @@ func loadEntities() {
 
 func loadItems() {
     log.Println("\t* Loading items")
-    err := item.LoadItemTypes()
+    err := item.Load()
     if err != nil {
         log.Panicln(err)
     }
@@ -102,7 +102,7 @@ func loadItems() {
 
 func loadRecipes() {
     log.Println("\t* Loading recipes")
-    err := crafting.LoadRecipes()
+    err := crafting.Load()
     if err != nil {
         log.Panicln(err)
     }

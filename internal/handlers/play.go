@@ -16,7 +16,7 @@ import (
 func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
     pkt := p.(packet.ServerboundPluginMessagePacket)
 
-    if pkt.Channel.Prefix == "minecraft" && pkt.Channel.Name == "brand" {
+    if pkt.Channel.Prefix() == "minecraft" && pkt.Channel.Name() == "brand" {
         buf := bufio.NewReader(bytes.NewReader(pkt.Data))
         brand := ""
         brand, err = primitives.ReadString(buf)

@@ -10,8 +10,8 @@ require (
 	github.com/junglemc/item v0.0.0-20210501142915-86f97f9bf899
 	github.com/junglemc/mc v0.0.0-20210503165821-a57268ca5677
 	github.com/junglemc/net v0.0.0-20210331152110-1745234921ff
-	github.com/junglemc/world v0.0.0-20210422154105-8c1c6d421929
-	github.com/pelletier/go-toml v1.9.0 // indirect
+	github.com/junglemc/world v0.0.0-20210501143440-242b50f2e440
+	github.com/pelletier/go-toml v1.9.0
 )
 
 replace github.com/junglemc/item => /home/ella/go/src/github.com/junglemc/item
