@@ -6,7 +6,7 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/junglemc/entity v0.0.0-20210422180046-32f559d007d8 // indirect
 	github.com/junglemc/inventory v0.0.0-20210426155211-e4abaf4170f6 // indirect
-	github.com/junglemc/item v0.0.0-20210426163630-9b5fb2ae05a2 // indirect
+	github.com/junglemc/item v0.0.0-20210501142915-86f97f9bf899 // indirect
 	github.com/junglemc/mc v0.0.0-20210426121021-8b2d2d4e268f
 	github.com/junglemc/net v0.0.0-20210331152110-1745234921ff
 	github.com/junglemc/world v0.0.0-20210422154105-8c1c6d421929

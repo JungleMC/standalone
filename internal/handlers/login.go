@@ -6,6 +6,7 @@ import (
     "github.com/google/uuid"
     "github.com/junglemc/JungleTree/internal/player"
     "github.com/junglemc/JungleTree/pkg"
+    "github.com/junglemc/item/recipes"
     "github.com/junglemc/mc"
     "github.com/junglemc/mc/ability"
     "github.com/junglemc/net"
@@ -91,7 +92,12 @@ func joinGame(c *net.Client) (err error) {
         return
     }
 
-    return sendPlayerAbilities(c)
+    err = sendPlayerAbilities(c)
+    if err != nil {
+        return
+    }
+
+    return sendDeclaredRecipes(c)
 }
 
 func sendJoinGame(c *net.Client) (err error) {
@@ -161,4 +167,8 @@ func sendPlayerAbilities(c *net.Client) (err error) {
         WalkingSpeed: 0.1,
     }
     return c.Send(pkt)
+}
+
+func sendDeclaredRecipes(c *net.Client) (err error) {
+    return c.Send(&packet.ClientboundDeclareRecipesPacket{Recipes: recipes.Get()})
 }
