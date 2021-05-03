@@ -50,7 +50,7 @@ func playClientSettings(c *net.Client, p codec.Packet) (err error) {
 
     if pkg.Config().DebugMode {
         data, _ := json.MarshalIndent(onlinePlayer, "", "  ")
-        log.Printf("Client settings for %s:\n", c.Profile.Name, string(data))
+        log.Printf("Client settings for %s:\n%s\n", c.Profile.Name, string(data))
     }
 
     itemChange := &packet.ClientboundHeldItemChangePacket{
