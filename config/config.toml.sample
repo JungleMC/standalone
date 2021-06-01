@@ -1,11 +1,14 @@
-DebugMode = false
+DebugMode = true
+Verbose = true
+Difficulty = "normal"
+Gamemode = "survival"
 MOTD = "A JungleTree Server"
 MaxOnlinePlayers = 20
 
 [JavaEdition]
-  OnlineMode = true
+OnlineMode = false
 
 [Network]
-  IP = ""
-  NetworkCompressionThreshold = 256
-  Port = 25565
+IP = ""
+NetworkCompressionThreshold = 256
+Port = 25565

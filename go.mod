@@ -9,7 +9,7 @@ require (
 	github.com/junglemc/inventory v0.0.0-20210426155211-e4abaf4170f6
 	github.com/junglemc/item v0.0.0-20210501142915-86f97f9bf899
 	github.com/junglemc/mc v0.0.0-20210503192518-57dc763f7426
-	github.com/junglemc/net v0.0.0-20210503192539-7f4d026e39b0
+	github.com/junglemc/net v0.0.0-20210601090209-1175022dceca
 	github.com/junglemc/packet v0.0.0-20210529215725-46008ea97cba // indirect
 	github.com/junglemc/world v0.0.0-20210503192549-f427001d1ef8
 	github.com/pelletier/go-toml v1.9.0
@@ -22,6 +22,8 @@ replace github.com/junglemc/crafting => /home/ella/go/src/github.com/junglemc/cr
 replace github.com/junglemc/inventory => /home/ella/go/src/github.com/junglemc/inventory
 
 replace github.com/junglemc/mc => /home/ella/go/src/github.com/junglemc/mc
+
+replace github.com/junglemc/nbt => /home/ella/go/src/github.com/junglemc/nbt
 
 replace github.com/junglemc/net => /home/ella/go/src/github.com/junglemc/net
 

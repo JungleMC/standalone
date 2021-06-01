@@ -21,7 +21,7 @@ func statusRequest(c *net.Client, p net.Packet) (err error) {
 			Online: player.GetOnlinePlayers(),
 			Sample: []status.ServerListPlayer{},
 		},
-		Description: chat.Message{Text: "A JungleTree Server"},
+		Description: chat.Message{Text: pkg.Config().MOTD},
 	}
 
 	data, err := json.Marshal(response)

@@ -14,6 +14,7 @@ var config RootConfiguration
 
 type RootConfiguration struct {
 	DebugMode        bool
+	Verbose          bool
 	MOTD             string
 	MaxOnlinePlayers int
 	Network          NetConfig

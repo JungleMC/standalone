@@ -25,10 +25,10 @@ type OnlinePlayer struct {
 	Difficulty        mc.Difficulty
 	Locale            string
 	ViewDistance      byte
-	ChatMode          chat.Mode
+	ChatMode          *chat.Mode
 	ChatColorsEnabled bool
 	SkinParts         byte
-	MainHand          mc.Hand
+	MainHand          *mc.Hand
 	Inventory         inventory.Player `json:"-"`
 	Hotbar            inventory.Hotbar `json:"-"`
 }

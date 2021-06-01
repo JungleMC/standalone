@@ -12,18 +12,18 @@ import (
 	"github.com/junglemc/net/auth"
 	"github.com/junglemc/net/codec"
 	"github.com/junglemc/net/protocol"
-	packet2 "github.com/junglemc/packet"
+	"github.com/junglemc/packet"
 	"github.com/junglemc/world"
 	"github.com/junglemc/world/dimensions"
 )
 
 func loginStart(c *net.Client, p net.Packet) (err error) {
-	pkt := p.(packet2.ServerboundLoginStartPacket)
+	pkt := p.(packet.ServerboundLoginStartPacket)
 
 	c.Profile.Name = pkt.Username
 
 	if c.Server.OnlineMode {
-		pkt := &packet2.ClientboundLoginEncryptionRequest{
+		pkt := &packet.ClientboundLoginEncryptionRequest{
 			ServerId:    "",
 			PublicKey:   c.Server.PublicKey(),
 			VerifyToken: c.ExpectedVerifyToken,
@@ -47,7 +47,7 @@ func loginStart(c *net.Client, p net.Packet) (err error) {
 }
 
 func loginEncryptionResponse(c *net.Client, p net.Packet) (err error) {
-	pkt := p.(packet2.ServerboundLoginEncryptionResponsePacket)
+	pkt := p.(packet.ServerboundLoginEncryptionResponsePacket)
 
 	sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
 	if err != nil {
@@ -78,7 +78,7 @@ func joinGame(c *net.Client) (err error) {
 	if err != nil {
 		return
 	}
-
+/*
 	player.Connect(c)
 
 	err = sendServerBrand(c)
@@ -94,9 +94,9 @@ func joinGame(c *net.Client) (err error) {
 	err = sendPlayerAbilities(c)
 	if err != nil {
 		return
-	}
+	}*/
 
-	return sendDeclaredRecipes(c)
+	return nil // sendDeclaredRecipes(c)
 }
 
 func sendJoinGame(c *net.Client) (err error) {
@@ -105,21 +105,21 @@ func sendJoinGame(c *net.Client) (err error) {
 		panic("dimension not found")
 	}
 
-	join := &packet2.ClientboundJoinGamePacket{
+	join := &packet.ClientboundJoinGamePacket{
 		EntityId:            0,
 		IsHardcore:          false,
 		GameMode:            mc.Survival,
 		PreviousGameMode:    -1,
-		WorldNames:          []string{"world"},
+		WorldNames:          []string{"minecraft:world"},
 		DimensionCodec:      world.Codec(),
 		Dimension:           *dimension,
-		WorldName:           "world",
+		WorldName:           "minecraft:world",
 		HashedSeed:          0,
-		MaxPlayers:          10,
-		ViewDistance:        50,
+		MaxPlayers:          int32(pkg.Config().MaxOnlinePlayers),
+		ViewDistance:        32,
 		ReducedDebugInfo:    false,
 		EnableRespawnScreen: true,
-		IsDebug:             true,
+		IsDebug:             pkg.Config().DebugMode,
 		IsFlat:              false,
 	}
 	return c.Send(join)
@@ -129,7 +129,7 @@ func sendServerBrand(c *net.Client) (err error) {
 	buf := &bytes.Buffer{}
 	buf.Write(codec.WriteString(pkg.Brand))
 
-	pkt := &packet2.ClientboundPluginMessagePacket{
+	pkt := &packet.ClientboundPluginMessagePacket{
 		Channel: "minecraft:brand",
 		Data:    buf.Bytes(),
 	}
@@ -137,7 +137,7 @@ func sendServerBrand(c *net.Client) (err error) {
 }
 
 func sendServerDifficulty(c *net.Client) (err error) {
-	pkt := &packet2.ClientboundServerDifficultyPacket{
+	pkt := &packet.ClientboundServerDifficultyPacket{
 		Difficulty:       mc.DifficultyByName(pkg.Config().Difficulty),
 		DifficultyLocked: false,
 	}
@@ -158,7 +158,7 @@ func sendPlayerAbilities(c *net.Client) (err error) {
 		abilities = ability.Set(abilities, ability.CreativeMode)
 	}
 
-	pkt := &packet2.ClientboundPlayerAbilitiesPacket{
+	pkt := &packet.ClientboundPlayerAbilitiesPacket{
 		Flags:        byte(abilities),
 		FlyingSpeed:  0.5,
 		WalkingSpeed: 0.1,
@@ -167,11 +167,11 @@ func sendPlayerAbilities(c *net.Client) (err error) {
 }
 
 func sendDeclaredRecipes(c *net.Client) (err error) {
-	return c.Send(&packet2.ClientboundDeclareRecipesPacket{Recipes: crafting.Recipes()})
+	return c.Send(&packet.ClientboundDeclareRecipesPacket{Recipes: crafting.Recipes()})
 }
 
 func enableCompression(c *net.Client) (err error) {
-	err = c.Send(&packet2.ClientboundLoginCompressionPacket{Threshold: c.Server.CompressionThreshold})
+	err = c.Send(&packet.ClientboundLoginCompressionPacket{Threshold: c.Server.CompressionThreshold})
 	if err != nil {
 		return
 	}
@@ -180,7 +180,7 @@ func enableCompression(c *net.Client) (err error) {
 }
 
 func loginSuccess(c *net.Client) (err error) {
-	response := &packet2.ClientboundLoginSuccess{
+	response := &packet.ClientboundLoginSuccess{
 		Uuid:     c.Profile.ID,
 		Username: c.Profile.Name,
 	}

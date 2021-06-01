@@ -26,7 +26,7 @@ func main() {
 
 	s := net.NewServer(
 		conf.Network.IP, conf.Network.Port, conf.JavaEdition.OnlineMode, 0, // conf.Network.NetworkCompressionThreshold,
-		conf.DebugMode, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play, player.Disconnect,
+		conf.DebugMode, conf.Verbose, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play, player.Disconnect,
 	)
 
 	log.Println(thickLine)
