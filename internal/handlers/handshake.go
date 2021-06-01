@@ -2,14 +2,14 @@ package handlers
 
 import (
 	"github.com/junglemc/net"
-	"github.com/junglemc/net/codec"
-	"github.com/junglemc/net/packet"
+	"github.com/junglemc/net/protocol"
+	packet2 "github.com/junglemc/packet"
 )
 
-func handshakeSetProtocol(c *net.Client, p codec.Packet) (err error) {
-	pkt := p.(packet.ServerboundHandshakePacket)
+func handshakeSetProtocol(c *net.Client, p net.Packet) (err error) {
+	pkt := p.(packet2.ServerboundHandshakePacket)
 
-	c.Protocol = codec.Protocol(pkt.NextState)
+	c.Protocol = protocol.Protocol(pkt.NextState)
 	c.GameProtocolVersion = pkt.ProtocolVersion
 	return
 }

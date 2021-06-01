@@ -7,8 +7,8 @@ import (
 	"github.com/junglemc/mc"
 	"github.com/junglemc/mc/chat"
 	"github.com/junglemc/net"
-	"github.com/junglemc/net/codec"
-	"github.com/junglemc/net/packet"
+	"github.com/junglemc/net/protocol"
+	packet2 "github.com/junglemc/packet"
 	"log"
 	"sync"
 	"time"
@@ -42,9 +42,8 @@ func tick(c *net.Client, time time.Time) (err error) {
 }
 
 func Connect(c *net.Client) {
-
 	if _, player, ok := getOnlinePlayer(c); ok {
-		player.Client.Disconnect(&chat.Message{Text: "You logged in from another location!"})
+		player.Client.Disconnect("You logged in from another location!")
 	}
 
 	playerEntity := entity.NewLivingEntity(entity.ByName("player"), c.Profile.ID, func(e *entity.LivingEntity, time time.Time) error {
@@ -63,7 +62,7 @@ func Connect(c *net.Client) {
 	onlinePlayers = append(onlinePlayers, player)
 }
 
-func Disconnect(c *net.Client, reason *chat.Message) {
+func Disconnect(c *net.Client, reason string) {
 	if i, _, ok := getOnlinePlayer(c); ok {
 		wait.Wait()
 		if i+1 >= len(onlinePlayers) {
@@ -72,12 +71,12 @@ func Disconnect(c *net.Client, reason *chat.Message) {
 			onlinePlayers = append(onlinePlayers[:i], onlinePlayers[i+1:]...)
 		}
 
-		if reason != nil {
-			log.Printf("%s disconnected: %s", c.Profile.Name, reason.String())
-			if c.Protocol == codec.ProtocolLogin {
-				_ = c.Send(&packet.ClientboundLoginDisconnectPacket{Reason: *reason})
-			} else if c.Protocol == codec.ProtocolPlay {
-				_ = c.Send(&packet.ClientboundPlayKickDisconnect{Reason: *reason})
+		if reason != "" {
+			log.Printf("%s disconnected: %s", c.Profile.Name, reason)
+			if c.Protocol == protocol.ProtocolLogin {
+				_ = c.Send(&packet2.ClientboundLoginDisconnectPacket{Reason: chat.Message{Text: reason}})
+			} else if c.Protocol == protocol.ProtocolPlay {
+				_ = c.Send(&packet2.ClientboundPlayKickDisconnect{Reason: chat.Message{Text: reason}})
 			}
 		}
 	}

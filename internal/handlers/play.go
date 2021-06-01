@@ -1,28 +1,22 @@
 package handlers
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"github.com/junglemc/JungleTree/internal/player"
 	"github.com/junglemc/JungleTree/pkg"
 	"github.com/junglemc/net"
 	"github.com/junglemc/net/codec"
-	"github.com/junglemc/net/codec/primitives"
-	"github.com/junglemc/net/packet"
+	packet2 "github.com/junglemc/packet"
 	"log"
 )
 
-func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
-	pkt := p.(packet.ServerboundPluginMessagePacket)
+func playPluginMessage(c *net.Client, p net.Packet) (err error) {
+	pkt := p.(packet2.ServerboundPluginMessagePacket)
 
 	if pkt.Channel.Prefix() == "minecraft" && pkt.Channel.Name() == "brand" {
-		buf := bufio.NewReader(bytes.NewReader(pkt.Data))
-		brand := ""
-		brand, err = primitives.ReadString(buf)
-		if err != nil {
-			return
-		}
+		buf := bytes.NewBuffer(pkt.Data)
+		brand := codec.ReadString(buf)
 
 		if onlinePlayer, ok := player.GetOnlinePlayer(c); ok {
 			onlinePlayer.ClientBrand = brand
@@ -35,8 +29,8 @@ func playPluginMessage(c *net.Client, p codec.Packet) (err error) {
 	return
 }
 
-func playClientSettings(c *net.Client, p codec.Packet) (err error) {
-	pkt := p.(packet.ServerboundClientSettingsPacket)
+func playClientSettings(c *net.Client, p net.Packet) (err error) {
+	pkt := p.(packet2.ServerboundClientSettingsPacket)
 
 	onlinePlayer, ok := player.GetOnlinePlayer(c)
 	if !ok {
@@ -53,7 +47,7 @@ func playClientSettings(c *net.Client, p codec.Packet) (err error) {
 		log.Printf("Client settings for %s:\n%s\n", c.Profile.Name, string(data))
 	}
 
-	itemChange := &packet.ClientboundHeldItemChangePacket{
+	itemChange := &packet2.ClientboundHeldItemChangePacket{
 		Slot: byte(onlinePlayer.Hotbar.SelectedIndex),
 	}
 	return c.Send(itemChange)

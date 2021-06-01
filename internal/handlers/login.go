@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bufio"
 	"bytes"
 	"github.com/google/uuid"
 	"github.com/junglemc/JungleTree/internal/player"
@@ -12,19 +11,19 @@ import (
 	"github.com/junglemc/net"
 	"github.com/junglemc/net/auth"
 	"github.com/junglemc/net/codec"
-	"github.com/junglemc/net/codec/primitives"
-	"github.com/junglemc/net/packet"
+	"github.com/junglemc/net/protocol"
+	packet2 "github.com/junglemc/packet"
 	"github.com/junglemc/world"
 	"github.com/junglemc/world/dimensions"
 )
 
-func loginStart(c *net.Client, p codec.Packet) (err error) {
-	pkt := p.(packet.ServerboundLoginStartPacket)
+func loginStart(c *net.Client, p net.Packet) (err error) {
+	pkt := p.(packet2.ServerboundLoginStartPacket)
 
 	c.Profile.Name = pkt.Username
 
 	if c.Server.OnlineMode {
-		pkt := &packet.ClientboundLoginEncryptionRequest{
+		pkt := &packet2.ClientboundLoginEncryptionRequest{
 			ServerId:    "",
 			PublicKey:   c.Server.PublicKey(),
 			VerifyToken: c.ExpectedVerifyToken,
@@ -32,14 +31,14 @@ func loginStart(c *net.Client, p codec.Packet) (err error) {
 		return c.Send(pkt)
 	} else {
 		if c.Server.CompressionThreshold > 0 {
-			err = c.EnableCompression()
+			err = enableCompression(c)
 			if err != nil {
 				return
 			}
 		}
 
 		c.Profile.ID, _ = uuid.NewRandom()
-		err = c.LoginSuccess()
+		err = loginSuccess(c)
 		if err != nil {
 			return
 		}
@@ -47,8 +46,8 @@ func loginStart(c *net.Client, p codec.Packet) (err error) {
 	}
 }
 
-func loginEncryptionResponse(c *net.Client, p codec.Packet) (err error) {
-	pkt := p.(packet.ServerboundLoginEncryptionResponsePacket)
+func loginEncryptionResponse(c *net.Client, p net.Packet) (err error) {
+	pkt := p.(packet2.ServerboundLoginEncryptionResponsePacket)
 
 	sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
 	if err != nil {
@@ -61,13 +60,13 @@ func loginEncryptionResponse(c *net.Client, p codec.Packet) (err error) {
 	}
 
 	if c.Server.CompressionThreshold > 0 {
-		err = c.EnableCompression()
+		err = enableCompression(c)
 		if err != nil {
 			return
 		}
 	}
 
-	err = c.LoginSuccess()
+	err = loginSuccess(c)
 	if err != nil {
 		return
 	}
@@ -106,7 +105,7 @@ func sendJoinGame(c *net.Client) (err error) {
 		panic("dimension not found")
 	}
 
-	join := &packet.ClientboundJoinGamePacket{
+	join := &packet2.ClientboundJoinGamePacket{
 		EntityId:            0,
 		IsHardcore:          false,
 		GameMode:            mc.Survival,
@@ -127,22 +126,18 @@ func sendJoinGame(c *net.Client) (err error) {
 }
 
 func sendServerBrand(c *net.Client) (err error) {
-	b := &bytes.Buffer{}
-	buf := bufio.NewWriter(b)
-	err = primitives.WriteString(buf, pkg.Brand)
-	if err != nil {
-		return
-	}
+	buf := &bytes.Buffer{}
+	buf.Write(codec.WriteString(pkg.Brand))
 
-	pkt := &packet.ClientboundPluginMessagePacket{
+	pkt := &packet2.ClientboundPluginMessagePacket{
 		Channel: "minecraft:brand",
-		Data:    b.Bytes(),
+		Data:    buf.Bytes(),
 	}
 	return c.Send(pkt)
 }
 
 func sendServerDifficulty(c *net.Client) (err error) {
-	pkt := &packet.ClientboundServerDifficultyPacket{
+	pkt := &packet2.ClientboundServerDifficultyPacket{
 		Difficulty:       mc.DifficultyByName(pkg.Config().Difficulty),
 		DifficultyLocked: false,
 	}
@@ -163,7 +158,7 @@ func sendPlayerAbilities(c *net.Client) (err error) {
 		abilities = ability.Set(abilities, ability.CreativeMode)
 	}
 
-	pkt := &packet.ClientboundPlayerAbilitiesPacket{
+	pkt := &packet2.ClientboundPlayerAbilitiesPacket{
 		Flags:        byte(abilities),
 		FlyingSpeed:  0.5,
 		WalkingSpeed: 0.1,
@@ -172,5 +167,28 @@ func sendPlayerAbilities(c *net.Client) (err error) {
 }
 
 func sendDeclaredRecipes(c *net.Client) (err error) {
-	return c.Send(&packet.ClientboundDeclareRecipesPacket{Recipes: crafting.Recipes()})
+	return c.Send(&packet2.ClientboundDeclareRecipesPacket{Recipes: crafting.Recipes()})
 }
+
+func enableCompression(c *net.Client) (err error) {
+	err = c.Send(&packet2.ClientboundLoginCompressionPacket{Threshold: c.Server.CompressionThreshold})
+	if err != nil {
+		return
+	}
+	c.CompressionEnabled = true
+	return
+}
+
+func loginSuccess(c *net.Client) (err error) {
+	response := &packet2.ClientboundLoginSuccess{
+		Uuid:     c.Profile.ID,
+		Username: c.Profile.Name,
+	}
+	err = c.Send(response)
+	if err != nil {
+		return
+	}
+	c.Protocol = protocol.ProtocolPlay
+	return
+}
+
