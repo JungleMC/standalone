@@ -7,7 +7,7 @@ import (
 	"github.com/junglemc/mc/chat"
 	"github.com/junglemc/mc/status"
 	"github.com/junglemc/net"
-	packet2 "github.com/junglemc/packet"
+	"github.com/junglemc/packet"
 )
 
 func statusRequest(c *net.Client, p net.Packet) (err error) {
@@ -29,10 +29,10 @@ func statusRequest(c *net.Client, p net.Packet) (err error) {
 		return
 	}
 
-	responsePkt := &packet2.ClientboundStatusResponsePacket{Response: string(data)}
+	responsePkt := &packet.ClientboundStatusResponsePacket{Response: string(data)}
 	return c.Send(responsePkt)
 }
 
 func statusPing(c *net.Client, p net.Packet) (err error) {
-	return c.Send(&packet2.ClientboundStatusPongPacket{Time: p.(packet2.ServerboundStatusPingPacket).Time})
+	return c.Send(&packet.ClientboundStatusPongPacket{Time: p.(packet.ServerboundStatusPingPacket).Time})
 }
