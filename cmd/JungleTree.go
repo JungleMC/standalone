@@ -25,7 +25,7 @@ func main() {
 	conf := pkg.Config()
 
 	s := net.NewServer(
-		conf.Network.IP, conf.Network.Port, conf.JavaEdition.OnlineMode, 0, // conf.Network.NetworkCompressionThreshold,
+		conf.Network.IP, conf.Network.Port, conf.JavaEdition.OnlineMode, conf.Network.NetworkCompressionThreshold,
 		conf.DebugMode, conf.Verbose, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play, player.Disconnect,
 	)
 

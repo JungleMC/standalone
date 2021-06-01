@@ -171,7 +171,7 @@ func sendDeclaredRecipes(c *net.Client) (err error) {
 }
 
 func enableCompression(c *net.Client) (err error) {
-	err = c.Send(&packet.ClientboundLoginCompressionPacket{Threshold: c.Server.CompressionThreshold})
+	err = c.Send(&packet.ClientboundLoginCompressionPacket{Threshold: int32(c.Server.CompressionThreshold)})
 	if err != nil {
 		return
 	}

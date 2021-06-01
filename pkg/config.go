@@ -26,7 +26,7 @@ type RootConfiguration struct {
 type NetConfig struct {
 	IP                          string
 	Port                        uint16
-	NetworkCompressionThreshold int32
+	NetworkCompressionThreshold int
 }
 
 type JavaEditionConfig struct {
