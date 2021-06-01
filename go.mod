@@ -7,9 +7,9 @@ require (
 	github.com/junglemc/crafting v0.0.0-20210503192434-b1109bbef7d2
 	github.com/junglemc/entity v0.0.0-20210422180046-32f559d007d8
 	github.com/junglemc/inventory v0.0.0-20210426155211-e4abaf4170f6
-	github.com/junglemc/item v0.0.0-20210501142915-86f97f9bf899
+	github.com/junglemc/item v0.0.0-20210601131653-793632bb0168
 	github.com/junglemc/mc v0.0.0-20210503192518-57dc763f7426
-	github.com/junglemc/net v0.0.0-20210601090209-1175022dceca
+	github.com/junglemc/net v0.0.0-20210601135052-216db97f3c55
 	github.com/junglemc/packet v0.0.0-20210529215725-46008ea97cba // indirect
 	github.com/junglemc/world v0.0.0-20210503192549-f427001d1ef8
 	github.com/pelletier/go-toml v1.9.0

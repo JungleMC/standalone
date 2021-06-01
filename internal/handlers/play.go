@@ -7,12 +7,12 @@ import (
 	"github.com/junglemc/JungleTree/pkg"
 	"github.com/junglemc/net"
 	"github.com/junglemc/net/codec"
-	packet2 "github.com/junglemc/packet"
+	"github.com/junglemc/packet"
 	"log"
 )
 
 func playPluginMessage(c *net.Client, p net.Packet) (err error) {
-	pkt := p.(packet2.ServerboundPluginMessagePacket)
+	pkt := p.(packet.ServerboundPluginMessagePacket)
 
 	if pkt.Channel.Prefix() == "minecraft" && pkt.Channel.Name() == "brand" {
 		buf := bytes.NewBuffer(pkt.Data)
@@ -30,7 +30,7 @@ func playPluginMessage(c *net.Client, p net.Packet) (err error) {
 }
 
 func playClientSettings(c *net.Client, p net.Packet) (err error) {
-	pkt := p.(packet2.ServerboundClientSettingsPacket)
+	pkt := p.(packet.ServerboundClientSettingsPacket)
 
 	onlinePlayer, ok := player.GetOnlinePlayer(c)
 	if !ok {
@@ -47,7 +47,7 @@ func playClientSettings(c *net.Client, p net.Packet) (err error) {
 		log.Printf("Client settings for %s:\n%s\n", c.Profile.Name, string(data))
 	}
 
-	itemChange := &packet2.ClientboundHeldItemChangePacket{
+	itemChange := &packet.ClientboundHeldItemChangePacket{
 		Slot: byte(onlinePlayer.Hotbar.SelectedIndex),
 	}
 	return c.Send(itemChange)

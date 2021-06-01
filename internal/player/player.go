@@ -8,7 +8,7 @@ import (
 	"github.com/junglemc/mc/chat"
 	"github.com/junglemc/net"
 	"github.com/junglemc/net/protocol"
-	packet2 "github.com/junglemc/packet"
+	packet "github.com/junglemc/packet"
 	"log"
 	"sync"
 	"time"
@@ -74,9 +74,9 @@ func Disconnect(c *net.Client, reason string) {
 		if reason != "" {
 			log.Printf("%s disconnected: %s", c.Profile.Name, reason)
 			if c.Protocol == protocol.ProtocolLogin {
-				_ = c.Send(&packet2.ClientboundLoginDisconnectPacket{Reason: chat.Message{Text: reason}})
+				_ = c.Send(&packet.ClientboundLoginDisconnectPacket{Reason: chat.Message{Text: reason}})
 			} else if c.Protocol == protocol.ProtocolPlay {
-				_ = c.Send(&packet2.ClientboundPlayKickDisconnect{Reason: chat.Message{Text: reason}})
+				_ = c.Send(&packet.ClientboundPlayKickDisconnect{Reason: chat.Message{Text: reason}})
 			}
 		}
 	}

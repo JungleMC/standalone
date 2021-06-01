@@ -78,7 +78,7 @@ func joinGame(c *net.Client) (err error) {
 	if err != nil {
 		return
 	}
-/*
+
 	player.Connect(c)
 
 	err = sendServerBrand(c)
@@ -94,9 +94,9 @@ func joinGame(c *net.Client) (err error) {
 	err = sendPlayerAbilities(c)
 	if err != nil {
 		return
-	}*/
+	}
 
-	return nil // sendDeclaredRecipes(c)
+	return sendDeclaredRecipes(c)
 }
 
 func sendJoinGame(c *net.Client) (err error) {
