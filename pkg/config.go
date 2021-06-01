@@ -59,7 +59,8 @@ func createDefaults() {
 	jeConfig := JavaEditionConfig{OnlineMode: true}
 
 	root := RootConfiguration{
-		DebugMode:        false,
+		DebugMode:        true,
+		Verbose:          false,
 		MOTD:             "A JungleTree Server",
 		MaxOnlinePlayers: 20,
 		Network:          serverConfig,
