@@ -7,8 +7,8 @@ import (
 	"errors"
 	codec2 "github.com/junglemc/JungleTree/internal/net/codec"
 	"github.com/junglemc/JungleTree/item"
-	"github.com/junglemc/JungleTree/pkg/inventory"
 	. "github.com/junglemc/JungleTree/pkg/codec"
+	"github.com/junglemc/JungleTree/pkg/inventory"
 	. "github.com/junglemc/JungleTree/pkg/util"
 	"reflect"
 )
@@ -23,7 +23,6 @@ func Load() (err error) {
 		return errors.New("recipe data already loaded")
 	}
 
-	recipes = make([]*Recipe, 0)
 	err = json.Unmarshal(recipeData, &recipes)
 	if err != nil {
 		return

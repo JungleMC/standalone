@@ -3,21 +3,20 @@ package biome
 import (
 	_ "embed"
 	"encoding/json"
-	"errors"
-	"github.com/junglemc/JungleTree/pkg/util"
+	. "github.com/junglemc/JungleTree/pkg/util"
 	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
 //go:embed "biomes.json"
 var data []byte
 
-var biomes *Biomes
+var biomes Biomes
 
 func Load() (err error) {
-	return json.Unmarshal(data, biomes)
+	return json.Unmarshal(data, &biomes)
 }
 
-func Store() *Biomes {
+func Store() Biomes {
 	return biomes
 }
 
@@ -27,10 +26,7 @@ func ByName(name string) *Biome {
 			return &biomes.Entries[i].Element
 		}
 	}
-	if name == "ocean" {
-		panic(errors.New("default could not be set: ocean not present in biome data"))
-	}
-	return ByName("ocean")
+	return nil
 }
 
 type Biomes struct {
@@ -45,25 +41,25 @@ type Entry struct {
 }
 
 type Biome struct {
-	ID                     int32           `json:"id" nbt:"-"`
-	Name                   string          `json:"name" nbt:"-"`
-	Category               string          `json:"category" nbt:"category"`
-	Temperature            float32         `json:"temperature" nbt:"temperature"`
-	Precipitation          string          `json:"precipitation" nbt:"precipitation"`
-	Depth                  float32         `json:"depth" nbt:"depth"`
-	Scale                  float32         `json:"scale" nbt:"scale"`
-	Dimension              util.Identifier `json:"dimension" nbt:"-"`
-	DisplayName            string          `json:"displayName" nbt:"-"`
-	Color                  int32           `json:"color" nbt:"-"`
-	Rainfall               float32         `json:"rainfall" nbt:"downfall"`
-	Parent                 string          `json:"parent,omitempty" nbt:"-"`
-	ChildID                int32           `json:"child,omitempty" nbt:"-"`
-	Climates               []Climate       `json:"climates,omitempty" nbt:"-"`
-	HasTemperatureModifier bool            `json:"has_temperature_modifier" nbt:"-"`
-	TemperatureModifier    string          `json:"temperature_modifier,omitempty" nbt:"temperature_modifier" optional:"HasTemperatureModifier"`
-	Effects                Effect          `json:"effects,omitempty" nbt:"effects"`
-	HasParticle            bool            `json:"has_particle" nbt:"-"`
-	Particle               Particle        `json:"particle,omitempty" nbt:"particle" optional:"HasParticle"`
+	ID                     int32      `json:"id" nbt:"-"`
+	Name                   string     `json:"name" nbt:"-"`
+	Category               string     `json:"category" nbt:"category"`
+	Temperature            float32    `json:"temperature" nbt:"temperature"`
+	Precipitation          string     `json:"precipitation" nbt:"precipitation"`
+	Depth                  float32    `json:"depth" nbt:"depth"`
+	Scale                  float32    `json:"scale" nbt:"scale"`
+	Dimension              Identifier `json:"dimension" nbt:"-"`
+	DisplayName            string     `json:"displayName" nbt:"-"`
+	Color                  int32      `json:"color" nbt:"-"`
+	Rainfall               float32    `json:"rainfall" nbt:"downfall"`
+	Parent                 string     `json:"parent,omitempty" nbt:"-"`
+	ChildID                int32      `json:"child,omitempty" nbt:"-"`
+	Climates               []Climate  `json:"climates,omitempty" nbt:"-"`
+	HasTemperatureModifier bool       `json:"has_temperature_modifier" nbt:"-"`
+	TemperatureModifier    string     `json:"temperature_modifier,omitempty" nbt:"temperature_modifier" optional:"HasTemperatureModifier"`
+	Effects                Effect     `json:"effects,omitempty" nbt:"effects"`
+	HasParticle            bool       `json:"has_particle" nbt:"-"`
+	Particle               Particle   `json:"particle,omitempty" nbt:"particle" optional:"HasParticle"`
 }
 
 type Climate struct {
@@ -96,10 +92,10 @@ type Effect struct {
 }
 
 type Music struct {
-	ReplaceCurrentMusic bool            `json:"replace_current_music" nbt:"replace_current_music"`
-	Sound               util.Identifier `json:"sound" nbt:"sound"`
-	MaxDelay            int32           `json:"max_delay" nbt:"max_delay"`
-	MinDelay            int32           `json:"min_delay" nbt:"min_delay"`
+	ReplaceCurrentMusic bool       `json:"replace_current_music" nbt:"replace_current_music"`
+	Sound               Identifier `json:"sound" nbt:"sound"`
+	MaxDelay            int32      `json:"max_delay" nbt:"max_delay"`
+	MinDelay            int32      `json:"min_delay" nbt:"min_delay"`
 }
 
 type AdditionsSound struct {

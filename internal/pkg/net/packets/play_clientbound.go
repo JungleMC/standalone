@@ -4,8 +4,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/junglemc/JungleTree/pkg/chat"
 	"github.com/junglemc/JungleTree/pkg/crafting"
-	"github.com/junglemc/JungleTree/pkg/util"
+	. "github.com/junglemc/JungleTree/pkg/util"
 	"github.com/junglemc/JungleTree/pkg/world"
+	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
 type ClientboundSpawnEntityPacket struct {
@@ -102,11 +103,11 @@ type ClientboundPlayBlockActionPacket struct {
 type ClientboundJoinGamePacket struct {
 	EntityId            int32
 	IsHardcore          bool
-	GameMode            util.GameMode
+	GameMode            GameMode
 	PreviousGameMode    int8
 	WorldNames          []string
 	DimensionCodec      interface{} `type:"nbt"`
-	Dimension           interface{} `type:"nbt"`
+	Dimension           dimensions.Dimension `type:"nbt"`
 	WorldName           string
 	HashedSeed          int64
 	MaxPlayers          int32 `type:"varint"`
@@ -473,7 +474,7 @@ type ClientboundPlayAdvancements struct {
 }
 
 type ClientboundServerDifficultyPacket struct {
-	Difficulty       util.Difficulty
+	Difficulty       Difficulty
 	DifficultyLocked bool
 }
 
@@ -610,7 +611,7 @@ type ClientboundPlayEntityUpdateAttributes struct {
 }
 
 type ClientboundPluginMessagePacket struct {
-	Channel util.Identifier
+	Channel Identifier
 	Data    []byte `size:"infer"`
 }
 

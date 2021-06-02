@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"bytes"
 	"github.com/google/uuid"
 	"github.com/junglemc/JungleTree/internal/configuration"
 	. "github.com/junglemc/JungleTree/internal/net"
@@ -13,6 +12,7 @@ import (
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/util"
+	"github.com/junglemc/JungleTree/pkg/world"
 	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
@@ -110,7 +110,7 @@ func sendJoinGame(c *Client) (err error) {
 		GameMode:            util.Survival,
 		PreviousGameMode:    -1,
 		WorldNames:          []string{"minecraft:world"},
-		DimensionCodec:      dimensions.DimensionBiomes(),
+		DimensionCodec:      world.DimensionBiomes(),
 		Dimension:           *dimension,
 		WorldName:           "minecraft:world",
 		HashedSeed:          0,
@@ -125,14 +125,10 @@ func sendJoinGame(c *Client) (err error) {
 }
 
 func sendServerBrand(c *Client) (err error) {
-	buf := &bytes.Buffer{}
-	buf.Write(WriteString(pkg.Brand))
-
-	pkt := &ClientboundPluginMessagePacket{
+	return c.Send(&ClientboundPluginMessagePacket{
 		Channel: "minecraft:brand",
-		Data:    buf.Bytes(),
-	}
-	return c.Send(pkt)
+		Data:    WriteString(pkg.Brand),
+	})
 }
 
 func sendServerDifficulty(c *Client) (err error) {

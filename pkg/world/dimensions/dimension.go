@@ -3,25 +3,19 @@ package dimensions
 import (
 	_ "embed"
 	"encoding/json"
-	"errors"
 	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 //go:embed "dimensions.json"
 var data []byte
 
-var dimensions *Dimensions
+var dimensions Dimensions
 
 func Load() (err error) {
-	if dimensions.Entries != nil {
-		return errors.New("dimension data already loaded")
-	}
-
-	err = json.Unmarshal(data, dimensions)
-	return
+	return json.Unmarshal(data, &dimensions)
 }
 
-func Store() *Dimensions {
+func Store() Dimensions {
 	return dimensions
 }
 
