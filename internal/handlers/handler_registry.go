@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/junglemc/net"
-	"github.com/junglemc/packet"
+	"github.com/junglemc/JungleTree/net"
+	. "github.com/junglemc/JungleTree/packet"
 	"reflect"
 )
 
@@ -11,20 +11,20 @@ func t(i interface{}) reflect.Type {
 }
 
 var Handshake = map[reflect.Type]func(c *net.Client, pkt net.Packet) error{
-	t(packet.ServerboundHandshakePacket{}): handshakeSetProtocol,
+	t(ServerboundHandshakePacket{}): handshakeSetProtocol,
 }
 
 var Status = map[reflect.Type]func(c *net.Client, pkt net.Packet) error{
-	t(packet.ServerboundStatusRequestPacket{}): statusRequest,
-	t(packet.ServerboundStatusPingPacket{}):    statusPing,
+	t(ServerboundStatusRequestPacket{}): statusRequest,
+	t(ServerboundStatusPingPacket{}):    statusPing,
 }
 
 var Login = map[reflect.Type]func(c *net.Client, pkt net.Packet) error{
-	t(packet.ServerboundLoginStartPacket{}):              loginStart,
-	t(packet.ServerboundLoginEncryptionResponsePacket{}): loginEncryptionResponse,
+	t(ServerboundLoginStartPacket{}):              loginStart,
+	t(ServerboundLoginEncryptionResponsePacket{}): loginEncryptionResponse,
 }
 
 var Play = map[reflect.Type]func(c *net.Client, pkt net.Packet) error{
-	t(packet.ServerboundClientSettingsPacket{}): playClientSettings,
-	t(packet.ServerboundPluginMessagePacket{}):  playPluginMessage,
+	t(ServerboundClientSettingsPacket{}): playClientSettings,
+	t(ServerboundPluginMessagePacket{}):  playPluginMessage,
 }

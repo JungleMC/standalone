@@ -2,24 +2,24 @@ package handlers
 
 import (
 	"encoding/json"
+	"github.com/junglemc/JungleTree/chat"
 	"github.com/junglemc/JungleTree/internal/player"
+	"github.com/junglemc/JungleTree/net"
+	. "github.com/junglemc/JungleTree/packet"
 	"github.com/junglemc/JungleTree/pkg"
-	"github.com/junglemc/mc/chat"
-	"github.com/junglemc/mc/status"
-	"github.com/junglemc/net"
-	"github.com/junglemc/packet"
+	. "github.com/junglemc/JungleTree/status"
 )
 
 func statusRequest(c *net.Client, p net.Packet) (err error) {
-	response := status.ServerListResponse{
-		Version: status.GameVersion{
+	response := ServerListResponse{
+		Version: GameVersion{
 			Name:     "1.16.5",
 			Protocol: 754,
 		},
-		Players: status.ServerListPlayers{
+		Players: ServerListPlayers{
 			Max:    pkg.Config().MaxOnlinePlayers,
 			Online: player.GetOnlinePlayers(),
-			Sample: []status.ServerListPlayer{},
+			Sample: []ServerListPlayer{},
 		},
 		Description: chat.Message{Text: pkg.Config().MOTD},
 	}
@@ -29,10 +29,10 @@ func statusRequest(c *net.Client, p net.Packet) (err error) {
 		return
 	}
 
-	responsePkt := &packet.ClientboundStatusResponsePacket{Response: string(data)}
+	responsePkt := &ClientboundStatusResponsePacket{Response: string(data)}
 	return c.Send(responsePkt)
 }
 
 func statusPing(c *net.Client, p net.Packet) (err error) {
-	return c.Send(&packet.ClientboundStatusPongPacket{Time: p.(packet.ServerboundStatusPingPacket).Time})
+	return c.Send(&ClientboundStatusPongPacket{Time: p.(ServerboundStatusPingPacket).Time})
 }

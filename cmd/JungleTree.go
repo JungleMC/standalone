@@ -1,16 +1,16 @@
 package main
 
 import (
+	"github.com/junglemc/JungleTree/crafting"
+	"github.com/junglemc/JungleTree/entity"
 	"github.com/junglemc/JungleTree/internal/handlers"
 	"github.com/junglemc/JungleTree/internal/player"
+	"github.com/junglemc/JungleTree/item"
+	"github.com/junglemc/JungleTree/net"
 	"github.com/junglemc/JungleTree/pkg"
-	"github.com/junglemc/crafting"
-	"github.com/junglemc/entity"
-	"github.com/junglemc/item"
-	"github.com/junglemc/net"
-	"github.com/junglemc/world/biomes"
-	"github.com/junglemc/world/blocks"
-	"github.com/junglemc/world/dimensions"
+	"github.com/junglemc/JungleTree/world/biomes"
+	"github.com/junglemc/JungleTree/world/blocks"
+	"github.com/junglemc/JungleTree/world/dimensions"
 	"log"
 )
 

@@ -1,15 +1,15 @@
 package handlers
 
 import (
-	"github.com/junglemc/net"
-	"github.com/junglemc/net/protocol"
-	"github.com/junglemc/packet"
+	"github.com/junglemc/JungleTree/net"
+	. "github.com/junglemc/JungleTree/net/protocol"
+	. "github.com/junglemc/JungleTree/packet"
 )
 
 func handshakeSetProtocol(c *net.Client, p net.Packet) (err error) {
-	pkt := p.(packet.ServerboundHandshakePacket)
+	pkt := p.(ServerboundHandshakePacket)
 
-	c.Protocol = protocol.Protocol(pkt.NextState)
+	c.Protocol = Protocol(pkt.NextState)
 	c.GameProtocolVersion = pkt.ProtocolVersion
 	return
 }

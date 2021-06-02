@@ -3,18 +3,18 @@ package handlers
 import (
 	"bytes"
 	"github.com/google/uuid"
+	"github.com/junglemc/JungleTree"
+	"github.com/junglemc/JungleTree/ability"
+	"github.com/junglemc/JungleTree/crafting"
 	"github.com/junglemc/JungleTree/internal/player"
+	"github.com/junglemc/JungleTree/net"
+	"github.com/junglemc/JungleTree/net/auth"
+	"github.com/junglemc/JungleTree/net/codec"
+	"github.com/junglemc/JungleTree/net/protocol"
+	"github.com/junglemc/JungleTree/packet"
 	"github.com/junglemc/JungleTree/pkg"
-	"github.com/junglemc/crafting"
-	"github.com/junglemc/mc"
-	"github.com/junglemc/mc/ability"
-	"github.com/junglemc/net"
-	"github.com/junglemc/net/auth"
-	"github.com/junglemc/net/codec"
-	"github.com/junglemc/net/protocol"
-	"github.com/junglemc/packet"
-	"github.com/junglemc/world"
-	"github.com/junglemc/world/dimensions"
+	"github.com/junglemc/JungleTree/world"
+	"github.com/junglemc/JungleTree/world/dimensions"
 )
 
 func loginStart(c *net.Client, p net.Packet) (err error) {
@@ -108,7 +108,7 @@ func sendJoinGame(c *net.Client) (err error) {
 	join := &packet.ClientboundJoinGamePacket{
 		EntityId:            0,
 		IsHardcore:          false,
-		GameMode:            mc.Survival,
+		GameMode:            JungleTree.Survival,
 		PreviousGameMode:    -1,
 		WorldNames:          []string{"minecraft:world"},
 		DimensionCodec:      world.Codec(),
@@ -138,7 +138,7 @@ func sendServerBrand(c *net.Client) (err error) {
 
 func sendServerDifficulty(c *net.Client) (err error) {
 	pkt := &packet.ClientboundServerDifficultyPacket{
-		Difficulty:       mc.DifficultyByName(pkg.Config().Difficulty),
+		Difficulty:       JungleTree.DifficultyByName(pkg.Config().Difficulty),
 		DifficultyLocked: false,
 	}
 	return c.Send(pkt)
@@ -152,7 +152,7 @@ func sendPlayerAbilities(c *net.Client) (err error) {
 
 	abilities := ability.PlayerAbilities(0)
 
-	if onlinePlayer.Gamemode == mc.Creative {
+	if onlinePlayer.Gamemode == JungleTree.Creative {
 		abilities = ability.Set(abilities, ability.Invulnerable)
 		abilities = ability.Set(abilities, ability.AllowFlying)
 		abilities = ability.Set(abilities, ability.CreativeMode)

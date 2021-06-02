@@ -1,14 +1,14 @@
 package player
 
 import (
+	"github.com/junglemc/JungleTree"
+	"github.com/junglemc/JungleTree/chat"
+	"github.com/junglemc/JungleTree/entity"
+	"github.com/junglemc/JungleTree/inventory"
+	"github.com/junglemc/JungleTree/net"
+	"github.com/junglemc/JungleTree/net/protocol"
+	. "github.com/junglemc/JungleTree/packet"
 	"github.com/junglemc/JungleTree/pkg"
-	"github.com/junglemc/entity"
-	"github.com/junglemc/inventory"
-	"github.com/junglemc/mc"
-	"github.com/junglemc/mc/chat"
-	"github.com/junglemc/net"
-	"github.com/junglemc/net/protocol"
-	packet "github.com/junglemc/packet"
 	"log"
 	"sync"
 	"time"
@@ -20,15 +20,15 @@ var wait = &sync.WaitGroup{}
 type OnlinePlayer struct {
 	Client            *net.Client          `json:"-"`
 	Entity            *entity.LivingEntity `json:"-"`
-	ClientBrand       string               `json:"-"`
-	Gamemode          mc.GameMode
-	Difficulty        mc.Difficulty
+	ClientBrand       string                `json:"-"`
+	Gamemode          JungleTree.GameMode
+	Difficulty        JungleTree.Difficulty
 	Locale            string
 	ViewDistance      byte
 	ChatMode          *chat.Mode
 	ChatColorsEnabled bool
 	SkinParts         byte
-	MainHand          *mc.Hand
+	MainHand          *JungleTree.Hand
 	Inventory         inventory.Player `json:"-"`
 	Hotbar            inventory.Hotbar `json:"-"`
 }
@@ -53,8 +53,8 @@ func Connect(c *net.Client) {
 	player := OnlinePlayer{
 		Client:     c,
 		Entity:     playerEntity,
-		Gamemode:   mc.GameModeByName(pkg.Config().Gamemode),
-		Difficulty: mc.DifficultyByName(pkg.Config().Difficulty),
+		Gamemode:   JungleTree.GameModeByName(pkg.Config().Gamemode),
+		Difficulty: JungleTree.DifficultyByName(pkg.Config().Difficulty),
 		Inventory:  inventory.Player{},
 		Hotbar:     inventory.Hotbar{},
 	}
@@ -74,9 +74,9 @@ func Disconnect(c *net.Client, reason string) {
 		if reason != "" {
 			log.Printf("%s disconnected: %s", c.Profile.Name, reason)
 			if c.Protocol == protocol.ProtocolLogin {
-				_ = c.Send(&packet.ClientboundLoginDisconnectPacket{Reason: chat.Message{Text: reason}})
+				_ = c.Send(&ClientboundLoginDisconnectPacket{Reason: chat.Message{Text: reason}})
 			} else if c.Protocol == protocol.ProtocolPlay {
-				_ = c.Send(&packet.ClientboundPlayKickDisconnect{Reason: chat.Message{Text: reason}})
+				_ = c.Send(&ClientboundPlayKickDisconnect{Reason: chat.Message{Text: reason}})
 			}
 		}
 	}

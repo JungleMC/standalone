@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"github.com/junglemc/mc"
+	"github.com/junglemc/JungleTree"
 	"github.com/pelletier/go-toml"
 	"io/fs"
 	"io/ioutil"
@@ -64,8 +64,8 @@ func createDefaults() {
 		MOTD:             "A JungleTree Server",
 		MaxOnlinePlayers: 20,
 		Network:          serverConfig,
-		Gamemode:         mc.Survival.String(),
-		Difficulty:       mc.Normal.String(),
+		Gamemode:         JungleTree.Survival.String(),
+		Difficulty:       JungleTree.Normal.String(),
 		JavaEdition:      jeConfig,
 	}
 
