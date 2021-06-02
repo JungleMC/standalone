@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="JungleTree Server" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="JungleTree" />
+    <working_directory value="$PROJECT_DIR$/run" />
+    <kind value="PACKAGE" />
+    <package value="github.com/junglemc/JungleTree/cmd" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/JungleTree/cmd/JungleTree.go" />
+    <method v="2" />
+  </configuration>
+</component>
