@@ -5,10 +5,10 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
-	codec2 "github.com/junglemc/JungleTree/internal/net/codec"
-	"github.com/junglemc/JungleTree/item"
+	. "github.com/junglemc/JungleTree/internal/net/codec"
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/inventory"
+	"github.com/junglemc/JungleTree/pkg/item"
 	. "github.com/junglemc/JungleTree/pkg/util"
 	"reflect"
 )
@@ -223,7 +223,7 @@ func writeSlot(i *item.Type, count byte) []byte {
 		Count:   count,
 		Data:    make(map[string]interface{}),
 	}
-	return codec2.Marshal(slot)
+	return Marshal(slot)
 }
 
 func writeResult(v interface{}) []byte {

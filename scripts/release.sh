@@ -10,4 +10,4 @@ GOOS=linux GOARCH=arm64; go build -o ${BUILD_DIR}/JungleTree_${GOOS}_${GOARCH} c
 GOOS=android GOARCH=arm64; go build -o ${BUILD_DIR}/JungleTree_${GOOS}_${GOARCH} cmd/JungleTree.go
 GOOS=darwin GOARCH=amd64; go build -o ${BUILD_DIR}/JungleTree_${GOOS}_${GOARCH} cmd/JungleTree.go
 GOOS=darwin GOARCH=arm64; go build -o ${BUILD_DIR}/JungleTree_${GOOS}_${GOARCH} cmd/JungleTree.go
-GOOS=windows GOARCH=amd64; go build -o ${BUILD_DIR}/JungleTree_${GOOS}_${GOARCH} cmd/JungleTree.go
+GOOS=windows GOARCH=amd64; go build -o ${BUILD_DIR}/JungleTree_${GOOS}_${GOARCH}.exe cmd/JungleTree.go
