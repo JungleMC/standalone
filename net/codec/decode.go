@@ -3,7 +3,7 @@ package codec
 import (
 	"bytes"
 	"errors"
-	"github.com/junglemc/nbt"
+	"github.com/junglemc/JungleTree/nbt"
 	"reflect"
 )
 
