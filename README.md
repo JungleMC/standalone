@@ -1,3 +1,3 @@
 # JungleTree
 
-Minecraft server software
+Minecraft server software, written from the ground-up in Go.

@@ -1,16 +1,15 @@
 package main
 
 import (
-	"github.com/junglemc/JungleTree/crafting"
-	"github.com/junglemc/JungleTree/entity"
-	"github.com/junglemc/JungleTree/internal/handlers"
-	"github.com/junglemc/JungleTree/internal/player"
+	"github.com/junglemc/JungleTree/internal/configuration"
+	"github.com/junglemc/JungleTree/internal/net"
+	"github.com/junglemc/JungleTree/internal/net/handlers"
 	"github.com/junglemc/JungleTree/item"
-	"github.com/junglemc/JungleTree/net"
-	"github.com/junglemc/JungleTree/pkg"
-	"github.com/junglemc/JungleTree/world/biomes"
-	"github.com/junglemc/JungleTree/world/blocks"
-	"github.com/junglemc/JungleTree/world/dimensions"
+	"github.com/junglemc/JungleTree/pkg/block"
+	"github.com/junglemc/JungleTree/pkg/crafting"
+	"github.com/junglemc/JungleTree/pkg/entity"
+	"github.com/junglemc/JungleTree/pkg/world/biome"
+	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 	"log"
 )
 
@@ -22,11 +21,11 @@ const (
 )
 
 func main() {
-	conf := pkg.Config()
+	conf := configuration.Config()
 
 	s := net.NewServer(
 		conf.Network.IP, conf.Network.Port, conf.JavaEdition.OnlineMode, conf.Network.NetworkCompressionThreshold,
-		conf.DebugMode, conf.Verbose, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play, player.Disconnect,
+		conf.DebugMode, conf.Verbose, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play, net.Disconnect,
 	)
 
 	log.Println(thickLine)
@@ -58,7 +57,7 @@ func main() {
 func loadBlocks() {
 	log.Println("\t* Loading blocks")
 
-	err := blocks.Load()
+	err := block.Load()
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -67,7 +66,7 @@ func loadBlocks() {
 func loadBiomes() {
 	log.Println("\t* Loading biomes")
 
-	err := biomes.Load()
+	err := biome.Load()
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -88,7 +87,7 @@ func loadEntities() {
 		log.Panicln(err)
 	}
 
-	entityThread := entity.EntityRunner{TPS: TicksPerSecond}
+	entityThread := entity.Runner{TPS: TicksPerSecond}
 	entityThread.Run()
 }
 

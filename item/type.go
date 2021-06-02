@@ -1,23 +1,23 @@
 package item
 
 import (
-	"github.com/junglemc/JungleTree"
+	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 type Type struct {
-	ID          int32                 `json:"id"`
-	Name        JungleTree.Identifier `json:"name"`
-	DisplayName string                `json:"displayName"`
-	StackSize   byte                  `json:"stackSize"`
+	ID          int32      `json:"id"`
+	Name        Identifier `json:"name"`
+	DisplayName string     `json:"displayName"`
+	StackSize   byte       `json:"stackSize"`
 }
 
 type Tag struct {
-	Name    JungleTree.Identifier
+	Name    Identifier
 	Replace bool
-	Values  []JungleTree.Identifier
+	Values  []Identifier
 }
 
-func ByName(ident JungleTree.Identifier) (itemType *Type, ok bool) {
+func ByName(ident Identifier) (itemType *Type, ok bool) {
 	for i, item := range items {
 		if item.Name.Equals(ident) {
 			return &items[i], true
@@ -26,7 +26,7 @@ func ByName(ident JungleTree.Identifier) (itemType *Type, ok bool) {
 	return nil, false
 }
 
-func ByTag(tag JungleTree.Identifier) []*Type {
+func ByTag(tag Identifier) []*Type {
 	result := make([]*Type, 0, 0)
 	for i, itm := range items {
 		t, ok := itm.tag()
