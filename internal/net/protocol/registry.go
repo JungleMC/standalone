@@ -8,16 +8,16 @@ import (
 )
 
 var Registry = registry{
-	Handshake: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Handshake: func() (clientbound, serverbound map[int32]Type) {
 		return HandshakeClientboundIds, HandshakeServerboundIds
 	},
-	Status: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Status: func() (clientbound, serverbound map[int32]Type) {
 		return StatusClientboundIds, StatusServerboundIds
 	},
-	Login: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Login: func() (clientbound, serverbound map[int32]Type) {
 		return LoginClientboundIds, LoginServerboundIds
 	},
-	Play: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Play: func() (clientbound, serverbound map[int32]Type) {
 		return PlayClientboundIds, PlayServerboundIds
 	},
 }

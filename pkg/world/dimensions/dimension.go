@@ -45,7 +45,7 @@ type Dimension struct {
 	Natural            bool       `json:"natural" nbt:"natural"`
 	AmbientLight       float32    `json:"ambient_light" nbt:"ambient_light"`
 	IsFixedTime        bool       `json:"is_fixed_time" nbt:"-"`
-	FixedTime          int64      `json:"fixed_time,omitempty" nbt:"fixed_time" optional:"IsFixedTime""`
+	FixedTime          int64      `json:"fixed_time,omitempty" nbt:"fixed_time" optional:"IsFixedTime"`
 	Infiburn           Identifier `json:"infiburn" nbt:"infiniburn"`
 	RespawnAnchorWorks bool       `json:"respawn_anchor_works" nbt:"respawn_anchor_works"`
 	HasSkylight        bool       `json:"has_skylight" nbt:"has_skylight"`

@@ -2,8 +2,8 @@ package packets
 
 import (
 	"bytes"
-	"github.com/google/uuid"
 
+	"github.com/google/uuid"
 	"github.com/junglemc/JungleTree/internal/net/auth"
 	"github.com/junglemc/JungleTree/pkg/chat"
 	. "github.com/junglemc/JungleTree/pkg/codec"

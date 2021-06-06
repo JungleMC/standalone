@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	test2 "github.com/junglemc/JungleTree/pkg/nbt/test"
+	"github.com/junglemc/JungleTree/pkg/nbt/test"
 )
 
 func TestMarshalCompoundMap(t *testing.T) {
@@ -25,7 +25,7 @@ func TestMarshalCompoundMap(t *testing.T) {
 				"ByteTag":   byte(0xFF),
 				"StringTag": "hello, world",
 			},
-			expected:      test2.UnnamedRootCompoundBytes,
+			expected:      test.UnnamedRootCompoundBytes,
 			expectedError: false,
 		},
 	}
@@ -58,41 +58,41 @@ func TestMarshalCompoundStruct(t *testing.T) {
 		{
 			name:    "unnamed root compound tag",
 			tagName: "",
-			tag: test2.UnnamedRootCompound{
+			tag: test.UnnamedRootCompound{
 				ByteTag:   0xFF,
 				StringTag: "hello, world",
 			},
-			want:    test2.UnnamedRootCompoundBytes,
+			want:    test.UnnamedRootCompoundBytes,
 			wantErr: false,
 		},
 		{
 			name:    "bananrama",
 			tagName: "hello world",
-			tag:     test2.BananramaStruct,
-			want:    test2.BananramaBytes,
+			tag:     test.BananramaStruct,
+			want:    test.BananramaBytes,
 			wantErr: false,
 		},
 		{
 			name:    "bigtest",
 			tagName: "Level",
-			tag: test2.BigTest{
+			tag: test.BigTest{
 				LongTest:   9223372036854775807,
 				ShortTest:  32767,
 				StringTest: "HELLO WORLD THIS IS A TEST STRING \xc3\x85\xc3\x84\xc3\x96!",
 				FloatTest:  0.49823147058486938,
 				IntTest:    2147483647,
-				NCT: test2.BigTestNCT{
-					Egg: test2.BigTestNameAndFloat32{
+				NCT: test.BigTestNCT{
+					Egg: test.BigTestNameAndFloat32{
 						Name:  "Eggbert",
 						Value: 0.5,
 					},
-					Ham: test2.BigTestNameAndFloat32{
+					Ham: test.BigTestNameAndFloat32{
 						Name:  "Hampus",
 						Value: 0.75,
 					},
 				},
 				ListTest: []int64{11, 12, 13, 14, 15},
-				ListTest2: [2]test2.BigTestCompound{
+				ListTest2: [2]test.BigTestCompound{
 					{
 						Name:      "Compound tag #0",
 						CreatedOn: 1264099775885,
@@ -103,10 +103,10 @@ func TestMarshalCompoundStruct(t *testing.T) {
 					},
 				},
 				ByteTest:      127,
-				ByteArrayTest: test2.BigTestByteArray(),
+				ByteArrayTest: test.BigTestByteArray(),
 				DoubleTest:    0.49312871321823148,
 			},
-			want:    test2.BigTestBytes,
+			want:    test.BigTestBytes,
 			wantErr: false,
 		},
 	}

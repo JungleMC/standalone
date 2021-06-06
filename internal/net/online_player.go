@@ -14,8 +14,10 @@ import (
 	"github.com/junglemc/JungleTree/pkg/util"
 )
 
-var onlinePlayers = make([]OnlinePlayer, 0)
-var wait = &sync.WaitGroup{}
+var (
+	onlinePlayers = make([]OnlinePlayer, 0)
+	wait          = &sync.WaitGroup{}
+)
 
 type OnlinePlayer struct {
 	Client            *Client              `json:"-"`

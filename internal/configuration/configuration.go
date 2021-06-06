@@ -36,7 +36,7 @@ type JavaEditionConfig struct {
 
 func init() {
 	if _, err := os.Stat(configFile); os.IsNotExist(err) {
-		createDefaults()
+		createDefaults(root())
 	}
 
 	data, err := ioutil.ReadFile(configFile)
@@ -50,32 +50,13 @@ func init() {
 	}
 }
 
-func createDefaults() {
-	serverConfig := NetConfig{
-		IP:                          "",
-		Port:                        25565,
-		NetworkCompressionThreshold: 256,
-	}
-
-	jeConfig := JavaEditionConfig{OnlineMode: true}
-
-	root := RootConfiguration{
-		DebugMode:        true,
-		Verbose:          false,
-		MOTD:             "A JungleTree Server",
-		MaxOnlinePlayers: 20,
-		Network:          serverConfig,
-		Gamemode:         Survival.String(),
-		Difficulty:       Normal.String(),
-		JavaEdition:      jeConfig,
-	}
-
+func createDefaults(root RootConfiguration) {
 	data, err := toml.Marshal(&root)
 	if err != nil {
 		panic(err)
 	}
 
-	err = ioutil.WriteFile(configFile, data, fs.FileMode(0664))
+	err = ioutil.WriteFile(configFile, data, fs.FileMode(0o664))
 	if err != nil {
 		panic(err)
 	}

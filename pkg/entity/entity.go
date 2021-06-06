@@ -4,9 +4,10 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
-	"github.com/google/uuid"
 	"sync"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 //go:embed "entities.json"

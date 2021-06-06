@@ -10,7 +10,7 @@ import (
 	"net"
 	"reflect"
 
-	auth "github.com/junglemc/JungleTree/internal/net/auth"
+	"github.com/junglemc/JungleTree/internal/net/auth"
 	. "github.com/junglemc/JungleTree/internal/net/protocol"
 	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 	"github.com/junglemc/JungleTree/pkg/util"

@@ -14,8 +14,10 @@ var itemData []byte
 //go:embed "tags.json"
 var tagData []byte
 
-var items []Type
-var tags []Tag
+var (
+	items []Type
+	tags  []Tag
+)
 
 func Load() (err error) {
 	if items != nil {
