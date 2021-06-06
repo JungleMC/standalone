@@ -6,7 +6,9 @@ import (
     . "reflect"
 )
 
-type Event interface{}
+type Event interface {
+    IsAsync() bool
+}
 
 type Listener interface {
     OnEvent(event Event)
@@ -33,16 +35,19 @@ func Register(event Event, listener Listener) {
 func Trigger(event Event) {
     // Run on a separate goroutine to avoid hogging the spawning thread
     // TODO: Perhaps use channels to get the cancellable return result? Not yet implemented
-    go func() {
-        v := listeners[TypeOf(event)]
-        if v == nil {
-            return
-        }
 
-        for _, l := range v {
-            // For long events, auto async it.
+    v := listeners[TypeOf(event)]
+    if v == nil {
+        return
+    }
+
+    for _, l := range v {
+        if event.IsAsync() {
+            // For long events, async it.
             // TODO: Thread pooling
             go l.OnEvent(event)
+        } else {
+            l.OnEvent(event)
         }
-    }()
+    }
 }

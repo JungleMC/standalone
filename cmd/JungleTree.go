@@ -5,6 +5,7 @@ import (
     "github.com/junglemc/JungleTree/internal/net"
     "github.com/junglemc/JungleTree/internal/net/handlers"
     "github.com/junglemc/JungleTree/internal/startup"
+    "github.com/junglemc/JungleTree/pkg/event"
     "log"
 )
 
@@ -28,4 +29,6 @@ func main() {
     if err != nil {
         log.Panicln(err)
     }
+
+    event.Trigger(event.ServerLoadedEvent{})
 }
