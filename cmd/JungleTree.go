@@ -10,8 +10,6 @@ import (
 	"github.com/junglemc/JungleTree/pkg/event"
 )
 
-var JungleTreeVersion string
-
 func main() {
 	conf := configuration.Config()
 
