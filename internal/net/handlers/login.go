@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"github.com/google/uuid"
+
 	"github.com/junglemc/JungleTree/internal/configuration"
 	. "github.com/junglemc/JungleTree/internal/net"
 	"github.com/junglemc/JungleTree/internal/net/auth"
@@ -17,16 +19,36 @@ import (
 )
 
 func init() {
-	event.Register(event.PlayerLoginEvent{}, event.PlayerLoginListener{})
+	event.Register(event.PlayerJoinEvent{}, event.PlayerJoinListener{})
 }
 
 func loginStart(c *Client, p Packet) (err error) {
 	pkt := p.(ServerboundLoginStartPacket)
 
-	event.Trigger(event.PlayerLoginEvent{
-		Username: pkt.Username,
-	})
-	return nil
+	c.Profile.Name = pkt.Username
+
+	if c.Server.OnlineMode {
+		pkt := &ClientboundLoginEncryptionRequest{
+			ServerId:    "",
+			PublicKey:   c.Server.PublicKey(),
+			VerifyToken: c.ExpectedVerifyToken,
+		}
+		return c.Send(pkt)
+	} else {
+		if c.Server.CompressionThreshold > 0 {
+			err = c.EnableCompression()
+			if err != nil {
+				return
+			}
+		}
+
+		c.Profile.ID, _ = uuid.NewRandom()
+		err = loginSuccess(c)
+		if err != nil {
+			return
+		}
+		return joinGame(c)
+	}
 }
 
 func loginEncryptionResponse(c *Client, p Packet) (err error) {
@@ -98,8 +120,8 @@ func joinGame(c *Client) (err error) {
 	return sendPositionLook(c)
 }
 
-// TODO: Pull data from the application configuration, world generator, etc
 func sendJoinGame(c *Client) (err error) {
+	// TODO: Pull data from the application configuration, world generator, etc
 	dimension, ok := dimensions.ByName("minecraft:overworld")
 	if !ok {
 		panic("dimension not found")
@@ -215,6 +237,11 @@ func loginSuccess(c *Client) (err error) {
 	if err != nil {
 		return
 	}
+
+	event.Trigger(event.PlayerJoinEvent{
+		Username: c.Profile.Name,
+	})
+
 	c.Protocol = protocol.Play
 	return
 }
