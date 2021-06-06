@@ -8,11 +8,11 @@ import (
 )
 
 type Event interface {
-    IsAsync() bool
+	IsAsync() bool
 }
 
 type Listener interface {
-    OnEvent(event Event) error
+	OnEvent(event Event) error
 }
 
 type listenerRegistry map[Type][]Listener
@@ -34,27 +34,27 @@ func Register(event Event, listener Listener) {
 }
 
 func Trigger(event Event) {
-    // Run on a separate goroutine to avoid hogging the spawning thread
-    // TODO: Perhaps use channels to get the cancellable return result? Not yet implemented
+	// Run on a separate goroutine to avoid hogging the spawning thread
+	// TODO: Perhaps use channels to get the cancellable return result? Not yet implemented
 
-    v := listeners[TypeOf(event)]
-    if v == nil {
-        return
-    }
+	v := listeners[TypeOf(event)]
+	if v == nil {
+		return
+	}
 
-    for _, l := range v {
-        if event.IsAsync() {
-            // For long events, async it.
-            // TODO: Thread pooling
-            go func() {
-                if err := l.OnEvent(event); err != nil {
-                    log.Panicln(err)
-                }
-            }()
-        } else {
-            if err := l.OnEvent(event); err != nil {
-                log.Panicln(err)
-            }
-        }
-    }
+	for _, l := range v {
+		if event.IsAsync() {
+			// For long events, async it.
+			// TODO: Thread pooling
+			go func() {
+				if err := l.OnEvent(event); err != nil {
+					log.Panicln(err)
+				}
+			}()
+		} else {
+			if err := l.OnEvent(event); err != nil {
+				log.Panicln(err)
+			}
+		}
+	}
 }

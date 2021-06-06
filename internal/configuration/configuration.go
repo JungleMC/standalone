@@ -1,11 +1,10 @@
 package configuration
 
 import (
+	"github.com/pelletier/go-toml"
 	"io/fs"
 	"io/ioutil"
 	"os"
-
-	"github.com/pelletier/go-toml"
 )
 
 const configFile = "config.toml"

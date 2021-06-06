@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	test "github.com/junglemc/JungleTree/pkg/nbt/test"
+	"github.com/junglemc/JungleTree/pkg/nbt/test"
 )
 
 func TestMarshalCompoundMap(t *testing.T) {

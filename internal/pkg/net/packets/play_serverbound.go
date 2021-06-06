@@ -2,6 +2,7 @@ package packets
 
 import (
 	"github.com/google/uuid"
+
 	"github.com/junglemc/JungleTree/pkg/chat"
 	"github.com/junglemc/JungleTree/pkg/util"
 	"github.com/junglemc/JungleTree/pkg/world"

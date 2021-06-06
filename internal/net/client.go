@@ -10,9 +10,9 @@ import (
 	"net"
 	"reflect"
 
-	auth "github.com/junglemc/JungleTree/internal/net/auth"
+	"github.com/junglemc/JungleTree/internal/net/auth"
 	. "github.com/junglemc/JungleTree/internal/net/protocol"
-  . "github.com/junglemc/JungleTree/internal/pkg/net/packets"
+	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 	"github.com/junglemc/JungleTree/pkg/util"
 )
 
@@ -61,6 +61,7 @@ func (c *Client) listen() {
 
 		reader := bytes.NewBuffer(buf)
 		pkt, err := ReadPacket(reader, c.Protocol, c.CompressionEnabled)
+
 		if err != nil {
 			if err != io.EOF {
 				log.Printf("client::codec::ReadPacket: %s\n", err)
@@ -151,6 +152,7 @@ func (c *Client) onClientPacket(pkt Packet) {
 		return
 	}
 	err := funcCall(c, pkt)
+
 	if err != nil {
 		c.Disconnect(err.Error())
 		return
@@ -184,10 +186,10 @@ func (c *Client) EnableEncryption(sharedSecret []byte) (err error) {
 }
 
 func (c *Client) EnableCompression() (err error) {
-    err = c.Send(&ClientboundLoginCompressionPacket{Threshold: int32(c.Server.CompressionThreshold)})
-    if err != nil {
-        return
-    }
-    c.CompressionEnabled = true
-    return
+	err = c.Send(&ClientboundLoginCompressionPacket{Threshold: int32(c.Server.CompressionThreshold)})
+	if err != nil {
+		return
+	}
+	c.CompressionEnabled = true
+	return
 }

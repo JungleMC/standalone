@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	test "github.com/junglemc/JungleTree/pkg/nbt/test"
+	"github.com/junglemc/JungleTree/pkg/nbt/test"
 )
 
 func TestUnmarshalCompoundMap(t *testing.T) {

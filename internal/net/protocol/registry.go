@@ -70,6 +70,7 @@ func (r *registry) ServerboundType(id int32, p Protocol) Type {
 		break
 	case Login:
 		_, serverbound = r.Login()
+		break
 	case Play:
 		_, serverbound = r.Play()
 		break

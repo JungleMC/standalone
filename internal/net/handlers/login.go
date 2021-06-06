@@ -1,59 +1,59 @@
 package handlers
 
 import (
-    "github.com/junglemc/JungleTree/internal/configuration"
-    . "github.com/junglemc/JungleTree/internal/net"
-    "github.com/junglemc/JungleTree/internal/net/auth"
-    "github.com/junglemc/JungleTree/internal/net/protocol"
-    . "github.com/junglemc/JungleTree/internal/pkg/net/packets"
-    "github.com/junglemc/JungleTree/pkg"
-    "github.com/junglemc/JungleTree/pkg/ability"
-    . "github.com/junglemc/JungleTree/pkg/codec"
-    "github.com/junglemc/JungleTree/pkg/crafting"
-    "github.com/junglemc/JungleTree/pkg/event"
-    "github.com/junglemc/JungleTree/pkg/util"
-    "github.com/junglemc/JungleTree/pkg/world"
-    "github.com/junglemc/JungleTree/pkg/world/dimensions"
+	"github.com/junglemc/JungleTree/internal/configuration"
+	. "github.com/junglemc/JungleTree/internal/net"
+	"github.com/junglemc/JungleTree/internal/net/auth"
+	"github.com/junglemc/JungleTree/internal/net/protocol"
+	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
+	"github.com/junglemc/JungleTree/pkg"
+	"github.com/junglemc/JungleTree/pkg/ability"
+	. "github.com/junglemc/JungleTree/pkg/codec"
+	"github.com/junglemc/JungleTree/pkg/crafting"
+	"github.com/junglemc/JungleTree/pkg/event"
+	"github.com/junglemc/JungleTree/pkg/util"
+	"github.com/junglemc/JungleTree/pkg/world"
+	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
 func init() {
-    event.Register(event.PlayerLoginEvent{}, event.PlayerLoginListener{})
+	event.Register(event.PlayerLoginEvent{}, event.PlayerLoginListener{})
 }
 
 func loginStart(c *Client, p Packet) (err error) {
-    pkt := p.(ServerboundLoginStartPacket)
+	pkt := p.(ServerboundLoginStartPacket)
 
-    event.Trigger(event.PlayerLoginEvent{
-        Username: pkt.Username,
-    })
-    return nil
+	event.Trigger(event.PlayerLoginEvent{
+		Username: pkt.Username,
+	})
+	return nil
 }
 
 func loginEncryptionResponse(c *Client, p Packet) (err error) {
-    pkt := p.(ServerboundLoginEncryptionResponsePacket)
+	pkt := p.(ServerboundLoginEncryptionResponsePacket)
 
-    sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
-    if err != nil {
-        return
-    }
+	sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
+	if err != nil {
+		return
+	}
 
-    err = c.EnableEncryption(sharedSecret)
-    if err != nil {
-        return
-    }
+	err = c.EnableEncryption(sharedSecret)
+	if err != nil {
+		return
+	}
 
-    if c.Server.CompressionThreshold > 0 {
-        err = c.EnableCompression()
-        if err != nil {
-            return
-        }
-    }
+	if c.Server.CompressionThreshold > 0 {
+		err = c.EnableCompression()
+		if err != nil {
+			return
+		}
+	}
 
-    err = loginSuccess(c)
-    if err != nil {
-        return
-    }
-    return joinGame(c)
+	err = loginSuccess(c)
+	if err != nil {
+		return
+	}
+	return joinGame(c)
 }
 
 // TODO: Cleanup
