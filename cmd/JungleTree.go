@@ -7,6 +7,7 @@ import (
 	"github.com/junglemc/JungleTree/internal/net"
 	"github.com/junglemc/JungleTree/internal/net/handlers"
 	"github.com/junglemc/JungleTree/internal/startup"
+	"github.com/junglemc/JungleTree/pkg/event"
 )
 
 var JungleTreeVersion string
@@ -25,12 +26,12 @@ func main() {
 	if addr == "" {
 		addr = "*"
 	}
-  
-  log.Printf("Server listening on: %s:%d", addr, s.Port)
-  err := s.Listen()
-  if err != nil {
-      log.Panicln(err)
-  }
 
-  event.Trigger(event.ServerLoadedEvent{})
+	log.Printf("Server listening on: %s:%d", addr, s.Port)
+	err := s.Listen()
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	event.Trigger(event.ServerLoadedEvent{})
 }
