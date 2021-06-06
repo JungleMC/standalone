@@ -5,6 +5,7 @@ import (
     "github.com/junglemc/JungleTree/pkg/block"
     "github.com/junglemc/JungleTree/pkg/crafting"
     "github.com/junglemc/JungleTree/pkg/entity"
+    "github.com/junglemc/JungleTree/pkg/event"
     "github.com/junglemc/JungleTree/pkg/item"
     "github.com/junglemc/JungleTree/pkg/world/biome"
     "github.com/junglemc/JungleTree/pkg/world/dimensions"
@@ -31,6 +32,8 @@ func Load() {
 
     log.Println("Done!")
     log.Println(thinLine)
+
+    event.Trigger(event.ServerLoadEvent{})
 }
 
 func loadBlocks() {
