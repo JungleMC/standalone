@@ -8,7 +8,7 @@
 *.out
 /vendor/
 /Godeps/
-.vs-code/
+.vscode/
 .idea/
 .DS_Store
 /run

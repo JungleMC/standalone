@@ -14,11 +14,12 @@ import (
 	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
+var JungleTreeVersion string
+
 const (
-	JungleTreeVersion = "0.0.10" // TODO: Load from git or tags?
-	thinLine          = "------------------------------------"
-	thickLine         = "===================================="
-	TicksPerSecond    = 20
+	thinLine       = "------------------------------------"
+	thickLine      = "===================================="
+	TicksPerSecond = 20
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 	)
 
 	log.Println(thickLine)
-	log.Println("Starting JungleTree Server v" + JungleTreeVersion)
+	log.Println("Starting JungleTree Server " + JungleTreeVersion)
 	log.Println(thickLine)
 
 	loadDimensions()
