@@ -23,7 +23,6 @@ func Init() {
     loadItems()
     loadRecipes()
     loadEntities()
-    event.Trigger(event.ServerLoadedEvent{})
 }
 
 func loadBlocks() {

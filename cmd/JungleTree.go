@@ -25,10 +25,12 @@ func main() {
 	if addr == "" {
 		addr = "*"
 	}
+  
+  log.Printf("Server listening on: %s:%d", addr, s.Port)
+  err := s.Listen()
+  if err != nil {
+      log.Panicln(err)
+  }
 
-	log.Printf("Server listening on: %s:%d", addr, s.Port)
-	err := s.Listen()
-	if err != nil {
-		log.Panicln(err)
-	}
+  event.Trigger(event.ServerLoadedEvent{})
 }

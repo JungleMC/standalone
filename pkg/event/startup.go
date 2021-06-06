@@ -11,15 +11,19 @@ const (
 	thinLine  = "------------------------------------"
 )
 
-type (
-	ServerStartupEvent struct{}
-	ServerLoadedEvent  struct{}
-)
+type ServerStartupEvent struct{}
+type ServerStartupListener struct{}
 
-type (
-	ServerStartupListener struct{}
-	ServerLoadedListener  struct{}
-)
+func (e ServerStartupEvent) IsAsync() bool {
+    return false
+}
+
+type ServerLoadedEvent struct{}
+type ServerLoadedListener struct{}
+
+func (e ServerLoadedEvent) IsAsync() bool {
+    return false
+}
 
 func (l ServerStartupListener) OnEvent(event Event) {
 	log.Println(thickLine)
