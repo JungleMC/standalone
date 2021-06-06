@@ -138,7 +138,7 @@ func readInt32Slice(buf *bytes.Buffer) ([]int32, error) {
 		return nil, err
 	}
 	v := make([]int32, length, length)
-	for i := 0; i < int(length); i++ {
+	for i:=0; i<int(length); i++ {
 		v[i], err = readInt32(buf)
 		if err != nil {
 			return v, err
@@ -153,7 +153,7 @@ func readInt64Slice(buf *bytes.Buffer) ([]int64, error) {
 		return nil, err
 	}
 	v := make([]int64, length, length)
-	for i := 0; i < int(length); i++ {
+	for i:=0; i<int(length); i++ {
 		v[i], err = readInt64(buf)
 		if err != nil {
 			return v, err

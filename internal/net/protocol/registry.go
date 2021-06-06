@@ -37,12 +37,16 @@ func (r *registry) ClientboundID(t Type, p Protocol) int32 {
 	switch p {
 	case Handshake:
 		clientbound, _ = r.Handshake()
+		break
 	case Status:
 		clientbound, _ = r.Status()
+		break
 	case Login:
 		clientbound, _ = r.Login()
+		break
 	case Play:
 		clientbound, _ = r.Play()
+		break
 	}
 
 	for id, pkt := range clientbound {
@@ -60,12 +64,15 @@ func (r *registry) ServerboundType(id int32, p Protocol) Type {
 	switch p {
 	case Handshake:
 		_, serverbound = r.Handshake()
+		break
 	case Status:
 		_, serverbound = r.Status()
+		break
 	case Login:
 		_, serverbound = r.Login()
 	case Play:
 		_, serverbound = r.Play()
+		break
 	}
 
 	result := serverbound[id]

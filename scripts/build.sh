@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Based on a script from https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04
 
 package=cmd/JungleTree.go
 package_name=JungleTree
