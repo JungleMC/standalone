@@ -10,7 +10,13 @@ import (
 	"reflect"
 
 	"github.com/junglemc/JungleTree/internal/net/protocol"
+	"github.com/junglemc/JungleTree/pkg/event"
 )
+
+func init() {
+	event.Register(event.ServerStartupEvent{}, event.ServerStartupListener{})
+	event.Register(event.ServerLoadedEvent{}, event.ServerLoadedListener{})
+}
 
 type Server struct {
 	Address string
