@@ -24,13 +24,15 @@ func (e ServerLoadedEvent) IsAsync() bool {
     return false
 }
 
-func (l ServerStartupListener) OnEvent(event Event) {
+func (l ServerStartupListener) OnEvent(event Event) error {
     log.Println(thickLine)
     log.Println("Starting JungleTree Server v" + pkg.Version)
     log.Println(thickLine)
+    return nil
 }
 
-func (l ServerLoadedListener) OnEvent(event Event) {
+func (l ServerLoadedListener) OnEvent(event Event) error {
     log.Println(thinLine)
     log.Println("Done!")
+    return nil
 }

@@ -11,7 +11,7 @@ type Event interface {
 }
 
 type Listener interface {
-    OnEvent(event Event)
+    OnEvent(event Event) error
 }
 
 type listenerRegistry map[Type][]Listener
@@ -45,9 +45,15 @@ func Trigger(event Event) {
         if event.IsAsync() {
             // For long events, async it.
             // TODO: Thread pooling
-            go l.OnEvent(event)
+            go func() {
+                if err := l.OnEvent(event); err != nil {
+                    log.Panicln(err)
+                }
+            }()
         } else {
-            l.OnEvent(event)
+            if err := l.OnEvent(event); err != nil {
+                log.Panicln(err)
+            }
         }
     }
 }
