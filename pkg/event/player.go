@@ -6,20 +6,20 @@ import (
 	"github.com/junglemc/JungleTree/internal/configuration"
 )
 
-type PlayerLoginEvent struct {
+type PlayerJoinEvent struct {
 	Username string
 }
 
-type PlayerLoginListener struct{}
+type PlayerJoinListener struct{}
 
-func (e PlayerLoginEvent) IsAsync() bool {
+func (e PlayerJoinEvent) IsAsync() bool {
 	return true
 }
 
-func (l PlayerLoginListener) OnEvent(event Event) error {
-	e := event.(PlayerLoginEvent)
+func (l PlayerJoinListener) OnEvent(event Event) error {
+	e := event.(PlayerJoinEvent)
 	if configuration.Config().DebugMode {
-		log.Printf("Player connecting: %s\n", e.Username)
+		log.Printf("%s joined the game\n", e.Username)
 	}
 	return nil
 }

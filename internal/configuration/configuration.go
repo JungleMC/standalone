@@ -5,8 +5,6 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"os"
-
-	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 const configFile = "config.toml"
