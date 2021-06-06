@@ -13,7 +13,8 @@ import (
 )
 
 func init() {
-	event.Register(event.ServerLoadEvent{}, event.ServerLoadListener{})
+	event.Register(event.ServerStartupEvent{}, event.ServerStartupListener{})
+	event.Register(event.ServerLoadedEvent{}, event.ServerLoadedListener{})
 }
 
 type Server struct {

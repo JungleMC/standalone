@@ -1,7 +1,6 @@
 package startup
 
 import (
-    "github.com/junglemc/JungleTree/pkg"
     "github.com/junglemc/JungleTree/pkg/block"
     "github.com/junglemc/JungleTree/pkg/crafting"
     "github.com/junglemc/JungleTree/pkg/entity"
@@ -13,27 +12,18 @@ import (
 )
 
 const (
-    thinLine       = "------------------------------------"
-    thickLine      = "===================================="
     TicksPerSecond = 20
 )
 
-func Load() {
-    log.Println(thickLine)
-    log.Println("Starting JungleTree Server v" + pkg.Version)
-    log.Println(thickLine)
-
+func Init() {
+    event.Trigger(event.ServerStartupEvent{})
     loadDimensions()
     loadBiomes()
     loadBlocks()
     loadItems()
     loadRecipes()
     loadEntities()
-
-    log.Println("Done!")
-    log.Println(thinLine)
-
-    event.Trigger(event.ServerLoadEvent{})
+    event.Trigger(event.ServerLoadedEvent{})
 }
 
 func loadBlocks() {

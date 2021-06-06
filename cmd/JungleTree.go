@@ -16,7 +16,7 @@ func main() {
         conf.DebugMode, conf.Verbose, handlers.Handshake, handlers.Status, handlers.Login, handlers.Play, net.Disconnect,
     )
 
-    startup.Load()
+    startup.Init()
 
     addr := s.Address
     if addr == "" {

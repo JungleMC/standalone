@@ -1,16 +1,28 @@
 package event
 
 import (
+    "github.com/junglemc/JungleTree/pkg"
     "log"
-    "reflect"
 )
 
-type ServerLoadEvent struct {
+const (
+    thickLine = "===================================="
+    thinLine  = "------------------------------------"
+)
+
+type ServerStartupEvent struct{}
+type ServerLoadedEvent struct{}
+
+type ServerStartupListener struct{}
+type ServerLoadedListener struct{}
+
+func (l ServerStartupListener) OnEvent(event Event) {
+    log.Println(thickLine)
+    log.Println("Starting JungleTree Server v" + pkg.Version)
+    log.Println(thickLine)
 }
 
-type ServerLoadListener struct {
-}
-
-func (l ServerLoadListener) OnEvent(event Event) {
-    log.Println("Test: " + reflect.TypeOf(event).Name())
+func (l ServerLoadedListener) OnEvent(event Event) {
+    log.Println(thinLine)
+    log.Println("Done!")
 }
