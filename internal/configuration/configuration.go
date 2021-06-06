@@ -1,11 +1,12 @@
 package configuration
 
 import (
-	. "github.com/junglemc/JungleTree/pkg/util"
 	"github.com/pelletier/go-toml"
 	"io/fs"
 	"io/ioutil"
 	"os"
+
+	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 const configFile = "config.toml"

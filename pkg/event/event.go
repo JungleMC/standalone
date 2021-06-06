@@ -1,17 +1,18 @@
 package event
 
 import (
-    "github.com/junglemc/JungleTree/internal/configuration"
-    "log"
-    . "reflect"
+	"log"
+	. "reflect"
+
+	"github.com/junglemc/JungleTree/internal/configuration"
 )
 
 type Event interface {
-    IsAsync() bool
+	IsAsync() bool
 }
 
 type Listener interface {
-    OnEvent(event Event) error
+	OnEvent(event Event) error
 }
 
 type listenerRegistry map[Type][]Listener
@@ -19,41 +20,41 @@ type listenerRegistry map[Type][]Listener
 var listeners = make(listenerRegistry)
 
 func Register(event Event, listener Listener) {
-    // Debug logging, print event registration on function call
-    if configuration.Config().DebugMode {
-        log.Printf("Registering event listener: event=%s, listener=%s", TypeOf(event).Name(), TypeOf(listener).Name())
-    }
+	// Debug logging, print event registration on function call
+	if configuration.Config().DebugMode {
+		log.Printf("Registering event listener: event=%s, listener=%s", TypeOf(event).Name(), TypeOf(listener).Name())
+	}
 
-    v := listeners[TypeOf(event)]
-    if v == nil {
-        v = make([]Listener, 0)
-    }
-    v = append(v, listener)
-    listeners[TypeOf(event)] = v
+	v := listeners[TypeOf(event)]
+	if v == nil {
+		v = make([]Listener, 0)
+	}
+	v = append(v, listener)
+	listeners[TypeOf(event)] = v
 }
 
 func Trigger(event Event) {
-    // Run on a separate goroutine to avoid hogging the spawning thread
-    // TODO: Perhaps use channels to get the cancellable return result? Not yet implemented
+	// Run on a separate goroutine to avoid hogging the spawning thread
+	// TODO: Perhaps use channels to get the cancellable return result? Not yet implemented
 
-    v := listeners[TypeOf(event)]
-    if v == nil {
-        return
-    }
+	v := listeners[TypeOf(event)]
+	if v == nil {
+		return
+	}
 
-    for _, l := range v {
-        if event.IsAsync() {
-            // For long events, async it.
-            // TODO: Thread pooling
-            go func() {
-                if err := l.OnEvent(event); err != nil {
-                    log.Panicln(err)
-                }
-            }()
-        } else {
-            if err := l.OnEvent(event); err != nil {
-                log.Panicln(err)
-            }
-        }
-    }
+	for _, l := range v {
+		if event.IsAsync() {
+			// For long events, async it.
+			// TODO: Thread pooling
+			go func() {
+				if err := l.OnEvent(event); err != nil {
+					log.Panicln(err)
+				}
+			}()
+		} else {
+			if err := l.OnEvent(event); err != nil {
+				log.Panicln(err)
+			}
+		}
+	}
 }

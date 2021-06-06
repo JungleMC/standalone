@@ -3,10 +3,11 @@ package nbt
 import (
 	"bufio"
 	"bytes"
-	test2 "github.com/junglemc/JungleTree/pkg/nbt/test"
 	"os"
 	"path/filepath"
 	"testing"
+
+	test2 "github.com/junglemc/JungleTree/pkg/nbt/test"
 )
 
 func TestMarshalCompoundMap(t *testing.T) {

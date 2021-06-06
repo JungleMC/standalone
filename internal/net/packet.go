@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"compress/zlib"
+	"reflect"
+
 	. "github.com/junglemc/JungleTree/internal/net/codec"
 	. "github.com/junglemc/JungleTree/internal/net/protocol"
 	. "github.com/junglemc/JungleTree/pkg/codec"
-	"reflect"
 )
 
 type Packet interface{}

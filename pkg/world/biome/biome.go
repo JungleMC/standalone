@@ -3,6 +3,7 @@ package biome
 import (
 	_ "embed"
 	"encoding/json"
+
 	. "github.com/junglemc/JungleTree/pkg/util"
 	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )

@@ -3,6 +3,7 @@ package dimensions
 import (
 	_ "embed"
 	"encoding/json"
+
 	. "github.com/junglemc/JungleTree/pkg/util"
 )
 

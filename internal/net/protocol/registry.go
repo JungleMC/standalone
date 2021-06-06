@@ -2,8 +2,9 @@ package protocol
 
 import (
 	"fmt"
-	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 	. "reflect"
+
+	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 )
 
 var Registry = registry{
@@ -82,8 +83,7 @@ func (r *registry) ServerboundType(id int32, p Protocol) Type {
 	return result
 }
 
-var HandshakeClientboundIds = map[int32]Type{
-}
+var HandshakeClientboundIds = map[int32]Type{}
 
 var HandshakeServerboundIds = map[int32]Type{
 	0x00: TypeOf(ServerboundHandshakePacket{}),

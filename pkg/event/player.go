@@ -1,24 +1,25 @@
 package event
 
 import (
-    "github.com/junglemc/JungleTree/internal/configuration"
-    "log"
+	"log"
+
+	"github.com/junglemc/JungleTree/internal/configuration"
 )
 
 type PlayerLoginEvent struct {
-    Username string
+	Username string
 }
 
 type PlayerLoginListener struct{}
 
 func (e PlayerLoginEvent) IsAsync() bool {
-    return true
+	return true
 }
 
 func (l PlayerLoginListener) OnEvent(event Event) error {
-    e := event.(PlayerLoginEvent)
-    if configuration.Config().DebugMode {
-        log.Printf("Player connecting: %s\n", e.Username)
-    }
-    return nil
+	e := event.(PlayerLoginEvent)
+	if configuration.Config().DebugMode {
+		log.Printf("Player connecting: %s\n", e.Username)
+	}
+	return nil
 }

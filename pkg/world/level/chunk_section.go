@@ -1,8 +1,9 @@
 package level
 
 import (
-	. "github.com/junglemc/JungleTree/pkg/block"
 	"math"
+
+	. "github.com/junglemc/JungleTree/pkg/block"
 )
 
 const chunkSectionSize = 16

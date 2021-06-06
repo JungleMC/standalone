@@ -3,9 +3,10 @@ package codec
 import (
 	"bytes"
 	"errors"
+	"reflect"
+
 	"github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/nbt"
-	"reflect"
 )
 
 func Unmarshal(data []byte, val reflect.Value) error {
@@ -232,7 +233,7 @@ func mapDecoder(_ *bytes.Buffer) reflect.Value {
 }
 
 type sliceDecoder struct {
-	t reflect.Type
+	t         reflect.Type
 	inferSize bool
 }
 

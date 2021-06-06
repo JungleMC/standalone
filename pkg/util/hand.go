@@ -2,6 +2,7 @@ package util
 
 import (
 	"bytes"
+
 	"github.com/junglemc/JungleTree/pkg/codec"
 )
 

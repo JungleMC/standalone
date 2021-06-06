@@ -5,12 +5,13 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
+	"reflect"
+
 	. "github.com/junglemc/JungleTree/internal/net/codec"
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/inventory"
 	"github.com/junglemc/JungleTree/pkg/item"
 	. "github.com/junglemc/JungleTree/pkg/util"
-	"reflect"
 )
 
 //go:embed "recipes.json"

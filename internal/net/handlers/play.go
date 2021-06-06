@@ -3,11 +3,12 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"log"
+
 	"github.com/junglemc/JungleTree/internal/configuration"
 	. "github.com/junglemc/JungleTree/internal/net"
 	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 	. "github.com/junglemc/JungleTree/pkg/codec"
-	"log"
 )
 
 func playPluginMessage(c *Client, p Packet) (err error) {

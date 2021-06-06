@@ -3,12 +3,13 @@ package codec
 import (
 	"bytes"
 	"errors"
-	"github.com/junglemc/JungleTree/pkg/codec"
-	"github.com/junglemc/JungleTree/pkg/nbt"
 	"log"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/junglemc/JungleTree/pkg/codec"
+	"github.com/junglemc/JungleTree/pkg/nbt"
 )
 
 func Marshal(v interface{}) []byte {
