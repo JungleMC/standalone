@@ -7,7 +7,7 @@ build_dir=./dist
 # For cross-compilation
 CGO=0
 
-DEV=false
+DEV=true
 platforms=("linux/amd64" "linux/arm" "linux/arm64" "android/arm64" "darwin/amd64" "darwin/arm64" "windows/amd64")
 
 for platform in "${platforms[@]}"
@@ -21,10 +21,10 @@ do
     fi
     
     if [ "$DEV" = true  ]; then
-        ld='-X main.JungleTreeVersion='$(git rev-parse HEAD)
+        ld='-X github.com/junglemc/JungleTree/pkg.Version='$(git rev-parse HEAD)
         tag='-tags dev'
     else
-        ld='-X main.JungleTreeVersion='${version}
+        ld='-X github.com/junglemc/JungleTree/pkg.Version='${version}
         tag=''
     fi
     
