@@ -31,7 +31,7 @@ func (e ServerLoadedEvent) IsAsync() bool {
 
 func (l ServerStartupListener) OnEvent(event Event) error {
 	log.Println(thickLine)
-	log.Println("Starting JungleTree Server v" + pkg.Version)
+	log.Printf("Starting JungleTree Server (Version: %s)\n", pkg.Version)
 	log.Println(thickLine)
 	return nil
 }

@@ -8,7 +8,7 @@ build_dir=./dist
 # For cross-compilation
 CGO=0
 
-DEV=true
+: "${DEV:=true}"
 platforms=("linux/amd64" "linux/arm" "linux/arm64" "android/arm64" "darwin/amd64" "darwin/arm64" "windows/amd64")
 
 for platform in "${platforms[@]}"
@@ -20,15 +20,15 @@ do
     if [ $GOOS = "windows" ]; then
         output_name+='.exe'
     fi
-    
+
     if [ "$DEV" = true  ]; then
-        ld='-X github.com/junglemc/JungleTree/pkg.Version='$(git rev-parse HEAD)
+        ld="-X github.com/junglemc/JungleTree/pkg.Version=$(git rev-parse HEAD)"
         tag='-tags dev'
     else
-        ld='-X github.com/junglemc/JungleTree/pkg.Version='${version}
+        ld="-X github.com/junglemc/JungleTree/pkg.Version=v${version}"
         tag=''
     fi
-    
+
     env CGO_ENABLED=$CGO GOOS=$GOOS GOARCH=$GOARCH go build -ldflags "${ld}" $tag -trimpath -o ${build_dir}/${output_name} $package
 
     if [ $? -ne 0 ]; then
