@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+
 	"github.com/junglemc/JungleTree/internal/configuration"
 	. "github.com/junglemc/JungleTree/internal/net"
 	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"

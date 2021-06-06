@@ -2,21 +2,22 @@ package protocol
 
 import (
 	"fmt"
-	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 	. "reflect"
+
+	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
 )
 
 var Registry = registry{
-	Handshake: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Handshake: func() (clientbound, serverbound map[int32]Type) {
 		return HandshakeClientboundIds, HandshakeServerboundIds
 	},
-	Status: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Status: func() (clientbound, serverbound map[int32]Type) {
 		return StatusClientboundIds, StatusServerboundIds
 	},
-	Login: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Login: func() (clientbound, serverbound map[int32]Type) {
 		return LoginClientboundIds, LoginServerboundIds
 	},
-	Play: func() (clientbound map[int32]Type, serverbound map[int32]Type) {
+	Play: func() (clientbound, serverbound map[int32]Type) {
 		return PlayClientboundIds, PlayServerboundIds
 	},
 }
@@ -36,16 +37,12 @@ func (r *registry) ClientboundID(t Type, p Protocol) int32 {
 	switch p {
 	case Handshake:
 		clientbound, _ = r.Handshake()
-		break
 	case Status:
 		clientbound, _ = r.Status()
-		break
 	case Login:
 		clientbound, _ = r.Login()
-		break
 	case Play:
 		clientbound, _ = r.Play()
-		break
 	}
 
 	for id, pkt := range clientbound {
@@ -63,16 +60,12 @@ func (r *registry) ServerboundType(id int32, p Protocol) Type {
 	switch p {
 	case Handshake:
 		_, serverbound = r.Handshake()
-		break
 	case Status:
 		_, serverbound = r.Status()
-		break
 	case Login:
 		_, serverbound = r.Login()
-		break
 	case Play:
 		_, serverbound = r.Play()
-		break
 	}
 
 	result := serverbound[id]
@@ -82,8 +75,7 @@ func (r *registry) ServerboundType(id int32, p Protocol) Type {
 	return result
 }
 
-var HandshakeClientboundIds = map[int32]Type{
-}
+var HandshakeClientboundIds = map[int32]Type{}
 
 var HandshakeServerboundIds = map[int32]Type{
 	0x00: TypeOf(ServerboundHandshakePacket{}),

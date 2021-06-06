@@ -2,6 +2,7 @@ package world
 
 import (
 	"bytes"
+
 	"github.com/junglemc/JungleTree/pkg/codec"
 )
 

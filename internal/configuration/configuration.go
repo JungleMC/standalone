@@ -1,11 +1,12 @@
 package configuration
 
 import (
-	. "github.com/junglemc/JungleTree/pkg/util"
-	"github.com/pelletier/go-toml"
 	"io/fs"
 	"io/ioutil"
 	"os"
+
+	. "github.com/junglemc/JungleTree/pkg/util"
+	"github.com/pelletier/go-toml"
 )
 
 const configFile = "config.toml"
@@ -74,7 +75,7 @@ func createDefaults() {
 		panic(err)
 	}
 
-	err = ioutil.WriteFile(configFile, data, fs.FileMode(0664))
+	err = ioutil.WriteFile(configFile, data, fs.FileMode(0o664))
 	if err != nil {
 		panic(err)
 	}

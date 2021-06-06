@@ -1,9 +1,10 @@
 package nbt
 
 import (
-	test2 "github.com/junglemc/JungleTree/pkg/nbt/test"
 	"reflect"
 	"testing"
+
+	test2 "github.com/junglemc/JungleTree/pkg/nbt/test"
 )
 
 func TestUnmarshalCompoundMap(t *testing.T) {

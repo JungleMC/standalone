@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/junglemc/JungleTree/internal/configuration"
 	"github.com/junglemc/JungleTree/internal/net"
 	"github.com/junglemc/JungleTree/internal/net/handlers"
@@ -10,7 +12,6 @@ import (
 	"github.com/junglemc/JungleTree/pkg/item"
 	"github.com/junglemc/JungleTree/pkg/world/biome"
 	"github.com/junglemc/JungleTree/pkg/world/dimensions"
-	"log"
 )
 
 const (

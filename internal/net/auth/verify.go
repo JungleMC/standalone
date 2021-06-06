@@ -25,8 +25,11 @@ func DecryptLoginResponse(serverPrivateKey *rsa.PrivateKey, serverPublicKey, exp
 }
 
 func decryptSecrets(privateKey *rsa.PrivateKey, verifyToken, sharedSecret []byte) ([]byte, []byte, error) {
-	var err error
-	verifyToken, err = rsa.DecryptPKCS1v15(rand.Reader, privateKey, verifyToken)
+	verifyToken, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, verifyToken)
+	if err != nil {
+		return verifyToken, sharedSecret, err
+	}
+
 	sharedSecret, err = rsa.DecryptPKCS1v15(rand.Reader, privateKey, sharedSecret)
 	return verifyToken, sharedSecret, err
 }
@@ -39,19 +42,23 @@ func verifySecret(serverPublicKey, sharedSecret []byte, profile *Profile) error 
 func getProfile(profile *Profile, hash string) (err error) {
 	uri := fmt.Sprintf(sessionServerUri, profile.Name, hash)
 
-	response, err := http.Get(uri)
-	defer response.Body.Close()
+	if response, err := http.Get(uri); err != nil {
+		return err
+	} else {
 
-	if response.StatusCode == 204 {
-		err = errors.New("Verification failed")
-		return
+		defer response.Body.Close()
+
+		if response.StatusCode == 204 {
+			err = errors.New("verification failed")
+			return err
+		}
+
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		err = json.Unmarshal(body, profile)
+		return err
 	}
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(body, profile)
-	return
 }

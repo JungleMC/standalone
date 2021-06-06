@@ -1,6 +1,10 @@
 package net
 
 import (
+	"log"
+	"sync"
+	"time"
+
 	"github.com/junglemc/JungleTree/internal/configuration"
 	"github.com/junglemc/JungleTree/internal/net/protocol"
 	"github.com/junglemc/JungleTree/internal/pkg/net/packets"
@@ -8,13 +12,12 @@ import (
 	"github.com/junglemc/JungleTree/pkg/entity"
 	"github.com/junglemc/JungleTree/pkg/inventory"
 	"github.com/junglemc/JungleTree/pkg/util"
-	"log"
-	"sync"
-	"time"
 )
 
-var onlinePlayers = make([]OnlinePlayer, 0)
-var wait = &sync.WaitGroup{}
+var (
+	onlinePlayers = make([]OnlinePlayer, 0)
+	wait          = &sync.WaitGroup{}
+)
 
 type OnlinePlayer struct {
 	Client            *Client              `json:"-"`

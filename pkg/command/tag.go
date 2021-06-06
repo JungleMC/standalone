@@ -4,6 +4,7 @@ import (
 	"bytes"
 	_ "embed"
 	"encoding/json"
+
 	"github.com/junglemc/JungleTree/pkg/codec"
 	. "github.com/junglemc/JungleTree/pkg/util"
 )

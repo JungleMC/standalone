@@ -30,17 +30,17 @@ type ServerboundPlaySelectTrade struct {
 }
 
 type ServerboundPlayUpdateStructureBlock struct {
-	Location world.BlockPosition
-	Action   int32 `type:"varint"`
-	Mode     int32 `type:"varint"`
-	Name     string
-	OffsetX  uint8
-	OffsetY  uint8
-	OffsetZ  uint8
-	SizeX    uint8
-	SizeY    uint8
-	SizeZ    uint8
-	Mirror   int32 `type:"varint"`
+	Location  world.BlockPosition
+	Action    int32 `type:"varint"`
+	Mode      int32 `type:"varint"`
+	Name      string
+	OffsetX   uint8
+	OffsetY   uint8
+	OffsetZ   uint8
+	SizeX     uint8
+	SizeY     uint8
+	SizeZ     uint8
+	Mirror    int32 `type:"varint"`
 	Rotation  int32 `type:"varint"`
 	Metadata  string
 	Integrity float32

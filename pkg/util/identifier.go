@@ -2,8 +2,9 @@ package util
 
 import (
 	"bytes"
-	. "github.com/junglemc/JungleTree/pkg/codec"
 	"strings"
+
+	. "github.com/junglemc/JungleTree/pkg/codec"
 )
 
 type Identifier string
@@ -31,7 +32,6 @@ func (i Identifier) Name() string {
 func (i Identifier) Empty() bool {
 	return i == ""
 }
-
 
 func (i *Identifier) MarshalMinecraft() ([]byte, error) {
 	return WriteString(string(*i)), nil

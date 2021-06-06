@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	. "reflect"
+
 	. "github.com/junglemc/JungleTree/internal/net"
 	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
-	. "reflect"
 )
 
 var Handshake = map[Type]func(c *Client, pkt Packet) error{

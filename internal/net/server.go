@@ -5,10 +5,11 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"fmt"
-	"github.com/junglemc/JungleTree/internal/net/protocol"
 	"log"
 	"net"
 	"reflect"
+
+	"github.com/junglemc/JungleTree/internal/net/protocol"
 )
 
 type Server struct {
@@ -22,7 +23,7 @@ type Server struct {
 	OnlineMode           bool
 	CompressionThreshold int
 	Debug                bool
-	Verbose bool
+	Verbose              bool
 	MaxOnlinePlayers     int32
 
 	HandshakeHandlers map[reflect.Type]func(c *Client, pkt Packet) error
@@ -95,7 +96,7 @@ func NewServer(address string, port uint16, onlineMode bool, compressionThreshol
 		OnlineMode:           onlineMode,
 		CompressionThreshold: compressionThreshold,
 		Debug:                debug,
-		Verbose: verbose,
+		Verbose:              verbose,
 
 		HandshakeHandlers: handshake,
 		StatusHandlers:    status,

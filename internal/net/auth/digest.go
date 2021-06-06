@@ -7,7 +7,7 @@ import (
 )
 
 // TODO: Benchmark
-func digest(sharedSecret []byte, pubKey []byte) string {
+func digest(sharedSecret, pubKey []byte) string {
 	h := sha1.New()
 	h.Write(sharedSecret)
 	h.Write(pubKey)
