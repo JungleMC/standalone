@@ -1,77 +1,62 @@
 package handlers
 
 import (
-	"github.com/google/uuid"
-	"github.com/junglemc/JungleTree/internal/configuration"
-	. "github.com/junglemc/JungleTree/internal/net"
-	"github.com/junglemc/JungleTree/internal/net/auth"
-	"github.com/junglemc/JungleTree/internal/net/protocol"
-	. "github.com/junglemc/JungleTree/internal/pkg/net/packets"
-	"github.com/junglemc/JungleTree/pkg"
-	"github.com/junglemc/JungleTree/pkg/ability"
-	. "github.com/junglemc/JungleTree/pkg/codec"
-	"github.com/junglemc/JungleTree/pkg/crafting"
-	"github.com/junglemc/JungleTree/pkg/util"
-	"github.com/junglemc/JungleTree/pkg/world"
-	"github.com/junglemc/JungleTree/pkg/world/dimensions"
+    "github.com/junglemc/JungleTree/internal/configuration"
+    . "github.com/junglemc/JungleTree/internal/net"
+    "github.com/junglemc/JungleTree/internal/net/auth"
+    "github.com/junglemc/JungleTree/internal/net/protocol"
+    . "github.com/junglemc/JungleTree/internal/pkg/net/packets"
+    "github.com/junglemc/JungleTree/pkg"
+    "github.com/junglemc/JungleTree/pkg/ability"
+    . "github.com/junglemc/JungleTree/pkg/codec"
+    "github.com/junglemc/JungleTree/pkg/crafting"
+    "github.com/junglemc/JungleTree/pkg/event"
+    "github.com/junglemc/JungleTree/pkg/util"
+    "github.com/junglemc/JungleTree/pkg/world"
+    "github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
+func init() {
+    event.Register(event.PlayerLoginEvent{}, event.PlayerLoginListener{})
+}
+
 func loginStart(c *Client, p Packet) (err error) {
-	pkt := p.(ServerboundLoginStartPacket)
+    pkt := p.(ServerboundLoginStartPacket)
 
-	c.Profile.Name = pkt.Username
-
-	if c.Server.OnlineMode {
-		pkt := &ClientboundLoginEncryptionRequest{
-			ServerId:    "",
-			PublicKey:   c.Server.PublicKey(),
-			VerifyToken: c.ExpectedVerifyToken,
-		}
-		return c.Send(pkt)
-	} else {
-		if c.Server.CompressionThreshold > 0 {
-			err = enableCompression(c)
-			if err != nil {
-				return
-			}
-		}
-
-		c.Profile.ID, _ = uuid.NewRandom()
-		err = loginSuccess(c)
-		if err != nil {
-			return
-		}
-		return joinGame(c)
-	}
+    event.Trigger(event.PlayerLoginEvent{
+        Username: pkt.Username,
+    })
+    return nil
 }
 
 func loginEncryptionResponse(c *Client, p Packet) (err error) {
-	pkt := p.(ServerboundLoginEncryptionResponsePacket)
+    pkt := p.(ServerboundLoginEncryptionResponsePacket)
 
-	sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
-	if err != nil {
-		return
-	}
+    sharedSecret, err := auth.DecryptLoginResponse(c.Server.PrivateKey(), c.Server.PublicKey(), c.ExpectedVerifyToken, pkt.VerifyToken, pkt.SharedSecret, &c.Profile)
+    if err != nil {
+        return
+    }
 
-	err = c.EnableEncryption(sharedSecret)
-	if err != nil {
-		return
-	}
+    err = c.EnableEncryption(sharedSecret)
+    if err != nil {
+        return
+    }
 
-	if c.Server.CompressionThreshold > 0 {
-		err = enableCompression(c)
-		if err != nil {
-			return
-		}
-	}
+    if c.Server.CompressionThreshold > 0 {
+        err = c.EnableCompression()
+        if err != nil {
+            return
+        }
+    }
 
-	err = loginSuccess(c)
-	if err != nil {
-		return
-	}
-	return joinGame(c)
+    err = loginSuccess(c)
+    if err != nil {
+        return
+    }
+    return joinGame(c)
 }
 
+// TODO: Cleanup
 func joinGame(c *Client) (err error) {
 	err = sendJoinGame(c)
 	if err != nil {
@@ -113,6 +98,7 @@ func joinGame(c *Client) (err error) {
 	return sendPositionLook(c)
 }
 
+// TODO: Pull data from the application configuration, world generator, etc
 func sendJoinGame(c *Client) (err error) {
 	dimension, ok := dimensions.ByName("minecraft:overworld")
 	if !ok {
@@ -218,15 +204,6 @@ func sendPositionLook(c *Client) (err error) {
 		Flags:      0,
 		TeleportId: 1,
 	})
-}
-
-func enableCompression(c *Client) (err error) {
-	err = c.Send(&ClientboundLoginCompressionPacket{Threshold: int32(c.Server.CompressionThreshold)})
-	if err != nil {
-		return
-	}
-	c.CompressionEnabled = true
-	return
 }
 
 func loginSuccess(c *Client) (err error) {
