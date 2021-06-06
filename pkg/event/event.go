@@ -18,7 +18,7 @@ var listeners = make(listenerRegistry)
 
 func Register(event Event, listener Listener) {
     // Debug logging, print event registration on function call
-    if configuration.Config().DebugMode && configuration.Config().Verbose {
+    if configuration.Config().DebugMode {
         log.Printf("Registering event listener: event=%s, listener=%s", TypeOf(event).Name(), TypeOf(listener).Name())
     }
 
