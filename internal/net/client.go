@@ -116,7 +116,7 @@ func (c *Client) onClientPacket(pkt Packet) {
 	if c.Server.Debug {
 		log.Printf("rx -> %s\n", reflect.TypeOf(pkt).Name())
 		if c.Server.Verbose {
-			log.Println(pkt)
+			log.Printf("%+v\n", pkt)
 		}
 	}
 
