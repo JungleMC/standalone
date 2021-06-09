@@ -61,7 +61,6 @@ func (c *Client) listen() {
 
 		reader := bytes.NewBuffer(buf)
 		pkt, err := ReadPacket(reader, c.Protocol, c.CompressionEnabled)
-
 		if err != nil {
 			if err != io.EOF {
 				log.Printf("client::codec::ReadPacket: %s\n", err)
@@ -83,7 +82,7 @@ func (c *Client) Send(pkt Packet) (err error) {
 	if c.Server.Debug {
 		log.Printf("tx -> %s\n", reflect.TypeOf(pkt).Elem().Name())
 		if c.Server.Verbose {
-			log.Println(pkt)
+			log.Printf("%+v\n", pkt)
 		}
 	}
 
@@ -152,7 +151,6 @@ func (c *Client) onClientPacket(pkt Packet) {
 		return
 	}
 	err := funcCall(c, pkt)
-
 	if err != nil {
 		c.Disconnect(err.Error())
 		return

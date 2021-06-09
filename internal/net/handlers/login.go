@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"log"
+
 	"github.com/google/uuid"
 
 	"github.com/junglemc/JungleTree/internal/configuration"
@@ -35,7 +37,10 @@ func loginStart(c *Client, p Packet) (err error) {
 		}
 		return c.Send(pkt)
 	} else {
-		if c.Server.CompressionThreshold > 0 {
+		if c.Server.CompressionThreshold >= 0 {
+			if c.Server.Debug {
+				log.Println("Compression enabled for " + c.Profile.Name)
+			}
 			err = c.EnableCompression()
 			if err != nil {
 				return
@@ -64,7 +69,10 @@ func loginEncryptionResponse(c *Client, p Packet) (err error) {
 		return
 	}
 
-	if c.Server.CompressionThreshold > 0 {
+	if c.Server.CompressionThreshold >= 0 {
+		if c.Server.Debug {
+			log.Println("Compression enabled for " + c.Profile.Name)
+		}
 		err = c.EnableCompression()
 		if err != nil {
 			return

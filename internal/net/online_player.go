@@ -2,9 +2,11 @@ package net
 
 import (
 	"log"
+	"net"
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/junglemc/JungleTree/internal/configuration"
 	"github.com/junglemc/JungleTree/internal/net/protocol"
 	"github.com/junglemc/JungleTree/internal/pkg/net/packets"
@@ -46,6 +48,22 @@ func tick(c *Client, time time.Time) (err error) {
 func Connect(c *Client) {
 	if _, player, ok := getOnlinePlayer(c); ok {
 		player.Client.Disconnect("You logged in from another location!")
+	}
+
+	// Kicking banned players
+	for _, bannedPlayer := range configuration.Config().BannedPlayers {
+		uuid, _ := uuid.Parse(bannedPlayer.Player)
+		if addr, ok := c.Connection.RemoteAddr().(*net.TCPAddr); ok {
+			if c.Profile.ID == uuid || addr.IP.String() == bannedPlayer.Player || (!c.Server.OnlineMode && c.Profile.Name == bannedPlayer.Player) {
+				if bannedPlayer.Reason == "" {
+					c.Disconnect("You are banned from this server.")
+				} else {
+					c.Disconnect(bannedPlayer.Reason)
+				}
+			}
+		} else {
+			panic("error parsing IP")
+		}
 	}
 
 	playerEntity := entity.NewLivingEntity(entity.ByName("player"), c.Profile.ID, func(e *entity.LivingEntity, time time.Time) error {

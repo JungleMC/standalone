@@ -17,8 +17,9 @@ func root() RootConfiguration {
 			Port:                        25565,
 			NetworkCompressionThreshold: 256,
 		},
-		Gamemode:    Survival.String(),
-		Difficulty:  Normal.String(),
-		JavaEdition: JavaEditionConfig{OnlineMode: true},
+		Gamemode:      Survival.String(),
+		Difficulty:    Normal.String(),
+		JavaEdition:   JavaEditionConfig{OnlineMode: true},
+		BannedPlayers: make([]Ban, 0),
 	}
 }

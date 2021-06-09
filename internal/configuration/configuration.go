@@ -1,10 +1,11 @@
 package configuration
 
 import (
-	"github.com/pelletier/go-toml"
 	"io/fs"
 	"io/ioutil"
 	"os"
+
+	"github.com/pelletier/go-toml"
 )
 
 const configFile = "config.toml"
@@ -20,6 +21,14 @@ type RootConfiguration struct {
 	Gamemode         string
 	Difficulty       string
 	JavaEdition      JavaEditionConfig
+	BannedPlayers    []Ban
+}
+
+type Ban struct {
+	// Player could either be UUID, IP, or Username (offline mode only)
+
+	Player string
+	Reason string
 }
 
 type NetConfig struct {
