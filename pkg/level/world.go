@@ -4,15 +4,22 @@ import (
 	"fmt"
 	"github.com/syndtr/goleveldb/leveldb/errors"
 
+	"github.com/junglemc/JungleTree/internal/configuration"
 	"github.com/junglemc/JungleTree/internal/storage"
 	. "github.com/junglemc/JungleTree/pkg/block"
 	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 type World struct {
-	Name   Identifier
-	Seed   uint64
-	Height uint
+	Name                Identifier
+	Seed                uint64
+	Height              uint
+	Dimension           Identifier
+	InitialGamemode     GameMode
+	ReducedDebugInfo    bool
+	EnableRespawnScreen bool
+	IsFlat              bool
+	IsHardcoreMode      bool
 }
 
 func ListWorlds() []Identifier {
@@ -24,7 +31,7 @@ func ListWorlds() []Identifier {
 	return worlds
 }
 
-func NewWorld(name string, seed uint64, height uint) *World {
+func NewWorld(name string, seed uint64, height uint, dimension Identifier) *World {
 	id := Identifier(fmt.Sprintf("world:%s", name))
 
 	worlds := make([]Identifier, 0, 0)
@@ -40,9 +47,15 @@ func NewWorld(name string, seed uint64, height uint) *World {
 	}
 
 	result := World{
-		Name:   id,
-		Seed:   seed,
-		Height: height,
+		Name:                id,
+		Seed:                seed,
+		Height:              height,
+		Dimension:           dimension,
+		InitialGamemode:     GameModeByName(configuration.Config().Gamemode),
+		ReducedDebugInfo:    false,
+		EnableRespawnScreen: true,
+		IsFlat:              true, // TODO: Check this value based on the world generator we're using, don't store persistently
+		IsHardcoreMode:      false,
 	}
 
 	err = storage.Put(result.worldKey(), result, nil)

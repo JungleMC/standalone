@@ -159,30 +159,30 @@ func joinGame(c *Client) (err error) {
 }
 
 func sendJoinGame(c *Client) (err error) {
+	world := level.DefaultWorld()
+
 	// TODO: Pull data from the application configuration, world generator, etc
 	dimension, ok := dimensions.ByName("minecraft:overworld")
 	if !ok {
 		panic("dimension not found")
 	}
 
-	world := level.DefaultWorld()
-
 	join := &ClientboundJoinGamePacket{
 		EntityId:            0,
-		IsHardcore:          false,
-		GameMode:            util.Survival,
+		IsHardcore:          world.IsHardcoreMode,
+		GameMode:            world.InitialGamemode,
 		PreviousGameMode:    -1,
 		WorldNames:          level.ListWorlds(),
 		DimensionCodec:      level.DimensionBiomes(),
 		Dimension:           *dimension,
-		WorldName:           world.Name,
+		DimensionName:       world.Dimension,
 		HashedSeed:          0,
 		MaxPlayers:          int32(configuration.Config().MaxOnlinePlayers),
 		ViewDistance:        32,
-		ReducedDebugInfo:    false,
-		EnableRespawnScreen: true,
+		ReducedDebugInfo:    world.ReducedDebugInfo,
+		EnableRespawnScreen: world.EnableRespawnScreen,
 		IsDebug:             configuration.Config().DebugMode,
-		IsFlat:              false,
+		IsFlat:              world.IsFlat,
 	}
 	return c.Send(join)
 }

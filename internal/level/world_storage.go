@@ -21,7 +21,7 @@ func Load() error {
 			name = "world"
 		}
 
-		world := level.NewWorld(name, rand.Uint64(), 256)
+		world := level.NewWorld(name, rand.Uint64(), 256, "minecraft:overworld")
 		err = storage.Put("jungletree:default_world", world.Name, nil)
 		if err != nil {
 			return err

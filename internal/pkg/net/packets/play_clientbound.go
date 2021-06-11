@@ -113,7 +113,7 @@ type ClientboundJoinGamePacket struct {
 	WorldNames          []Identifier
 	DimensionCodec      interface{}          `type:"nbt"`
 	Dimension           dimensions.Dimension `type:"nbt"`
-	WorldName           Identifier
+	DimensionName       Identifier
 	HashedSeed          int64
 	MaxPlayers          int32 `type:"varint"`
 	ViewDistance        int32 `type:"varint"`
