@@ -15,12 +15,13 @@ import (
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/event"
+	"github.com/junglemc/JungleTree/pkg/level"
+	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 	"github.com/junglemc/JungleTree/pkg/util"
-	"github.com/junglemc/JungleTree/pkg/world"
-	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
 func init() {
+	event.Register(event.PlayerLoginEvent{}, event.PlayerLoginListener{})
 	event.Register(event.PlayerJoinEvent{}, event.PlayerJoinListener{})
 }
 
@@ -48,11 +49,17 @@ func loginStart(c *Client, p Packet) (err error) {
 		}
 
 		c.Profile.ID, _ = uuid.NewRandom()
-		err = loginSuccess(c)
+
+		var ok bool
+		ok, err = loginSuccess(c)
 		if err != nil {
 			return
 		}
-		return joinGame(c)
+
+		if ok {
+			return joinGame(c)
+		}
+		return nil
 	}
 }
 
@@ -79,11 +86,42 @@ func loginEncryptionResponse(c *Client, p Packet) (err error) {
 		}
 	}
 
-	err = loginSuccess(c)
+	var ok bool
+	ok, err = loginSuccess(c)
 	if err != nil {
 		return
 	}
-	return joinGame(c)
+
+	if ok {
+		return joinGame(c)
+	}
+	return nil
+}
+
+func loginSuccess(c *Client) (bool, error) {
+	// TODO: Event cancel return parameters
+	cancelled := event.Trigger(event.PlayerLoginEvent{
+		ID:       c.Profile.ID,
+		Username: c.Profile.Name,
+	})
+
+	if cancelled {
+		c.Disconnect("You were disconnected from the server.")
+		return false, nil
+	}
+
+	response := &ClientboundLoginSuccess{
+		Uuid:     c.Profile.ID,
+		Username: c.Profile.Name,
+	}
+
+	err := c.Send(response)
+	if err != nil {
+		return false, err
+	}
+
+	c.Protocol = protocol.Play
+	return true, nil
 }
 
 // TODO: Cleanup
@@ -129,6 +167,8 @@ func joinGame(c *Client) (err error) {
 }
 
 func sendJoinGame(c *Client) (err error) {
+	world := level.DefaultWorld()
+
 	// TODO: Pull data from the application configuration, world generator, etc
 	dimension, ok := dimensions.ByName("minecraft:overworld")
 	if !ok {
@@ -137,20 +177,20 @@ func sendJoinGame(c *Client) (err error) {
 
 	join := &ClientboundJoinGamePacket{
 		EntityId:            0,
-		IsHardcore:          false,
-		GameMode:            util.Survival,
+		IsHardcore:          world.IsHardcoreMode,
+		GameMode:            world.InitialGamemode,
 		PreviousGameMode:    -1,
-		WorldNames:          []string{"minecraft:world"},
-		DimensionCodec:      world.DimensionBiomes(),
+		WorldNames:          level.ListWorlds(),
+		DimensionCodec:      level.DimensionBiomes(),
 		Dimension:           *dimension,
-		WorldName:           "minecraft:world",
+		DimensionName:       world.Dimension,
 		HashedSeed:          0,
 		MaxPlayers:          int32(configuration.Config().MaxOnlinePlayers),
 		ViewDistance:        32,
-		ReducedDebugInfo:    false,
-		EnableRespawnScreen: true,
+		ReducedDebugInfo:    world.ReducedDebugInfo,
+		EnableRespawnScreen: world.EnableRespawnScreen,
 		IsDebug:             configuration.Config().DebugMode,
-		IsFlat:              false,
+		IsFlat:              world.IsFlat,
 	}
 	return c.Send(join)
 }
@@ -234,22 +274,4 @@ func sendPositionLook(c *Client) (err error) {
 		Flags:      0,
 		TeleportId: 1,
 	})
-}
-
-func loginSuccess(c *Client) (err error) {
-	response := &ClientboundLoginSuccess{
-		Uuid:     c.Profile.ID,
-		Username: c.Profile.Name,
-	}
-	err = c.Send(response)
-	if err != nil {
-		return
-	}
-
-	event.Trigger(event.PlayerJoinEvent{
-		Username: c.Profile.Name,
-	})
-
-	c.Protocol = protocol.Play
-	return
 }

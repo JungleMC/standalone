@@ -3,7 +3,7 @@
 
 package=cmd/JungleTree.go
 package_name=JungleTree
-version=0.0.11
+version=0.0.12
 build_dir=./dist
 # For cross-compilation
 CGO=0

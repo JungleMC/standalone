@@ -20,6 +20,6 @@ Verbose = true
   Port = 25565
 
 [[BannedPlayers]]
-Player = "hubofeverything"
+Player = "<insert player name>"
 Reason = "ab"
 ```
