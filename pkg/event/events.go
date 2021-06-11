@@ -12,15 +12,15 @@ type (
 	ServerLoadedEvent  struct{}
 
 	PlayerLoginEvent struct {
-		ID               uuid.UUID
-		Username         string
-		cancel           bool
+		ID       uuid.UUID
+		Username string
+		cancel   bool
 	}
 
 	PlayerJoinEvent struct {
-		ID               uuid.UUID
-		Username         string
-		cancel           bool
+		ID       uuid.UUID
+		Username string
+		cancel   bool
 	}
 )
 

@@ -4,8 +4,8 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/junglemc/JungleTree/pkg/chat"
-	"github.com/junglemc/JungleTree/pkg/util"
 	"github.com/junglemc/JungleTree/pkg/level"
+	"github.com/junglemc/JungleTree/pkg/util"
 )
 
 type ServerboundPlayEnchantItem struct {
@@ -31,17 +31,17 @@ type ServerboundPlaySelectTrade struct {
 }
 
 type ServerboundPlayUpdateStructureBlock struct {
-	Location level.BlockPosition
-	Action   int32 `type:"varint"`
-	Mode     int32 `type:"varint"`
-	Name     string
-	OffsetX  uint8
-	OffsetY  uint8
-	OffsetZ  uint8
-	SizeX    uint8
-	SizeY    uint8
-	SizeZ    uint8
-	Mirror   int32 `type:"varint"`
+	Location  level.BlockPosition
+	Action    int32 `type:"varint"`
+	Mode      int32 `type:"varint"`
+	Name      string
+	OffsetX   uint8
+	OffsetY   uint8
+	OffsetZ   uint8
+	SizeX     uint8
+	SizeY     uint8
+	SizeZ     uint8
+	Mirror    int32 `type:"varint"`
 	Rotation  int32 `type:"varint"`
 	Metadata  string
 	Integrity float32

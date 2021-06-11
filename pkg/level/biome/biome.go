@@ -4,8 +4,8 @@ import (
 	_ "embed"
 	"encoding/json"
 
-	. "github.com/junglemc/JungleTree/pkg/util"
 	"github.com/junglemc/JungleTree/pkg/level/dimensions"
+	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 //go:embed "biomes.json"
