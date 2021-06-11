@@ -9,13 +9,18 @@ import (
 	"github.com/syndtr/goleveldb/leveldb/storage"
 	"reflect"
 
+	"github.com/junglemc/JungleTree/internal/configuration"
 	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 var DB *leveldb.DB
 
 func Load() (err error) {
-	DB, err = leveldb.Open(storage.NewMemStorage(), nil)
+	if configuration.Config().DebugMode {
+		DB, err = leveldb.Open(storage.NewMemStorage(), nil)
+	} else {
+		DB, err = leveldb.OpenFile("data", nil)
+	}
 	return
 }
 
