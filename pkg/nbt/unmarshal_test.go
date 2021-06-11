@@ -19,7 +19,7 @@ func TestUnmarshalCompoundMap(t *testing.T) {
 			input: test.UnnamedRootCompoundBytes,
 			expected: map[string]interface{}{
 				"ByteTag":   byte(0xFF),
-				"StringTag": "hello, level",
+				"StringTag": "hello, world",
 			},
 		},
 	}
@@ -57,7 +57,7 @@ func TestUnmarshalCompoundStruct(t *testing.T) {
 			wantTagName: "",
 			want: test.UnnamedRootCompound{
 				ByteTag:   0xFF,
-				StringTag: "hello, level",
+				StringTag: "hello, world",
 			},
 			wantErr: false,
 		},

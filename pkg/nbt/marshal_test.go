@@ -23,7 +23,7 @@ func TestMarshalCompoundMap(t *testing.T) {
 			inputTagName: "",
 			input: map[string]interface{}{
 				"ByteTag":   byte(0xFF),
-				"StringTag": "hello, level",
+				"StringTag": "hello, world",
 			},
 			expected:      test.UnnamedRootCompoundBytes,
 			expectedError: false,
@@ -60,14 +60,14 @@ func TestMarshalCompoundStruct(t *testing.T) {
 			tagName: "",
 			tag: test.UnnamedRootCompound{
 				ByteTag:   0xFF,
-				StringTag: "hello, level",
+				StringTag: "hello, world",
 			},
 			want:    test.UnnamedRootCompoundBytes,
 			wantErr: false,
 		},
 		{
 			name:    "bananrama",
-			tagName: "hello level",
+			tagName: "hello world",
 			tag:     test.BananramaStruct,
 			want:    test.BananramaBytes,
 			wantErr: false,
