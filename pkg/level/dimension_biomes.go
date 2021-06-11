@@ -1,8 +1,8 @@
-package world
+package level
 
 import (
-	"github.com/junglemc/JungleTree/pkg/world/biome"
-	"github.com/junglemc/JungleTree/pkg/world/dimensions"
+	"github.com/junglemc/JungleTree/pkg/level/biome"
+	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 )
 
 type DimensionBiome struct {

@@ -4,13 +4,14 @@ import (
 	"bytes"
 
 	"github.com/google/uuid"
+
 	"github.com/junglemc/JungleTree/internal/net/auth"
 	"github.com/junglemc/JungleTree/pkg/chat"
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
+	"github.com/junglemc/JungleTree/pkg/level"
+	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 	. "github.com/junglemc/JungleTree/pkg/util"
-	"github.com/junglemc/JungleTree/pkg/world"
-	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
 type ClientboundSpawnEntityPacket struct {
@@ -55,7 +56,7 @@ type ClientboundSpawnEntityPaintingPacket struct {
 	EntityId   int32 `type:"varint"`
 	EntityUUID uuid.UUID
 	Title      int32 `type:"varint"`
-	Location   world.BlockPosition
+	Location   level.BlockPosition
 	Direction  byte
 }
 
@@ -79,7 +80,7 @@ type ClientboundPlayStatisticsPacket struct {
 }
 
 type ClientboundPlayAcknowledgePlayerDiggingPacket struct {
-	Location   world.BlockPosition
+	Location   level.BlockPosition
 	Block      int32 `type:"varint"`
 	Status     int32 `type:"varint"`
 	Successful bool
@@ -87,18 +88,18 @@ type ClientboundPlayAcknowledgePlayerDiggingPacket struct {
 
 type ClientboundPlayBlockBreakAnimationPacket struct {
 	EntityId     int32 `type:"varint"`
-	Location     world.BlockPosition
+	Location     level.BlockPosition
 	DestroyStage byte
 }
 
 type ClientboundPlayBlockEntityDataPacket struct {
-	Location world.BlockPosition
+	Location level.BlockPosition
 	Action   byte
 	Data     map[string]interface{} `type:"nbt"`
 }
 
 type ClientboundPlayBlockActionPacket struct {
-	Location        world.BlockPosition
+	Location        level.BlockPosition
 	ActionID        byte
 	ActionParameter byte
 	BlockId         int32 `type:"varint"`
@@ -109,10 +110,10 @@ type ClientboundJoinGamePacket struct {
 	IsHardcore          bool
 	GameMode            GameMode
 	PreviousGameMode    int8
-	WorldNames          []string
+	WorldNames          []Identifier
 	DimensionCodec      interface{}          `type:"nbt"`
 	Dimension           dimensions.Dimension `type:"nbt"`
-	WorldName           string
+	DimensionName       Identifier
 	HashedSeed          int64
 	MaxPlayers          int32 `type:"varint"`
 	ViewDistance        int32 `type:"varint"`
@@ -141,7 +142,7 @@ type ClientboundPlayNamedSoundEffect struct {
 }
 
 type ClientboundPlayBlockChange struct {
-	Location world.BlockPosition
+	Location level.BlockPosition
 	Type     int32 `type:"varint"`
 }
 
@@ -608,7 +609,7 @@ type ClientboundPlayAttachEntity struct {
 
 type ClientboundPlayWorldEvent struct {
 	EffectId int32
-	Location world.BlockPosition
+	Location level.BlockPosition
 	Data     int32
 	Global   bool
 }
@@ -636,7 +637,7 @@ type ClientboundPlayRelEntityMove struct {
 }
 
 type ClientboundPlayOpenSignEntity struct {
-	Location world.BlockPosition
+	Location level.BlockPosition
 }
 
 type ClientboundPlayRespawn struct {
@@ -668,7 +669,7 @@ type ClientboundDeclareRecipesPacket struct {
 }
 
 type ClientboundPlaySpawnPosition struct {
-	Location world.BlockPosition
+	Location level.BlockPosition
 }
 
 type ClientboundPlayEntityEquipment struct {
