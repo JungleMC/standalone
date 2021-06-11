@@ -3,6 +3,7 @@ package startup
 import (
 	"log"
 
+	"github.com/junglemc/JungleTree/internal/storage"
 	"github.com/junglemc/JungleTree/pkg/block"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/entity"
@@ -18,12 +19,21 @@ const (
 
 func Init() {
 	event.Trigger(event.ServerStartupEvent{})
+	loadStorage()
 	loadDimensions()
 	loadBiomes()
 	loadBlocks()
 	loadItems()
 	loadRecipes()
 	loadEntities()
+}
+
+func loadStorage() {
+	log.Println("\t* Loading LevelDB")
+	err := storage.Load()
+	if err != nil {
+		log.Panicln(err)
+	}
 }
 
 func loadBlocks() {
