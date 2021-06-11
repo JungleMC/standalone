@@ -2,8 +2,11 @@ package startup
 
 import (
 	"log"
+	"math/rand"
+	"time"
 
 	"github.com/junglemc/JungleTree/internal/storage"
+	"github.com/junglemc/JungleTree/internal/world"
 	"github.com/junglemc/JungleTree/pkg/block"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/entity"
@@ -18,8 +21,11 @@ const (
 )
 
 func Init() {
+	rand.Seed(time.Now().Unix())
+
 	event.Trigger(event.ServerStartupEvent{})
 	loadStorage()
+	loadWorlds()
 	loadDimensions()
 	loadBiomes()
 	loadBlocks()
@@ -31,6 +37,14 @@ func Init() {
 func loadStorage() {
 	log.Println("\t* Loading LevelDB")
 	err := storage.Load()
+	if err != nil {
+		log.Panicln(err)
+	}
+}
+
+func loadWorlds() {
+	log.Println("\t* Loading Worlds")
+	err := world.Load()
 	if err != nil {
 		log.Panicln(err)
 	}
