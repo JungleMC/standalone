@@ -5,7 +5,7 @@ import (
 
 	"github.com/junglemc/JungleTree/pkg/chat"
 	"github.com/junglemc/JungleTree/pkg/util"
-	"github.com/junglemc/JungleTree/pkg/world"
+	"github.com/junglemc/JungleTree/pkg/level"
 )
 
 type ServerboundPlayEnchantItem struct {
@@ -31,17 +31,17 @@ type ServerboundPlaySelectTrade struct {
 }
 
 type ServerboundPlayUpdateStructureBlock struct {
-	Location  world.BlockPosition
-	Action    int32 `type:"varint"`
-	Mode      int32 `type:"varint"`
-	Name      string
-	OffsetX   uint8
-	OffsetY   uint8
-	OffsetZ   uint8
-	SizeX     uint8
-	SizeY     uint8
-	SizeZ     uint8
-	Mirror    int32 `type:"varint"`
+	Location level.BlockPosition
+	Action   int32 `type:"varint"`
+	Mode     int32 `type:"varint"`
+	Name     string
+	OffsetX  uint8
+	OffsetY  uint8
+	OffsetZ  uint8
+	SizeX    uint8
+	SizeY    uint8
+	SizeZ    uint8
+	Mirror   int32 `type:"varint"`
 	Rotation  int32 `type:"varint"`
 	Metadata  string
 	Integrity float32
@@ -94,7 +94,7 @@ type ServerboundInteractEntityPacket struct {
 
 type ServerboundPlayBlockDig struct {
 	Status   int8
-	Location world.BlockPosition
+	Location level.BlockPosition
 	Face     int8
 }
 
@@ -176,7 +176,7 @@ type ServerboundPlaySetCreativeSlot struct {
 }
 
 type ServerboundPlayUpdateSign struct {
-	Location world.BlockPosition
+	Location level.BlockPosition
 	Text1    string
 	Text2    string
 	Text3    string
@@ -204,7 +204,7 @@ type ServerboundPlaySteerVehicle struct {
 
 type ServerboundPlayBlockPlace struct {
 	Hand        int32 `type:"varint"`
-	Location    world.BlockPosition
+	Location    level.BlockPosition
 	Direction   int32 `type:"varint"`
 	CursorX     float32
 	CursorY     float32
@@ -227,7 +227,7 @@ type ServerboundPlayTransaction struct {
 }
 
 type ServerboundPlayGenerateStructure struct {
-	Location    world.BlockPosition
+	Location    level.BlockPosition
 	Levels      int32 `type:"varint"`
 	KeepJigsaws bool
 }
@@ -237,7 +237,7 @@ type ServerboundPlayHeldItemSlot struct {
 }
 
 type ServerboundPlayUpdateCommandBlock struct {
-	Location world.BlockPosition
+	Location level.BlockPosition
 	Command  string
 	Mode     int32 `type:"varint"`
 	Flags    uint8
@@ -245,7 +245,7 @@ type ServerboundPlayUpdateCommandBlock struct {
 
 type ServerboundPlayQueryBlockNbt struct {
 	TransactionId int32 `type:"varint"`
-	Location      world.BlockPosition
+	Location      level.BlockPosition
 }
 
 type ServerboundClientSettingsPacket struct {
@@ -282,7 +282,7 @@ type ServerboundPlayAbilities struct {
 }
 
 type ServerboundPlayUpdateJigsawBlock struct {
-	Location   world.BlockPosition
+	Location   level.BlockPosition
 	Name       string
 	Target     string
 	Pool       string

@@ -13,9 +13,9 @@ import (
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/event"
+	"github.com/junglemc/JungleTree/pkg/level"
+	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 	"github.com/junglemc/JungleTree/pkg/util"
-	"github.com/junglemc/JungleTree/pkg/world"
-	"github.com/junglemc/JungleTree/pkg/world/dimensions"
 )
 
 func init() {
@@ -165,15 +165,17 @@ func sendJoinGame(c *Client) (err error) {
 		panic("dimension not found")
 	}
 
+	world := level.DefaultWorld()
+
 	join := &ClientboundJoinGamePacket{
 		EntityId:            0,
 		IsHardcore:          false,
 		GameMode:            util.Survival,
 		PreviousGameMode:    -1,
-		WorldNames:          []string{"minecraft:level"},
-		DimensionCodec:      world.DimensionBiomes(),
+		WorldNames:          level.ListWorlds(),
+		DimensionCodec:      level.DimensionBiomes(),
 		Dimension:           *dimension,
-		WorldName:           "minecraft:level",
+		WorldName:           world.Name,
 		HashedSeed:          0,
 		MaxPlayers:          int32(configuration.Config().MaxOnlinePlayers),
 		ViewDistance:        32,

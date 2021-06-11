@@ -12,8 +12,8 @@ import (
 	"github.com/junglemc/JungleTree/pkg/entity"
 	"github.com/junglemc/JungleTree/pkg/event"
 	"github.com/junglemc/JungleTree/pkg/item"
-	"github.com/junglemc/JungleTree/pkg/world/biome"
-	"github.com/junglemc/JungleTree/pkg/world/dimensions"
+	"github.com/junglemc/JungleTree/pkg/level/biome"
+	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 )
 
 const (
