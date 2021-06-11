@@ -24,21 +24,23 @@ func ListWorlds() []Identifier {
 	return worlds
 }
 
-func NewWorld(name Identifier, seed uint64, height uint) *World {
+func NewWorld(name string, seed uint64, height uint) *World {
+	id := Identifier(fmt.Sprintf("world:%s", name))
+
 	worlds := make([]Identifier, 0, 0)
 	err := storage.Get("jungletree:worlds", &worlds, nil)
 	if err != nil && err != errors.ErrNotFound {
 		panic(err)
 	}
 
-	worlds = append(worlds, name)
+	worlds = append(worlds, id)
 	err = storage.Put("jungletree:worlds", worlds, nil)
 	if err != nil {
 		panic(err)
 	}
 
 	result := World{
-		Name:   name,
+		Name:   id,
 		Seed:   seed,
 		Height: height,
 	}
@@ -51,7 +53,7 @@ func NewWorld(name Identifier, seed uint64, height uint) *World {
 }
 
 func GetWorld(name Identifier) *World {
-	id := Identifier(fmt.Sprintf("jungletree:world_%s", name.Name()))
+	id := Identifier(fmt.Sprintf("world:%s", name.Name()))
 	ok, err := storage.Has(id, nil)
 	if err != nil {
 		panic(err)
@@ -65,6 +67,15 @@ func GetWorld(name Identifier) *World {
 		panic(err)
 	}
 	return &result
+}
+
+func DefaultWorld() *World {
+	var id Identifier
+	err := storage.Get("jungletree:default_world", &id, nil)
+	if err != nil {
+		panic(err)
+	}
+	return GetWorld(id)
 }
 
 func (w *World) ChunkAt(x int32, z int32) *Chunk {
@@ -88,7 +99,7 @@ func (w *World) ChunkAt(x int32, z int32) *Chunk {
 }
 
 func (w *World) worldKey() Identifier {
-	return Identifier(fmt.Sprintf("jungletree:world_%s", w.Name.Name()))
+	return Identifier(fmt.Sprintf("world:%s", w.Name.Name()))
 }
 
 func (w *World) chunkKey(index uint64) Identifier {

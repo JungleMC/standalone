@@ -2,6 +2,9 @@
   <configuration default="false" name="JungleTree Server" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="JungleTree" />
     <working_directory value="$PROJECT_DIR$/run" />
+    <envs>
+      <env name="DEFAULT_WORLD_NAME" value="hello_jungletree" />
+    </envs>
     <kind value="PACKAGE" />
     <package value="github.com/junglemc/JungleTree/cmd" />
     <directory value="$PROJECT_DIR$" />

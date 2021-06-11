@@ -2,6 +2,7 @@ package level
 
 import (
 	"math/rand"
+	"os"
 
 	"github.com/junglemc/JungleTree/internal/storage"
 	"github.com/junglemc/JungleTree/pkg/world/level"
@@ -14,7 +15,17 @@ func Load() error {
 	}
 
 	if !ok {
-		level.NewWorld("minecraft:world", rand.Uint64(), 256)
+		// TODO: Environment variable wrap default values - 12 factor apps style
+		name := os.Getenv("DEFAULT_WORLD_NAME")
+		if name == "" {
+			name = "world"
+		}
+
+		world := level.NewWorld(name, rand.Uint64(), 256)
+		err = storage.Put("jungletree:default_world", world.Name, nil)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
