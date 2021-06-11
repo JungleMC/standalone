@@ -19,6 +19,7 @@ import (
 )
 
 func init() {
+	event.Register(event.PlayerLoginEvent{}, event.PlayerLoginListener{})
 	event.Register(event.PlayerJoinEvent{}, event.PlayerJoinListener{})
 }
 
@@ -43,11 +44,17 @@ func loginStart(c *Client, p Packet) (err error) {
 		}
 
 		c.Profile.ID, _ = uuid.NewRandom()
-		err = loginSuccess(c)
+
+		var ok bool
+		ok, err = loginSuccess(c)
 		if err != nil {
 			return
 		}
-		return joinGame(c)
+
+		if ok {
+			return joinGame(c)
+		}
+		return nil
 	}
 }
 
@@ -71,11 +78,42 @@ func loginEncryptionResponse(c *Client, p Packet) (err error) {
 		}
 	}
 
-	err = loginSuccess(c)
+	var ok bool
+	ok, err = loginSuccess(c)
 	if err != nil {
 		return
 	}
-	return joinGame(c)
+
+	if ok {
+		return joinGame(c)
+	}
+	return nil
+}
+
+func loginSuccess(c *Client) (bool, error) {
+	// TODO: Event cancel return parameters
+	cancelled := event.Trigger(event.PlayerLoginEvent{
+		ID:       c.Profile.ID,
+		Username: c.Profile.Name,
+	})
+
+	if cancelled {
+		c.Disconnect("You were disconnected from the server.")
+		return false, nil
+	}
+
+	response := &ClientboundLoginSuccess{
+		Uuid:     c.Profile.ID,
+		Username: c.Profile.Name,
+	}
+
+	err := c.Send(response)
+	if err != nil {
+		return false, err
+	}
+
+	c.Protocol = protocol.Play
+	return true, nil
 }
 
 // TODO: Cleanup
@@ -226,22 +264,4 @@ func sendPositionLook(c *Client) (err error) {
 		Flags:      0,
 		TeleportId: 1,
 	})
-}
-
-func loginSuccess(c *Client) (err error) {
-	response := &ClientboundLoginSuccess{
-		Uuid:     c.Profile.ID,
-		Username: c.Profile.Name,
-	}
-	err = c.Send(response)
-	if err != nil {
-		return
-	}
-
-	event.Trigger(event.PlayerJoinEvent{
-		Username: c.Profile.Name,
-	})
-
-	c.Protocol = protocol.Play
-	return
 }
