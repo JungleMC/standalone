@@ -1,7 +1,11 @@
 package level
 
 import (
+	"fmt"
+
+	"github.com/junglemc/JungleTree/internal/storage"
 	. "github.com/junglemc/JungleTree/pkg/block"
+	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 const (
@@ -16,6 +20,18 @@ type Chunk struct {
 	sections  []ChunkSection
 	heightMap [chunkSize * chunkSize]int32 // signed integer, future proofing for the new chunk format in 1.17.?
 	biomes    [chunkSize * chunkSize * biomeBlocks]int32
+}
+
+func (c *Chunk) index() uint64 {
+	return uint64(c.X)<<32 | uint64(c.Z)
+}
+
+func (c *Chunk) chunkKey() Identifier {
+	return Identifier(fmt.Sprintf("jungletree:%s_%d", c.World.Name.Name(), c.index()))
+}
+
+func (c *Chunk) Save() error {
+	return storage.Put(c.chunkKey(), *c, nil)
 }
 
 func (c *Chunk) Update() {
