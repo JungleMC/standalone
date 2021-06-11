@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/junglemc/JungleTree/internal/storage"
-	world2 "github.com/junglemc/JungleTree/pkg/level"
+	"github.com/junglemc/JungleTree/pkg/level"
 )
 
 func Load() error {
@@ -21,7 +21,7 @@ func Load() error {
 			name = "world"
 		}
 
-		world := world2.NewWorld(name, rand.Uint64(), 256)
+		world := level.NewWorld(name, rand.Uint64(), 256)
 		err = storage.Put("jungletree:default_world", world.Name, nil)
 		if err != nil {
 			return err
