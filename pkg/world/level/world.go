@@ -15,6 +15,15 @@ type World struct {
 	Height uint
 }
 
+func ListWorlds() []Identifier {
+	worlds := make([]Identifier, 0, 0)
+	err := storage.Get("jungletree:worlds", &worlds, nil)
+	if err != nil {
+		panic(err)
+	}
+	return worlds
+}
+
 func NewWorld(name Identifier, seed uint64, height uint) *World {
 	worlds := make([]Identifier, 0, 0)
 	err := storage.Get("jungletree:worlds", &worlds, nil)
@@ -50,12 +59,12 @@ func GetWorld(name Identifier) *World {
 	if !ok {
 		return nil
 	}
-	result := &World{}
+	result := World{}
 	err = storage.Get(id, &result, nil)
 	if err != nil {
 		panic(err)
 	}
-	return result
+	return &result
 }
 
 func (w *World) ChunkAt(x int32, z int32) *Chunk {

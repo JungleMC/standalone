@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/junglemc/JungleTree/internal/level"
 	"github.com/junglemc/JungleTree/internal/storage"
-	"github.com/junglemc/JungleTree/internal/world"
 	"github.com/junglemc/JungleTree/pkg/block"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/entity"
@@ -44,7 +44,7 @@ func loadStorage() {
 
 func loadWorlds() {
 	log.Println("\t* Loading Worlds")
-	err := world.Load()
+	err := level.Load()
 	if err != nil {
 		log.Panicln(err)
 	}

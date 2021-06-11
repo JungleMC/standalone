@@ -33,12 +33,10 @@ func Get(key Identifier, value interface{}, opts *opt.ReadOptions) error {
 	buf := bytes.NewBuffer(data)
 	decoder := gob.NewDecoder(buf)
 
-	val := v.Elem().Interface()
-	err = decoder.Decode(val)
+	err = decoder.Decode(value)
 	if err != nil {
 		return err
 	}
-	v.Elem().Set(reflect.ValueOf(val))
 	return nil
 }
 
