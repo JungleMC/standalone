@@ -94,9 +94,9 @@ func Disconnect(c *Client, reason string) {
 		if reason != "" {
 			log.Printf("%s disconnected: %s", c.Profile.Name, reason)
 			if c.Protocol == protocol.Login {
-				_ = c.Send(&packets.ClientboundLoginDisconnectPacket{Reason: &chat.Message{Text: reason}})
+				_ = c.Send(&packets.ClientboundLoginDisconnectPacket{Reason: chat.Message{Text: reason}.String()})
 			} else if c.Protocol == protocol.Play {
-				_ = c.Send(&packets.ClientboundPlayKickDisconnect{Reason: &chat.Message{Text: reason}})
+				_ = c.Send(&packets.ClientboundPlayKickDisconnect{Reason: chat.Message{Text: reason}.String()})
 			}
 		}
 	}

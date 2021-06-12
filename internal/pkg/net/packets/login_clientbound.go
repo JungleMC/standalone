@@ -2,12 +2,11 @@ package packets
 
 import (
 	"github.com/google/uuid"
-
-	"github.com/junglemc/JungleTree/pkg/chat"
 )
 
 type ClientboundLoginDisconnectPacket struct {
-	Reason *chat.Message
+	// Reason *chat.Message
+	Reason string
 }
 
 type ClientboundLoginEncryptionRequest struct {

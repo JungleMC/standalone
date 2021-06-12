@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/junglemc/JungleTree/internal/net/auth"
-	"github.com/junglemc/JungleTree/pkg/chat"
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/level"
@@ -355,6 +354,7 @@ func (p ClientboundPlayerInfoPacket) MarshalMinecraft() ([]byte, error) {
 	buf := &bytes.Buffer{}
 	buf.Write(WriteVarInt32(int32(p.Action)))
 	buf.Write(WriteVarInt32(int32(len(p.Data))))
+	// Unclear, break out of the for loop or break out of the switch?
 	for _, player := range p.Data {
 		id, _ := player.UUID.MarshalBinary()
 		buf.Write(id)
@@ -599,7 +599,8 @@ type ClientboundPlayCraftProgressBar struct {
 }
 
 type ClientboundPlayKickDisconnect struct {
-	Reason *chat.Message
+	// Reason *chat.Message
+	Reason string
 }
 
 type ClientboundPlayAttachEntity struct {
