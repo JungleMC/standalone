@@ -2,10 +2,14 @@ package packets
 
 import (
 	"bytes"
+	"encoding/json"
+	"log"
 
 	"github.com/google/uuid"
 
 	"github.com/junglemc/JungleTree/internal/net/auth"
+	"github.com/junglemc/JungleTree/pkg/chat"
+	"github.com/junglemc/JungleTree/pkg/codec"
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
 	"github.com/junglemc/JungleTree/pkg/level"
@@ -599,8 +603,18 @@ type ClientboundPlayCraftProgressBar struct {
 }
 
 type ClientboundPlayKickDisconnect struct {
-	// Reason *chat.Message
-	Reason string
+	Reason *chat.Message
+}
+
+func (p ClientboundPlayKickDisconnect) MarshalMinecraft() ([]byte, error) {
+	data, err := json.Marshal(&p.Reason)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// Must be string
+	return codec.WriteString(string(data)), nil
 }
 
 type ClientboundPlayAttachEntity struct {

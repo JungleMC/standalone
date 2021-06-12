@@ -1,12 +1,27 @@
 package packets
 
 import (
+	"encoding/json"
+	"log"
+
 	"github.com/google/uuid"
+	"github.com/junglemc/JungleTree/pkg/chat"
+	"github.com/junglemc/JungleTree/pkg/codec"
 )
 
 type ClientboundLoginDisconnectPacket struct {
-	// Reason *chat.Message
-	Reason string
+	Reason *chat.Message
+}
+
+func (p ClientboundLoginDisconnectPacket) MarshalMinecraft() ([]byte, error) {
+	data, err := json.Marshal(&p.Reason)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// Must be string
+	return codec.WriteString(string(data)), nil
 }
 
 type ClientboundLoginEncryptionRequest struct {
