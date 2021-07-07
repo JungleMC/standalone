@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package msg;
+
+option go_package = "github.com/junglemc/JungleTree/pkg/rpc/message";
+
+message WorldGetRequest {
+  optional string name = 1;
+}
+
+message WorldGetResponse {
+  repeated World result = 1;
+}
+
+message WorldDeleteRequest {
+  optional string uuid = 1;
+}
+
+message WorldDeleteResponse {}
+
+message World {
+  optional string uuid = 1;
+  string name = 2;
+  uint64 seed = 3;
+  uint32 height = 4;
+  string dimension = 5;
+  Gamemode initial_gamemode = 6;
+  bool enable_respawn_screen = 7;
+  bool is_flat = 8;
+  bool is_hardcore = 9;
+}
+
+enum Gamemode {
+  SURVIVAL = 0;
+  CREATIVE = 1;
+  ADVENTURE = 2;
+  SPECTATOR = 3;
+}

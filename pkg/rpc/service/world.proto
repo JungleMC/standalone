@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+import "pkg/rpc/message/world.proto";
+
+package service;
+
+option go_package = "github.com/junglemc/JungleTree/pkg/rpc/service";
+
+service WorldProvider {
+  rpc CreateWorld(msg.World) returns (msg.World) {}
+  rpc GetWorld(msg.WorldGetRequest) returns (msg.WorldGetResponse) {}
+  rpc UpdateWorld(msg.World) returns (msg.World) {}
+  rpc DeleteWorld(msg.WorldDeleteRequest) returns (msg.WorldDeleteResponse) {}
+}
