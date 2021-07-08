@@ -2,15 +2,14 @@ package packets
 
 import (
 	"bytes"
-
 	"github.com/google/uuid"
+	"github.com/junglemc/JungleTree/pkg/level"
+	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 
 	"github.com/junglemc/JungleTree/internal/net/auth"
 	"github.com/junglemc/JungleTree/pkg/chat"
 	. "github.com/junglemc/JungleTree/pkg/codec"
 	"github.com/junglemc/JungleTree/pkg/crafting"
-	"github.com/junglemc/JungleTree/pkg/level"
-	"github.com/junglemc/JungleTree/pkg/level/dimensions"
 	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
@@ -108,12 +107,12 @@ type ClientboundPlayBlockActionPacket struct {
 type ClientboundJoinGamePacket struct {
 	EntityId            int32
 	IsHardcore          bool
-	GameMode            GameMode
+	GameMode            byte
 	PreviousGameMode    int8
-	WorldNames          []Identifier
+	WorldNames          []string
 	DimensionCodec      interface{}          `type:"nbt"`
 	Dimension           dimensions.Dimension `type:"nbt"`
-	DimensionName       Identifier
+	DimensionName       string
 	HashedSeed          int64
 	MaxPlayers          int32 `type:"varint"`
 	ViewDistance        int32 `type:"varint"`

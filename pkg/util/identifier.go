@@ -33,6 +33,9 @@ func (i Identifier) Empty() bool {
 	return i == ""
 }
 
+func (i Identifier) String() string {
+	return string(i)
+}
 func (i *Identifier) MarshalMinecraft() ([]byte, error) {
 	return WriteString(string(*i)), nil
 }

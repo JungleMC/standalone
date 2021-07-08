@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/junglemc/JungleTree/internal/services"
 	"log"
 
 	"github.com/junglemc/JungleTree/internal/configuration"
@@ -11,6 +12,13 @@ import (
 )
 
 func main() {
+	go func() {
+		err := services.World("", 50051)
+		if err != nil {
+			panic(err)
+		}
+	}()
+
 	conf := configuration.Config()
 
 	s := net.NewServer(
@@ -19,6 +27,7 @@ func main() {
 	)
 
 	startup.Init()
+	defer rpcClose()
 
 	addr := s.Address
 	if addr == "" {
@@ -32,4 +41,8 @@ func main() {
 	}
 
 	event.Trigger(event.ServerLoadedEvent{})
+}
+
+func rpcClose() {
+	startup.WorldConnection.Close()
 }

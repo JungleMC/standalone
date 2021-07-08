@@ -8,10 +8,6 @@ message WorldGetRequest {
   optional string name = 1;
 }
 
-message WorldGetResponse {
-  repeated World result = 1;
-}
-
 message WorldDeleteRequest {
   optional string uuid = 1;
 }
@@ -28,6 +24,7 @@ message World {
   bool enable_respawn_screen = 7;
   bool is_flat = 8;
   bool is_hardcore = 9;
+  bool reduced_debug_info = 10;
 }
 
 enum Gamemode {

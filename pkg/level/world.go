@@ -2,9 +2,6 @@ package level
 
 import (
 	"fmt"
-	"github.com/syndtr/goleveldb/leveldb/errors"
-
-	"github.com/junglemc/JungleTree/internal/configuration"
 	"github.com/junglemc/JungleTree/internal/storage"
 	. "github.com/junglemc/JungleTree/pkg/block"
 	. "github.com/junglemc/JungleTree/pkg/util"
@@ -29,66 +26,6 @@ func ListWorlds() []Identifier {
 		panic(err)
 	}
 	return worlds
-}
-
-func NewWorld(name string, seed uint64, height uint, dimension Identifier) *World {
-	id := Identifier(fmt.Sprintf("world:%s", name))
-
-	worlds := make([]Identifier, 0, 0)
-	err := storage.Get("jungletree:worlds", &worlds, nil)
-	if err != nil && err != errors.ErrNotFound {
-		panic(err)
-	}
-
-	worlds = append(worlds, id)
-	err = storage.Put("jungletree:worlds", worlds, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	result := World{
-		Name:                id,
-		Seed:                seed,
-		Height:              height,
-		Dimension:           dimension,
-		InitialGamemode:     GameModeByName(configuration.Config().Gamemode),
-		ReducedDebugInfo:    false,
-		EnableRespawnScreen: true,
-		IsFlat:              true, // TODO: Check this value based on the world generator we're using, don't store persistently
-		IsHardcoreMode:      false,
-	}
-
-	err = storage.Put(result.worldKey(), result, nil)
-	if err != nil {
-		panic(err)
-	}
-	return &result
-}
-
-func GetWorld(name Identifier) *World {
-	id := Identifier(fmt.Sprintf("world:%s", name.Name()))
-	ok, err := storage.Has(id, nil)
-	if err != nil {
-		panic(err)
-	}
-	if !ok {
-		return nil
-	}
-	result := World{}
-	err = storage.Get(id, &result, nil)
-	if err != nil {
-		panic(err)
-	}
-	return &result
-}
-
-func DefaultWorld() *World {
-	var id Identifier
-	err := storage.Get("jungletree:default_world", &id, nil)
-	if err != nil {
-		panic(err)
-	}
-	return GetWorld(id)
 }
 
 func (w *World) ChunkAt(x int32, z int32) *Chunk {
@@ -120,7 +57,7 @@ func (w *World) chunkKey(index uint64) Identifier {
 }
 
 func (w *World) chunkAt(index uint64) *Chunk {
-	var chunk Chunk
+	/*var chunk Chunk
 	err := storage.Get(w.chunkKey(index), &chunk, nil)
 	if err != nil {
 		if err == errors.ErrNotFound {
@@ -128,7 +65,8 @@ func (w *World) chunkAt(index uint64) *Chunk {
 		}
 		panic(err)
 	}
-	return &chunk
+	return &chunk*/
+	return nil
 }
 
 func (w *World) BlockAt(x, y, z int32) *Block {

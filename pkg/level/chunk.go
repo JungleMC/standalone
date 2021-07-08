@@ -3,7 +3,6 @@ package level
 import (
 	"fmt"
 
-	"github.com/junglemc/JungleTree/internal/storage"
 	. "github.com/junglemc/JungleTree/pkg/block"
 	. "github.com/junglemc/JungleTree/pkg/util"
 )
@@ -31,7 +30,7 @@ func (c *Chunk) chunkKey() Identifier {
 }
 
 func (c *Chunk) Save() error {
-	return storage.Put(c.chunkKey(), *c, nil)
+	return nil
 }
 
 func (c *Chunk) Update() {

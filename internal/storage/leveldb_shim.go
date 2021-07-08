@@ -10,7 +10,6 @@ import (
 	"reflect"
 
 	"github.com/junglemc/JungleTree/internal/configuration"
-	. "github.com/junglemc/JungleTree/pkg/util"
 )
 
 var DB *leveldb.DB
@@ -24,7 +23,7 @@ func Load() (err error) {
 	return
 }
 
-func Get(key Identifier, value interface{}, opts *opt.ReadOptions) error {
+func Get(key string, value interface{}, opts *opt.ReadOptions) error {
 	v := reflect.ValueOf(value)
 	if v.Kind() != reflect.Ptr || v.IsNil() {
 		return errors.New("ptr required")
@@ -45,7 +44,7 @@ func Get(key Identifier, value interface{}, opts *opt.ReadOptions) error {
 	return nil
 }
 
-func Put(key Identifier, value interface{}, opts *opt.WriteOptions) error {
+func Put(key string, value interface{}, opts *opt.WriteOptions) error {
 	buf := &bytes.Buffer{}
 	encoder := gob.NewEncoder(buf)
 	if err := encoder.Encode(value); err != nil {
@@ -54,6 +53,6 @@ func Put(key Identifier, value interface{}, opts *opt.WriteOptions) error {
 	return DB.Put([]byte(key), buf.Bytes(), opts)
 }
 
-func Has(key Identifier, opts *opt.ReadOptions) (bool, error) {
+func Has(key string, opts *opt.ReadOptions) (bool, error) {
 	return DB.Has([]byte(key), opts)
 }

@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"context"
 	"github.com/google/uuid"
+	"github.com/junglemc/JungleTree/internal/startup"
+	"github.com/junglemc/JungleTree/pkg/rpc/message"
+	"time"
 
 	"github.com/junglemc/JungleTree/internal/configuration"
 	. "github.com/junglemc/JungleTree/internal/net"
@@ -120,7 +124,7 @@ func loginSuccess(c *Client) (bool, error) {
 func joinGame(c *Client) (err error) {
 	err = sendJoinGame(c)
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	Connect(c)
@@ -159,7 +163,13 @@ func joinGame(c *Client) (err error) {
 }
 
 func sendJoinGame(c *Client) (err error) {
-	world := level.DefaultWorld()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	world, err := startup.WorldRPC.GetWorld(ctx, &message.WorldGetRequest{})
+	if err != nil {
+		return err
+	}
 
 	// TODO: Pull data from the application configuration, world generator, etc
 	dimension, ok := dimensions.ByName("minecraft:overworld")
@@ -169,10 +179,10 @@ func sendJoinGame(c *Client) (err error) {
 
 	join := &ClientboundJoinGamePacket{
 		EntityId:            0,
-		IsHardcore:          world.IsHardcoreMode,
-		GameMode:            world.InitialGamemode,
+		IsHardcore:          world.IsHardcore,
+		GameMode:            byte(world.InitialGamemode.Number()),
 		PreviousGameMode:    -1,
-		WorldNames:          level.ListWorlds(),
+		WorldNames:          []string{world.Name},
 		DimensionCodec:      level.DimensionBiomes(),
 		Dimension:           *dimension,
 		DimensionName:       world.Dimension,
