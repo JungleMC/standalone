@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Based on a script from https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04
 
-package=cmd/JungleTree.go
+package=cmd/jungletree.go
 package_name=JungleTree
 version=0.0.12
 build_dir=./dist
@@ -22,10 +22,10 @@ do
     fi
 
     if [ "$DEV" = true  ]; then
-        ld="-X github.com/junglemc/JungleTree/pkg.Version=$(git rev-parse HEAD)"
+        ld="-X github.com/JungleMC/standalone/pkg.Version=$(git rev-parse HEAD)"
         tag='-tags dev'
     else
-        ld="-X github.com/junglemc/JungleTree/pkg.Version=v${version}"
+        ld="-X github.com/JungleMC/standalone/pkg.Version=v${version}"
         tag=''
     fi
 
