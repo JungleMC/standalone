@@ -1,4 +1,4 @@
-module github.com/junglemc/JungleTree
+module github.com/JungleMC/standalone
 
 go 1.16
 
