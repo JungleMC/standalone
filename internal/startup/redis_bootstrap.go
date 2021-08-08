@@ -1,24 +1,35 @@
 package startup
 
 import (
-	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/hdt3213/godis/config"
 	"github.com/hdt3213/godis/redis/server"
 	"github.com/hdt3213/godis/tcp"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 const internalRedisPort = 6380
 
-func RedisBootstrap() (*redis.Client, net.Listener, *server.Handler) {
+func RedisBootstrap() *redis.Client {
 	config.Properties = &config.ServerProperties{
-		Bind:           "127.0.0.1",
-		Port:           internalRedisPort,
 		AppendOnly:     false,
 		AppendFilename: "",
 		MaxClients:     100,
 	}
+
+	_ = os.Remove("/tmp/godis.sock")
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGKILL)
+	go func() {
+		<-quit
+		_ = os.Remove("/tmp/godis.sock")
+		close(quit)
+		os.Exit(0)
+	}()
 
 	listener, err := net.Listen("unix", "/tmp/godis.sock")
 	if err != nil {
@@ -26,15 +37,16 @@ func RedisBootstrap() (*redis.Client, net.Listener, *server.Handler) {
 	}
 
 	handler := server.MakeHandler()
-	tcp.ListenAndServe(listener, handler, nil)
+	go tcp.ListenAndServe(listener, handler, nil)
 
 	if err != nil {
 		panic(err)
 	}
 
 	return redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", "localhost", internalRedisPort),
+		Network: "unix",
+		Addr:     "/tmp/godis.sock",
 		Password: "",
 		DB:       0,
-	}), listener, handler
+	})
 }
