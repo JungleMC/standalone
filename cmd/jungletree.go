@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	// TODO: Custom socket path
 	_ = os.Remove("/tmp/godis.sock")
 
 	rdb, listener, handler := startup.RedisBootstrap()
