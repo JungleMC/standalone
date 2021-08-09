@@ -1,8 +1,11 @@
 package chat
 
 import (
+	"bytes"
 	"encoding/json"
 	"log"
+
+	"github.com/junglemc/JungleTree/pkg/codec"
 )
 
 type Message struct {
@@ -27,4 +30,26 @@ func (c Message) String() string {
 		return ""
 	}
 	return string(data)
+}
+
+func (c *Message) MarshalMinecraft() ([]byte, error) {
+	data, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// Must be string
+	return codec.WriteString(string(data)), nil
+}
+
+func (c *Message) UnmarshalMinecraft(buf *bytes.Buffer) error {
+	data := codec.ReadString(buf)
+	err := json.Unmarshal([]byte(data), &buf)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }
