@@ -11,8 +11,6 @@ import (
 	"syscall"
 )
 
-const internalRedisPort = 6380
-
 func RedisBootstrap() *redis.Client {
 	config.Properties = &config.ServerProperties{
 		AppendOnly:     false,
