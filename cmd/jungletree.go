@@ -1,7 +1,7 @@
 package main
 
 import (
-	java "github.com/JungleMC/java-edition/pkg/startup"
+	java "github.com/JungleMC/java-edition/pkg/service"
 	"github.com/JungleMC/standalone/internal/startup"
 )
 
