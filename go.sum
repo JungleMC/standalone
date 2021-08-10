@@ -1,3 +1,5 @@
+github.com/JungleMC/sdk v0.0.0-20210810042112-e30cdbe2f38a h1:fUOl9vlSavHW867iBCMRw1jBT9c7EveEA6h5yQNwOQE=
+github.com/JungleMC/sdk v0.0.0-20210810042112-e30cdbe2f38a/go.mod h1:R2HwsXThW0J3beYKy6NSUuc2Acb39SNURVxzdYZiPbM=
 github.com/caarlos0/env v3.5.0+incompatible h1:Yy0UN8o9Wtr/jGHZDpCBLpNrzcFLLM2yixi/rBrKyJs=
 github.com/caarlos0/env v3.5.0+incompatible/go.mod h1:tdCsowwCzMLdkqRYDlHpZCp2UooDD3MspDBjZ2AD02Y=
 github.com/cespare/xxhash/v2 v2.1.1 h1:6MnRN8NT7+YBpUIWxHtefFZOKTAPgGjpQSxqLNn0+qY=

@@ -3,14 +3,12 @@ module github.com/JungleMC/standalone
 go 1.16
 
 require (
-	github.com/JungleMC/java-edition v0.0.0-20210808094919-e7bc63e3faf6
-	github.com/JungleMC/login-service v0.0.0-20210809133537-973d79d88972
-	github.com/JungleMC/sdk v0.0.0-20210809130650-a3783d7db03f
-	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/JungleMC/java-edition v0.0.0-20210809140412-861ede23c72b
+	github.com/JungleMC/login-service v0.0.0-20210810041609-ba221521faec
 )
 
-replace github.com/JungleMC/java-edition => ../java-edition
-
-replace github.com/JungleMC/login-service => ../login-service
-
-replace github.com/JungleMC/sdk => ../sdk
+replace (
+	github.com/JungleMC/java-edition v0.0.0-20210809140412-861ede23c72b => ../java-edition
+	github.com/JungleMC/login-service v0.0.0-20210810041609-ba221521faec => ../login-service
+	github.com/JungleMC/sdk v0.0.0-20210809140359-e8dcfa68f6af => ../sdk
+)
