@@ -5,6 +5,7 @@ go 1.16
 replace (
 	github.com/JungleMC/java-edition => ../java-edition
 	github.com/JungleMC/login-service => ../login-service
+	github.com/JungleMC/protocol => ../protocol
 	github.com/JungleMC/sdk => ../sdk
 )
 
